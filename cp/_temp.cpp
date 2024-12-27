@@ -1,7 +1,7 @@
 //// AKSHIT - template ////
 
 #include <bits/stdc++.h>
-#include<chrono>
+// #include<chrono>
 #include<unordered_set>
 
 using namespace std;
@@ -13,6 +13,15 @@ typedef unsigned long long int uint64;
 #define INF LLONG_MAX
 #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
+#define setbits(x) __builtin_popcountll(x)
+#define trailzero(x) __builtin_ctz(x)
+#define pb push_back
+#define mp make_pair
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define rall(x) x.rbegin(), x.rend()
+#define rep(i, a, b) for (int i = a; i < b; i++)
+#define rrep(i, a, b) for (int i = b - 1; i >= a; i--)
 
 // i/o
 static const auto init = []() { ios::sync_with_stdio(0); cin.tie(0); cout.tie(0); return 0;}();
@@ -30,6 +39,7 @@ int mod_mul(int a, int b, int m) {return (a%m * b%m)%m;}
 int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m); res=mod_mul(res,res,m); if(b%2==1) res=mod_mul(res,a,m);return res;}
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
+vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
 
 // vector operationss
 using vi = vector<int>;
@@ -66,5 +76,5 @@ int32_t main(){
 
     auto end = chrono::high_resolution_clock::now();
     auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);
-    cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
+    // cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
 }
