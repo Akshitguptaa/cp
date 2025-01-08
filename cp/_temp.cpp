@@ -48,7 +48,7 @@ using v32 = vector<int32_t>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
-void inp(vector<T> &v) { for(int i=0;i<v.size();i++) cin>>v[i];}
+void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
 void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 
