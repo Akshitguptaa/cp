@@ -56,45 +56,41 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
-
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
-        }
+void solve(){
+    int n;
+    cin>>n;
+    vi v(n);
+    inp(v);
+int s=0;
+int c=0;
+vi v1;
+for(auto i:v){
+    if(i%2==0){
+        v1.push_back(i);
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
 }
+for(auto i:v){
+    if(i%2!=0){
+        v1.push_back(i);
+    }
+}
+    for(int i=0;i<n;i++){
+        s+=v1[i];
+        if(s%2==0){
+            c++;
+            while(s%2==0){
+                s/=2;
+            }
+        }
+
+    }
+    cout<<c<<endl;
+}
+
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
-    vector<bool> s= sieve(100);
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 

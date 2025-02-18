@@ -9,17 +9,17 @@ typedef long long int int64;
 typedef unsigned long long int uint64;
 
 #define int long long
-#define endl "\n"
+#define el "\n"
 #define INF LLONG_MAX
 #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
-#define setbits(x) __builtin_popcountll(x)
+#define setbits(x) __builtin_popcll(x)
 #define trailzero(x) __builtin_ctz(x)
 #define pb push_back
 #define mp make_pair
-#define all(x) x.begin(), x.end()
-#define rall(x) x.rbegin(), x.rend()
-#define rall(x) x.rbegin(), x.rend()
+#define all(x) x.begin(), x.e()
+#define rall(x) x.rbegin(), x.re()
+#define rall(x) x.rbegin(), x.re()
 #define rep(i, a, b) for (int i = a; i < b; i++)
 #define rrep(i, a, b) for (int i = b - 1; i >= a; i--)
 
@@ -50,46 +50,31 @@ void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout 
 template <class T>
 void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
-void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
+void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << el; }
 
 // utitily
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
+void solve(){
+    int l,r;
+    cin>>l>>r;
+    int c=0;
 
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
+    if(l<=1 && r>=1){
+        c+=1;
+    }
+
+    if(r>2){
+        int s=max(l,(int)2);
+        int e=r-1;
+        if(s<=e){
+            c+=(e-s+1);
         }
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+    cout<<c<<endl;
 }
+
 void solve2(){}
 
 int32_t main(){
@@ -105,7 +90,7 @@ int32_t main(){
         // solve2();
     }
 
-    auto end = chrono::high_resolution_clock::now();
-    auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);
-    // cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
+    auto e = chrono::high_resolution_clock::now();
+    auto elapsed = chrono::duration_cast<chrono::nanoseconds>(e - begin);
+    // cerr << "Time measured: " << elapsed.c() * 1e-9 << " seconds.\n";
 }

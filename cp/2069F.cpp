@@ -42,6 +42,7 @@ int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
 
 // vector operationss
+using vvi = vector<vector<int>>;
 using vi = vector<int>;
 using vb = vector<bool>;
 using v32 = vector<int32_t>;
@@ -56,40 +57,106 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
 
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
+
+void dfs(int node,vi& vis,vi& comp,vvi& graph){
+    vis[node] = 1;
+    comp.push_back(node);
+    for(int i:graph[node]){
+        if(!vis[i]){
+            dfs(i,vis,comp,graph);
         }
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
 }
+
+vvi getcomps(vvi& graph,int n){
+    vi vis(n, 0);
+    vvi ans;
+
+    for(int i=0; i<n;i++){
+        if(!vis[i]){
+            vi comp;
+            dfs(i,vis,comp,graph);
+            ans.push_back(comp);
+        }
+    }
+    return ans;
+}
+
+int func(vvi vec,vvi vec2,int si) {
+    auto compA=getcomps(vec,si);
+    auto compB=getcomps(vec2,si);
+    int n= compA.size();
+    int m= compB.size();
+
+
+    map<int,int> mp;
+    for(int i = 0;i<n;i++){
+        for (int node:compA[i]){
+            mp[node]=i;
+        }
+    }
+
+    int ans = 0;
+    for(auto& i:compB) {
+        if(i.empty()){
+            continue;
+        }
+        int temp=mp[i[0]];
+        for (int v:i){
+            if (mp[v] != temp) {
+                ans++;
+                break;
+            }
+        }
+    }
+    return ans;
+}
+
+void solve(){
+    int n,q;
+    cin>>n>>q;
+    vvi vec(n);
+    vvi vec2(n);
+    map<pair<int,int>,int> edge, edge2;   
+    while(q--){
+        char ch;
+        cin>>ch;
+        int x,y;
+        cin>>x>>y;
+        x--;
+        y--;
+        if(ch=='A'){
+            if(edge[{x,y}]|| edge[{y,x}]){
+                edge.erase({x,y});
+                edge.erase({y,x});
+                vec[x].erase(remove(all(vec[x]),y),vec[x].end());
+                vec[y].erase(remove(all(vec[y]),x),vec[y].end());
+            }else {
+                edge[{x,y}]=1;
+                edge[{y,x}]=1;
+                vec[x].push_back(y);
+                vec[y].push_back(x);
+            }
+    }else{
+                    if (edge2[{x,y}]||edge2[{y,x}]) {
+                        edge2.erase({x, y});
+                        edge2.erase({y, x});
+                        vec2[x].erase(remove(all(vec2[x]),y),vec2[x].end());
+                        vec2[y].erase(remove(all(vec2[y]),x),vec2[y].end());
+            }else{
+                edge2[{x,y}] = 1;
+                edge2[{y,x}] = 1;
+                vec2[x].push_back(y);
+                vec2[y].push_back(x);
+            }
+        }
+
+        int ans= func(vec,vec2,n);
+        cout<<ans<<endl;
+    }
+}
+
 void solve2(){}
 
 int32_t main(){
@@ -98,12 +165,12 @@ int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while(t--){
+    // int t;
+    // cin >> t;
+    // while(t--){
         solve();
         // solve2();
-    }
+    // }
 
     auto end = chrono::high_resolution_clock::now();
     auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);

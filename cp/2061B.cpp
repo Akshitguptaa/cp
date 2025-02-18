@@ -56,40 +56,110 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
 
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
+void solve(){
+    int n;
+    cin>>n;
+
+    vi v(n);    
+    inp(v);
+    sort(all(v));    
+    unordered_map<int,int> mp;
+    vi vec;
+    for(int i=0;i<n;i++){
+        mp[v[i]]++;
+        if(mp[v[i]]==2){
+            vec.push_back(v[i]);
         }
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+    // int f=-1;
+    // int c=-1;
+    // for(auto i:mp){
+    //     if(i.second>=2){
+    //         f++;
+    //     }
+    //     if(i.second>=4){
+    //         for(int j=0;j<4;j++){
+    //             cout<<i.first<<" ";
+    //         }
+    //         cout<<endl;
+    //         return ;
+    //     }
+    // }    
+    int m= vec.size();
+    if(m==0){
+        cout<<-1<<endl;
+        return;
+    }
+
+
+    if(m>1){
+        cout<<vec[0]<<" "<<vec[0]<<" ";
+        cout<<vec[1]<<" "<<vec[1]<<endl;
+        return;
+    }
+    // if(f==0){
+    //     cout<<-1<<endl;
+    //     return;
+    // }
+    // if(f>=1){
+    //     vi ans;
+    //     for(auto i:mp){
+    //         if(i.second>=2){
+    //             ans.push_back(i.first);
+    //         }
+    //         if(ans.size()==2){
+    //             break;
+    //         }
+    //     }
+    //     for(auto i:ans){
+    //         cout<<i<<" "<<i<<" ";
+    //     }
+    //     cout<<endl;
+    //     return;
+    // }
+    // if(mp[1]>=n-1){
+    //     cout<<-1<<endl;
+    //     return;
+    // }
+
+    // for(auto i:mp){
+    //     if(i.second>=2){
+    //         cout<<i.first<<" "<<i.first<<" ";
+    //         break;
+    //     }
+    // }
+    // for(auto i:mp){
+    //     if(i.second<2){
+    //         cout<<i.first<<" ";
+    //         break;
+    //     }
+    // }
+    // return;
+    unordered_set<int> s(all(vec));
+    if(m==1){
+        vi extra;
+        int c=2;
+        for(int i=0;i<n;i++){
+            if(v[i]==vec[0] && c>0){
+                c--;
+                continue;
+            }
+            extra.push_back(v[i]);
+        }
+
+        for(int i=0;i<extra.size()-1;i++){
+            if(extra[i+1]-extra[i]<2*vec[0]){
+                cout<<vec[0]<<" "<<vec[0]<<" "<<extra[i+1]<<" "<<extra[i]<<endl;
+                return;
+            }
+        }
+    }
+    cout<<-1<<endl;
+
+
 }
+
 void solve2(){}
 
 int32_t main(){

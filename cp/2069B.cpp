@@ -43,6 +43,7 @@ vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p 
 
 // vector operationss
 using vi = vector<int>;
+using vvi = vector<vector<int>>;
 using vb = vector<bool>;
 using v32 = vector<int32_t>;
 template <class T>
@@ -56,45 +57,59 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
-
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
+void solve(){
+    int n,m;
+    cin>>n>>m;
+    vvi v(n,vi(m));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            cin>>v[i][j];
         }
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+
+    // map<int,int> mp;
+    // for(int i=0;i<n;i++){
+    //     for(int j=0;j<m;j++){
+    //         mp[v[i][j]]++;
+    //     }
+    // }
+    map<int,pair<int,bool>> mp; 
+
+    for(int i=0;i<n;i++) {
+        for(int j=0; j<m;j++){
+            mp[v[i][j]].first++;
+
+            if (i+1<n){
+                if(v[i][j]==v[i+1][j]){
+                    mp[v[i][j]].second = 1;
+                }
+            }
+                if(j+1<m){
+                    if(v[i][j] == v[i][j+1]) {
+                        mp[v[i][j]].second = 1;
+                    }
+                }
+        }
+    }
+    int c=0;
+    int maxx=0;
+    for(auto i:mp){
+        int temp=1;
+        if(i.second.second){
+            temp=2;
+        }
+        c+=temp;
+        maxx= max(maxx,temp);
+    }
+    cout<<c-maxx<<endl;
+
 }
+
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
-    vector<bool> s= sieve(100);
+    vector<bool> v= sieve(100);
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 

@@ -56,45 +56,42 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
-
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
+void solve(){
+    int n;
+    cin>>n;
+    vi v(n);
+    inp(v);
+    int c=0;
+    for(auto i:v){
+        if((i&1)==0){
+            c++;
         }
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+    // even and odd mix
+    if(c>0 && c<n){
+        cout<<2<<endl;
+        return;
+    }
+
+    int k =1;
+    set<int> s;
+    while(s.size()!=2){
+        s.clear();
+        k*=2;
+        for(auto i:v){
+            s.insert(i%k);
+        }
+    }
+    cout<<k<<endl;
+
+    // // only odd case
+    // cout<<4<<endl;
 }
+
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
-    vector<bool> s= sieve(100);
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 

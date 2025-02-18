@@ -56,40 +56,42 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
-
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
+void solve(){
+    int n;
+    cin>>n;
+    vector<vi> v(n, vi(n));
+    vi vec(n, 0);
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            cin>>v[i][j];
         }
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+
+    for(int i=0; i<n; i++){
+        int c=0;
+        for(int j= n-1;j>=0;j--){
+            if(v[i][j]==1){
+                c++;
+            }else{
+                break;
+            }
+        }
+        vec[i]=c;
+    }
+
+    sort(all(vec));
+
+    int ans = 0;
+    for (int i=0; i<n; i++){
+        if(vec[i]>=ans){
+            ans++;
+        }
+    }
+
+    cout<<ans<<endl;
 }
+
+
 void solve2(){}
 
 int32_t main(){

@@ -56,45 +56,109 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
+struct State {
+    int pos;
+    int blocks;
+    State(int p = 0, int b = 0) : pos(p), blocks(b) {}
+};
 
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    
+    vi a(n + 1);
+    rep(i, 1, n + 1) cin >> a[i];
+    
+    int r = k / 2;
+    
+    // Store positions of each value
+    unordered_map<int, vi> pos;
+    pos.reserve(n * 2);
+    rep(i, 1, n + 1) pos[a[i]].pb(i);
+    for(auto &p : pos) sort(all(p.second));
+    
+    // Precompute next different element
+    vi next_diff(n + 2, 0);
+    next_diff[n] = n;
+    rrep(i, 1, n) {
+        next_diff[i] = (a[i] == a[i + 1]) ? next_diff[i + 1] : i;
+    }
+    
+    // Binary search for next occurrence
+    auto get_next = [&](int start, int val, int UB) -> int {
+        if(pos.find(val) == pos.end()) return INF;
+        auto &vec = pos[val];
+        int lo = 0, hi = vec.size();
+        while(lo < hi) {
+            int mid = (lo + hi) / 2;
+            if(vec[mid] < start) lo = mid + 1;
+            else hi = mid;
         }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
+        return (lo < vec.size() && vec[lo] <= UB) ? vec[lo] : INF;
+    };
+    
+    vector<State> F(n + 2);
+    F[0] = State(0, 0);
+    
+    // Check early sabotage
+    int maxStart = n - 2 * (r - 1);
+    if(2 <= maxStart) {
+        if(a[2] != 1 || next_diff[2] < maxStart) {
+            cout << 1 << endl;
+            return;
         }
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+    
+    // Check for position 1 mismatch
+    int UB_new = n - 2 * (r - 1);
+    int candidate = get_next(2, 1, UB_new);
+    if(candidate == INF) {
+        cout << 1 << endl;
+        return;
+    }
+    F[1] = State(candidate, 1);
+    
+    // Main DP
+    int Mforced = 1;
+    int bestSabotage = INF;
+    
+    rep(i, 1, n + 1) {
+        State st = F[i];
+        int bestPos = INF, bestBlocks = INF;
+        
+        if(st.pos + 1 <= n - 2 * (r - st.blocks)) {
+            int extPos = st.pos + 1;
+            if(extPos <= n && a[extPos] == i + 1) {
+                bestPos = extPos;
+                bestBlocks = st.blocks;
+            }
+        }
+        
+        if(st.blocks < r) {
+            UB_new = n - 2 * (r - (st.blocks + 1));
+            int cand = get_next(st.pos + 2, i + 1, UB_new);
+            if(cand < bestPos) {
+                bestPos = cand;
+                bestBlocks = st.blocks + 1;
+            }
+        }
+        
+        if(bestPos == INF) {
+            Mforced = i;
+            break;
+        }
+        
+        F[i + 1] = State(bestPos, bestBlocks);
+        Mforced = i + 1;
+    }
+    
+    cout << Mforced + 1 << endl;
 }
+
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
-    vector<bool> s= sieve(100);
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 

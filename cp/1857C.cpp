@@ -56,45 +56,48 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
+void solve(){
+    int n;
+    cin>>n;
+    int t= n*(n-1)/2;
 
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
+    if(n==2){
+        int x;
+        cin>>x;
+        cout<<x<<" "<<x<<endl;
+        return;
+    }
+
+    vi v(t);
+    inp(v);
+    sort(all(v));
+    vi ans(n);
+    int c=1;
+    for(int i=0;i<t-1;i++){
+        if(v[i]==v[i+1]){
+            c++;
         }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
+            int c1=0;
+            while(c>n){
+            n/=2;
+            c++;
+            }
+            ans[n-c-1]=v[i];
+            c=1;
         }
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+    if(n>2){
+    ans[n-2]= v.back();
+    ans[n-1]= v.back();
+    }
+    display(ans);
+    return;
 }
+
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
-    vector<bool> s= sieve(100);
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 

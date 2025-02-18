@@ -11,7 +11,7 @@ typedef unsigned long long int uint64;
 #define int long long
 #define endl "\n"
 #define INF LLONG_MAX
-#define MOD 1000000007
+// #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
 #define setbits(x) __builtin_popcountll(x)
 #define trailzero(x) __builtin_ctz(x)
@@ -56,40 +56,48 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
+const int MOD = 998244353;
 
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
+#define vvvi vector<vector<vector<int>>>
+#define vvi vector<vector<int>>
+
+void solve() {
+    int n;
+    cin>>n;
+    vi v(n);
+   inp(v);
+
+    vvi dp(n+1,vi(2,0));
+
+    // cout<<func(0,0,v,n,1,dp) <<endl;
+    dp[0][0]= 1;
+
+    for(int i=0; i<n;i++){
+        vvi dp1(n+1,vi(2,0));
+        for(int j=0; j<=i;j++){
+            for(int k=0;k<2;k++){
+                if(dp[j][k]!=0){
+                    if(j==v[i]){
+                        dp1[j][0]= (dp1[j][0]+ dp[j][k])%MOD;
+                    }
+                    if(k==0){
+                        dp1[j+1][1]= (dp1[j+1][1]+dp[j][k])%MOD;
+                    }
+                }
+            }
         }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
-        }
+        dp = dp1;
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+
+    int ans = 0;
+    for(int j=0;j<=n;j++){
+        ans=(ans+dp[j][0]) % MOD;
+        ans=(ans+dp[j][1]) % MOD;
+    }
+
+    cout<<ans<<endl;
 }
+
 void solve2(){}
 
 int32_t main(){

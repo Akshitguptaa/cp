@@ -56,40 +56,51 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
-
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
+void solve(){
+    int n;
+    cin>>n;
+    vi v(n);
+    inp(v);
+    vi v1(n);
+    inp(v1);
+    // set<int> s;
+    // for(auto i:v){
+    //     s.insert(i);
+    // }
+    set<int> s(all(v));
+    set<int> s1(all(v1));
+    if(s1.size()>1 && s.size()>1){
+        yes();
+        return;
+    }
+    if(s.size()<=1){
+        if(s1.size()>=3){
+            yes();
+            return;
         }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
+            no();
+            return;
         }
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+    if(s1.size()<=1){
+        if(s.size()>=3){
+            yes();
+            return;
+        }else{
+            no();
+            return;
+        }
+    }
+
+    if(n==3){
+        if(s1.size()<=1 && s.size()<=1){
+            no();
+            return;
+        }
+    }
+    yes();
 }
+
 void solve2(){}
 
 int32_t main(){

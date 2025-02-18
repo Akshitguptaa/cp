@@ -56,40 +56,24 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
+void solve(){
 
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
+
+    int n,m; 
+    cin >>n>>m; 
+    vector<pair<int, int>> v(n); 
+    
+    for(int i= 0;i<n;i++){ 
+            cin >> v[i].first >> v[i].second; 
+        } 
+    int ans = 4 *m*n; 
+    for(int i= 1;i < n; i++){ 
+        ans -= 2*(m-v[i].first + m - v[i].second); 
     } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
-        }
-    }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+
+    cout << ans << endl; 
 }
+
 void solve2(){}
 
 int32_t main(){

@@ -56,45 +56,94 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
 
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
+void solve(){
+    int n,l,r;
+    cin>>n>>l>>r;
+    vector<int> a(n);
+    inp(a);
+    int s1= r-l+1;
+    if(r>n){
+        r=n;
+    }
+    if(l<1){
+        l=1;
+    }
+    l--;
+    // r--;
+
+    vector<int> pre,seg,su;
+    rep(i,0,r){
+        pre.push_back(a[i]);
+    }
+
+    // rep(i,0,r){
+    //     seg.push_back(a[i]);
+    // }
+
+    rep(i,l,n){
+        su.push_back(a[i]);
+    }
+
+    sort(all(pre));
+    // sort(all(seg), greater<int>());
+    sort(all(su));
+
+    int sum = 0;
+    // for (int i=l;i<=r;i++){
+    //     sum+=a[i];
+    // }
+
+    int minn=sum;
+
+    // int i=0;
+    // int j=0;
+
+    int sum1=0;
+    for(int i=0;i<s1;i++){
+        if(i>r || i>n-l){
             break;
         }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
+
+        if(i<pre.size()){
+            sum+=pre[i];
+        }
+        if(i<su.size()){
+            sum1+=su[i];
         }
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+    // while (i < seg.size() && j < pre.size()) {
+    //     if (seg[i] > pre[j]) {
+    //         sum -= seg[i];
+    //         sum += pre[j];
+    //         i++;
+    //         j++;
+    //     } else {
+    //         break;
+    //     }
+    // }
+
+    // while(i < seg.size() && j < su.size()) {
+    //     if(seg[i]>su[j]) {
+    //         sum-=seg[i];
+    //         sum+=su[j];
+    //         i++;
+    //         j++;
+    //     } else {
+    //         break;
+    //     }
+    // }
+
+    minn=min(sum1,sum);
+
+    cout<<minn<<endl;
+
 }
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
-    vector<bool> s= sieve(100);
+    vector<bool> s=sieve(100);
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 

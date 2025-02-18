@@ -56,40 +56,44 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
+void solve(){
+    int a,b,c,d;
+    cin>>a>>b>>c>>d;
+    int temp= a+b;
+    int maxx=0;
+    // int c1=0,c2=0;
+    // if(temp==a+b){
+    //     c1++;
+    // }
+    // if(temp==c-b){
+    //     c1++;
+    // }
+    // if(temp== d-c){
+    //     c1++;
+    // }
 
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
-        }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
-        }
+    // temp= d-c;
+    // if(temp==a+b){
+    //     c2++;
+    // }
+
+    // if(temp==c-b){
+    //     c2++;
+    // }
+    // if(temp== d-c){
+    //     c2++;
+    // }
+    unordered_map<int,int> mp;
+    mp[a+b]++;
+    mp[c-b]++;
+    mp[d-c]++;
+
+    for(auto i:mp){
+        maxx=max(maxx,i.second);
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+    cout<<maxx<<endl;
 }
+
 void solve2(){}
 
 int32_t main(){

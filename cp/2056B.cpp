@@ -56,40 +56,42 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve() {
-    int l, r;
-    cin >> l >> r;
-    int ans=0;
-    int a,b,c;
-
-    // first not same bit se alag alg bit use karenge 
-    // 
-    for(int i=30;i>=0;i--){
-        int temp1 =0;
-        int temp =0;
-        if(l& (1<<i)){
-            temp1=1;
-        }
-        if(r&(1<<i)){
-            temp= 1;
-        }
-        if(temp==temp1){
-            ans+=temp1*(1<<i);
+bool func(int u,int v,vector<string>& vec){
+    if(u<v){
+        if(vec[u][v]=='1'){
+            return 1;
         }else{
-            a=ans+(1<<i);
-            b=a-1;
-            break;
-        }
-    } 
-    // c will satisfy any value 
-    for(int i=l;i<=r;i++){
-        if(i!=a && i!=b){
-            c=i;
-            break;
+            return 0;
         }
     }
-    cout<<a<<" "<<b<<" "<<c<<endl;
+    if(vec[v][u]=='0'){
+        return 1;
+    }else{
+        return 0;
+    }
 }
+
+void solve(){
+    int n;
+    cin >> n;
+    vector<string> vec(n);
+    inp(vec);
+    
+    vector<int> v1(n);
+    for (int i =0;i< n; i++) {
+        v1[i]=i;
+    }
+
+    sort(v1.begin(), v1.end(), [&vec](int u, int v) {
+        return func(u, v, vec);
+    });
+
+    for(int i =0;i<n;i++){
+        cout << v1[i]+1<<" ";
+    }
+    cout<<endl;
+}
+
 void solve2(){}
 
 int32_t main(){
