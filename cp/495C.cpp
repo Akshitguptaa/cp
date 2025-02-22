@@ -11,7 +11,7 @@ typedef unsigned long long int uint64;
 #define int long long
 #define endl "\n"
 #define INF LLONG_MAX
-#define MOD 998244353
+#define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
 #define setbits(x) __builtin_popcountll(x)
 #define trailzero(x) __builtin_ctz(x)
@@ -57,29 +57,41 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n;
-    cin>>n;
-    vi v(n);
-    inp(v);
-    int ans=0;
+    string s;
+    cin>>s;
     int c=0;
-    int one=0;
-    for(int i=0;i<n;i++){
-        if(v[i]==3){
-            ans+=c;
-            ans%=MOD;
-        }
-        if(v[i]==2){
-            c=c*2;
-            c%=MOD;
-            c+=one;
-            c%=MOD;
-        }
-        if(v[i]==1){
-            one++;
+    int c1=0;
+    int n= s.size();
+    for(auto i:s){
+        if(i==')'){
+            c++;
+        }else if(i=='('){
+            c1++;
         }
     }
-    cout<<ans%MOD<<endl;
+    int c2= n-c-c1;
+    if(c1<(c+c2)){
+        cout<<-1<<endl;
+        return;
+    }
+    c=0;
+    for(int i=0;i<n;i++){
+        if(s[i]=='('){
+            c++;
+        }else if(s[i]==')'){
+            c1--;
+            c--;
+        }else{
+            if(c2>1){
+                    cout<<1<<endl;
+                    c--;
+                    c1--;
+                c2--;
+            }else{
+                cout<<c-c1<<endl;
+            }
+        }
+    }
 }
 
 void solve2(){}
@@ -89,12 +101,12 @@ int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while(t--){
+    // int t;
+    // cin >> t;
+    // while(t--){
         solve();
         // solve2();
-    }
+    // }
 
     auto end = chrono::high_resolution_clock::now();
     auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);

@@ -11,7 +11,7 @@ typedef unsigned long long int uint64;
 #define int long long
 #define endl "\n"
 #define INF LLONG_MAX
-#define MOD 998244353
+#define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
 #define setbits(x) __builtin_popcountll(x)
 #define trailzero(x) __builtin_ctz(x)
@@ -57,29 +57,29 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n;
-    cin>>n;
-    vi v(n);
-    inp(v);
-    int ans=0;
-    int c=0;
-    int one=0;
-    for(int i=0;i<n;i++){
-        if(v[i]==3){
-            ans+=c;
-            ans%=MOD;
-        }
-        if(v[i]==2){
-            c=c*2;
-            c%=MOD;
-            c+=one;
-            c%=MOD;
-        }
-        if(v[i]==1){
-            one++;
+    string s;
+    cin>>s;
+    string st;
+    cin>>st;
+    int c=0,c1=0;
+    for(auto i:s){
+        if(i=='1'){
+            c++;
         }
     }
-    cout<<ans%MOD<<endl;
+    for(auto j:st){
+        if(j=='1'){
+            c1++;
+        }
+    }
+    c= (c+1)/2;
+    c*=2;
+    if(c1<=c){
+        yes();
+        return;
+    }else{
+        no();
+    }
 }
 
 void solve2(){}
@@ -89,12 +89,12 @@ int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while(t--){
+    // int t;
+    // cin >> t;
+    // while(t--){
         solve();
         // solve2();
-    }
+    // }
 
     auto end = chrono::high_resolution_clock::now();
     auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);

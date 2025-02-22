@@ -11,7 +11,7 @@ typedef unsigned long long int uint64;
 #define int long long
 #define endl "\n"
 #define INF LLONG_MAX
-#define MOD 998244353
+#define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
 #define setbits(x) __builtin_popcountll(x)
 #define trailzero(x) __builtin_ctz(x)
@@ -55,32 +55,64 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 // utitily
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
+const int MAX = 2e5 + 6;
 
-void solve(){
-    int n;
-    cin>>n;
-    vi v(n);
-    inp(v);
-    int ans=0;
-    int c=0;
-    int one=0;
-    for(int i=0;i<n;i++){
-        if(v[i]==3){
-            ans+=c;
-            ans%=MOD;
-        }
-        if(v[i]==2){
-            c=c*2;
-            c%=MOD;
-            c+=one;
-            c%=MOD;
-        }
-        if(v[i]==1){
-            one++;
+struct DSU {
+    vector<int> parent, size;
+
+    void build(int n) {
+        parent.resize(n);
+        size.resize(n, 1);
+        iota(parent.begin(), parent.end(), 0);
+    }
+
+    int getParent(int x) {
+        return parent[x] = (x == parent[x]) ? x : getParent(parent[x]);
+    }
+
+    int merge(int x, int y) {
+        x = getParent(x);
+        y = getParent(y);
+        int result = size[x] * size[y];
+
+        if (size[y] > size[x])
+            swap(x, y);
+
+        size[x] += size[y];
+        parent[y] = x;
+
+        return result;
+    }
+};
+
+void solve() {
+    int n, q, u, v, w;
+    cin >> n >> q;
+
+    vector<pair<int, int>> edges[MAX];
+    vector<int> ans(MAX, 0);
+
+    for (int i = 1; i < n; i++) {
+        cin >> u >> v >> w;
+        edges[w].pb({u, v});
+    }
+
+    DSU dsu;
+    dsu.build(n+1);
+
+    for (int i = 1; i < MAX; i++) {
+        ans[i] = ans[i - 1];
+        for (auto edge : edges[i]) {
+            ans[i] += dsu.merge(edge.first, edge.second);
         }
     }
-    cout<<ans%MOD<<endl;
+
+    while (q--) {
+        cin >> u;
+        cout << ans[u] << " ";
+    }
 }
+
 
 void solve2(){}
 
@@ -89,12 +121,12 @@ int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while(t--){
+    // int t;
+    // cin >> t;
+    // while(t--){
         solve();
         // solve2();
-    }
+    // }
 
     auto end = chrono::high_resolution_clock::now();
     auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);

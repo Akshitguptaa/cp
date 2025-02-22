@@ -11,7 +11,7 @@ typedef unsigned long long int uint64;
 #define int long long
 #define endl "\n"
 #define INF LLONG_MAX
-#define MOD 998244353
+#define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
 #define setbits(x) __builtin_popcountll(x)
 #define trailzero(x) __builtin_ctz(x)
@@ -26,7 +26,7 @@ typedef unsigned long long int uint64;
 // i/o
 static const auto init = []() { ios::sync_with_stdio(0); cin.tie(0); cout.tie(0); return 0;}();
 
-// string operations
+// string c
 string to_upper(string a) { for (int i=0;i<(int)a.size();++i) if (a[i]>='a' && a[i]<='z') a[i]-='a'-'A'; return a; }
 string to_lower(string a) { for (int i=0;i<(int)a.size();++i) if (a[i]>='A' && a[i]<='Z') a[i]+='a'-'A'; return a; }
 
@@ -41,7 +41,7 @@ int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
 
-// vector operationss
+// vector cs
 using vi = vector<int>;
 using vb = vector<bool>;
 using v32 = vector<int32_t>;
@@ -57,29 +57,38 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n;
-    cin>>n;
-    vi v(n);
-    inp(v);
-    int ans=0;
-    int c=0;
-    int one=0;
-    for(int i=0;i<n;i++){
-        if(v[i]==3){
-            ans+=c;
-            ans%=MOD;
-        }
-        if(v[i]==2){
-            c=c*2;
-            c%=MOD;
-            c+=one;
-            c%=MOD;
-        }
-        if(v[i]==1){
-            one++;
+    int n,k;
+    cin>>n>>k;
+    vi a(n);
+    inp(a);
+
+    map<int,vi> mp;
+
+    for (int i = 0; i < n; ++i) {
+        int temp = a[i];
+        int c = 0;
+        while (1) {
+            mp[temp].push_back(c);
+            if (temp == 0) break;
+            temp /= 2;
+            c++;
         }
     }
-    cout<<ans%MOD<<endl;
+
+    int minn = INT_MAX;
+
+    for (auto& [x, y] : mp) {
+        if (y.size() >= k) {
+            sort(y.begin(), y.end());
+            int c = 0;
+            for (int i = 0; i < k; ++i) {
+                c += y[i];
+            }
+            minn=min(minn,c);
+        }
+    }
+
+    cout << minn << endl;
 }
 
 void solve2(){}
@@ -89,14 +98,13 @@ int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while(t--){
+    // int t;
+    // cin >> t;
+    // while(t--){
         solve();
         // solve2();
-    }
+    // }/
 
     auto end = chrono::high_resolution_clock::now();
     auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);
     // cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
-}
