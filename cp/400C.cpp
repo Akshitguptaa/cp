@@ -56,55 +56,49 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+
+void horizontal(int &a,int& b,int &n ,int &m){
+    // b=((m+1)/2 + b)%m;
+    b= m+1-b;
+}
+void rotation(int &a,int& b,int &n,int &m){
+    swap(a,b);
+    horizontal(a,b,m,n);
+    // b= n+1-b;
+    swap(n,m);
+}
+void rotationtwo(int &a,int& b,int &n,int &m){
+    swap(a,b);
+    horizontal(b,a,n,m);
+    // a= m+1-a;
+    swap(n,m);
+}
+
 void solve(){
-    int n;
-    cin>>n;
-    int t= n*(n-1)/2;
+    int n,m,x,y,z,p;
+    cin>>n>>m>>x>>y>>z>>p;
 
-    if(n==2){
-        int x;
-        cin>>x;
-        cout<<x<<" "<<x<<endl;
-        return;
-    }
+    x%=4;
+    z%=4;
+    y%=2;
+    // z= 4-z;
 
-    vi v(t);
-    inp(v);
-    sort(all(v));
-    vi ans(n);
-    int c=1;
-    // for(int i=0;i<t-1;i++){
-    //     if(v[i]==v[i+1]){
-    //         c++;
-    //     }else{
-    //         int c1=0;
-    //         while(c>n){
-    //         n/=2;
-    //         c1++;
-    //         }
-    //         ans[n-c1-1]=v[i];
-    //         c=1;
-    //     }
-    // // }
-    // if(n>2){
-    // ans[n-2]= v.back();
-    // ans[n-1]= v.back();
-    // }
-
-    // ans[0]=v[0];
-    int l=0;
-    int r=n-1;
-    for(int i=0;i<n;i++){
-        if(i==n-1){
-            ans[i]=v[t-1];
-        }else{
-            ans[i]= v[l];
-            l+=r;
-            r--;
+    while(p--){
+        int a,b;
+        cin>>a>>b;
+        int n1= n;
+        int m1=m;
+        for(int i=0;i<x;i++){
+            rotation(a,b,n1,m1);
         }
+        for(int i=0;i<y;i++){
+            horizontal(a,b,n1,m1);
+        }
+        for(int i=0;i<z;i++){
+            rotationtwo(a,b,n1,m1);
+        }
+        cout<<a<<" "<<b<<endl;
     }
-    display(ans);
-    return;
 }
 
 void solve2(){}
@@ -114,12 +108,12 @@ int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while(t--){
+    // int t;
+    // cin >> t;
+    // while(t--){
         solve();
         // solve2();
-    }
+    // }
 
     auto end = chrono::high_resolution_clock::now();
     auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);

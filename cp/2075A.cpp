@@ -57,60 +57,35 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n;
-    cin>>n;
-    int t= n*(n-1)/2;
+    int n,k;
+    cin>>n>>k;
 
-    if(n==2){
-        int x;
-        cin>>x;
-        cout<<x<<" "<<x<<endl;
-        return;
-    }
+   int c=0;
+    if(n&1){
+        c++;
+        n-=(k);
+    } 
 
-    vi v(t);
-    inp(v);
-    sort(all(v));
-    vi ans(n);
-    int c=1;
-    // for(int i=0;i<t-1;i++){
-    //     if(v[i]==v[i+1]){
-    //         c++;
-    //     }else{
-    //         int c1=0;
-    //         while(c>n){
-    //         n/=2;
-    //         c1++;
-    //         }
-    //         ans[n-c1-1]=v[i];
-    //         c=1;
-    //     }
-    // // }
-    // if(n>2){
-    // ans[n-2]= v.back();
-    // ans[n-1]= v.back();
-    // }
+    if(n>0){
+        int temp=0;
+        temp += n/(k-1);
+        n%=(k-1);
 
-    // ans[0]=v[0];
-    int l=0;
-    int r=n-1;
-    for(int i=0;i<n;i++){
-        if(i==n-1){
-            ans[i]=v[t-1];
-        }else{
-            ans[i]= v[l];
-            l+=r;
-            r--;
+        if(n>0){
+            temp++;
         }
+        c+=temp;
     }
-    display(ans);
-    return;
+
+    cout<<c<<endl;
+    
 }
 
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
+    vector<bool> s= sieve(100);
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 

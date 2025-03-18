@@ -57,54 +57,34 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n;
-    cin>>n;
-    int t= n*(n-1)/2;
-
-    if(n==2){
-        int x;
-        cin>>x;
-        cout<<x<<" "<<x<<endl;
-        return;
-    }
-
-    vi v(t);
+    int n,m,k;
+    cin>>n>>m>>k;
+    vi v(n);
     inp(v);
-    sort(all(v));
-    vi ans(n);
-    int c=1;
-    // for(int i=0;i<t-1;i++){
-    //     if(v[i]==v[i+1]){
-    //         c++;
-    //     }else{
-    //         int c1=0;
-    //         while(c>n){
-    //         n/=2;
-    //         c1++;
-    //         }
-    //         ans[n-c1-1]=v[i];
-    //         c=1;
-    //     }
-    // // }
-    // if(n>2){
-    // ans[n-2]= v.back();
-    // ans[n-1]= v.back();
-    // }
+    
+    vi v1(m);
+    inp(v1);
 
-    // ans[0]=v[0];
-    int l=0;
-    int r=n-1;
-    for(int i=0;i<n;i++){
-        if(i==n-1){
-            ans[i]=v[t-1];
-        }else{
-            ans[i]= v[l];
-            l+=r;
-            r--;
+    sort(all(v));
+    sort(all(v1));
+    unordered_set<int> st;
+    int c=0;
+
+    int i=0;
+    int j=0;
+    while (i < n && j < m) {
+        if (abs(v[i] - v1[j]) <= k) {
+            c++;
+            i++; 
+            j++; 
+        }
+        else if (v1[j] < v[i] - k) {
+            j++; 
+        } else {
+            i++; 
         }
     }
-    display(ans);
-    return;
+    cout<<c<<endl;
 }
 
 void solve2(){}
@@ -114,12 +94,12 @@ int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while(t--){
+    // int t;
+    // cin >> t;
+    // while(t--){
         solve();
         // solve2();
-    }
+    // }
 
     auto end = chrono::high_resolution_clock::now();
     auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);
