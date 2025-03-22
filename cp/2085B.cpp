@@ -55,43 +55,81 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 // utitily
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-#define vvi vector<vector<int>>
-
-void func1(int i,int x){
-    if(i==0){
-        
-    }
-}
 
 void solve(){
-    int n,k;
-    cin>>n>>k;
+    int n;
+    cin>>n;
     vi v(n);
     inp(v);
-    
 
-    int maxx=0;
-    // saala k==1
-    if(k==1){
-        // agar max element ko paint kiya toh 
-        // usme humare pass last element ya toh 1st hoga ya n-1 element hoga 
-        // uss case hume uska sum 
-        // last+ baaki ke max ka sum ka max lena hoga
-        //
-
-        maxx= max(maxx,v[0]+*max_element(v.begin()+1,v.end()));
-
-        maxx= max(maxx,v[n-1]+ *max_element(v.begin(),v.end()-1));
-
-        cout<<maxx<<endl;
-        return ;
-    }    
-    sort(rall(v));
-    int s=0;
-    for(int i=0;i<=k;i++){
-        s+=v[i];
+    int f=0;
+    int i=0;
+    for(i=0;i<n;i++){
+        if(v[i]==0){
+            f=1;
+            break;
+        }
     }
-    cout<<s<<endl;
+    if(!f){
+        cout<<1<<endl;
+        cout<<1<<" "<<n<<endl;
+        return ;
+    }
+    vector<pair<int,int>> ans;
+    while(1){
+        if(v.size()==1){
+            break;
+        }
+        int f=0;
+        int i=0;
+        for(i=0;i<v.size();i++){
+            if(v[i]==0){
+                f=1;
+                break;
+            }
+        }
+        if(!f){
+            ans.push_back({1,v.size()});
+            break ;
+        }
+
+        int l,r;
+        if(i==v.size()-1){
+            l=i-1;
+            r=i;
+        }else{
+            l=i;
+            r=i+1;
+        }
+
+        ans.pb({l+1,r+1});
+
+        set<int> s;
+
+        vector<int> temp1 ;
+        for(int j=l;j<=r;j++){
+            s.insert(v[j]);
+        }
+        int mex=0;
+        while(s.find(mex)!=s.end()){
+            mex++;
+        }
+        vector<int> temp ;
+        for(int j=0;j<l;j++){
+            temp.pb(v[j]);
+        }
+        temp.pb(mex);
+        for(int j=r+1;j<v.size();j++){
+            temp.pb(v[j]);
+        }
+        v= temp;
+
+    }
+    cout<<ans.size()<<endl;
+
+    for(auto [x,y]:ans){
+        cout<<x<<" "<<y<<endl;
+    }
 }
 
 void solve2(){}

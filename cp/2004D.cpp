@@ -10,7 +10,7 @@ typedef unsigned long long int uint64;
 
 #define int long long
 #define endl "\n"
-#define INF LLONG_MAX
+#define INT_MAX LLONG_MAX
 #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
 #define setbits(x) __builtin_popcountll(x)
@@ -55,50 +55,126 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 // utitily
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-#define vvi vector<vector<int>>
 
-void func1(int i,int x){
-    if(i==0){
-        
+bool check(string str,string str1){
+    for(int i=0;i<str.size();i++){
+        for(int j=0;j<str1.size();j++){
+            if(str[i]==str1[j]){
+                return 1;
+            }
+        }
     }
+    return 0;
+}
+
+int func(vector<int>& vec, int l, int r) {
+    if (vec.empty()) return INT_MAX;
+    
+    int lo = 0;
+    int hi = vec.size() - 1;
+    int ans = -1;
+    
+    while (lo <= hi) {
+        int mid = lo + (hi - lo) / 2;
+        int k=vec[mid];
+        int dist = abs(l - k) + abs(k - r);
+        
+        if(ans==-1||dist<abs(l-ans)+abs(ans-r)){
+            ans = k;
+        }
+        
+        if(k<l){
+            lo= mid+1;
+        }
+        else if(k>r){
+            hi=mid-1;
+        }
+        else{
+            break;
+        }
+    }
+    
+    if (ans == -1) return INT_MAX;
+    int minn = abs(l - ans) + abs(ans - r);
+    
+    auto it = lower_bound(vec.begin(), vec.end(), ans);
+    int idx = it - vec.begin();
+    
+    if (idx > 0) {
+        int k = vec[idx - 1];
+        minn = min(minn, abs(l - k) + abs(k - r));
+    }
+    if (idx + 1 < vec.size()) {
+        int k = vec[idx + 1];
+        minn = min(minn, abs(l - k) + abs(k - r));
+    }
+    
+    return minn;
 }
 
 void solve(){
-    int n,k;
-    cin>>n>>k;
-    vi v(n);
+    int n,q;
+    cin>>n>>q;
+    vector<string> v(n);
     inp(v);
-    
+    map<string,vector<int>> mp;
 
-    int maxx=0;
-    // saala k==1
-    if(k==1){
-        // agar max element ko paint kiya toh 
-        // usme humare pass last element ya toh 1st hoga ya n-1 element hoga 
-        // uss case hume uska sum 
-        // last+ baaki ke max ka sum ka max lena hoga
-        //
-
-        maxx= max(maxx,v[0]+*max_element(v.begin()+1,v.end()));
-
-        maxx= max(maxx,v[n-1]+ *max_element(v.begin(),v.end()-1));
-
-        cout<<maxx<<endl;
-        return ;
-    }    
-    sort(rall(v));
-    int s=0;
-    for(int i=0;i<=k;i++){
-        s+=v[i];
+    // all possible conditionz
+    vector<string> vec= {"BG", "BR", "BY", "GR", "GY", "RY"};
+    for(int i=0;i<n;i++){
+        mp[v[i]].push_back(i);
     }
-    cout<<s<<endl;
+    unordered_map<string,int> mp1;
+    mp1["BG"]=0;
+    mp1["BR"]=1;
+    mp1["BY"]=2;
+    mp1["GR"]=3;
+    mp1["GY"]=4;
+    mp1["RY"]=5;
+
+    while(q--){
+        int l,r;
+        cin>>l>>r;
+
+        string st= v[l-1];
+        string en= v[r-1];
+        int minn=INT_MAX;
+        if(check(st,en)){
+            cout<<abs(r-l)<<endl;
+            continue;
+        }
+        l--;
+        r--;
+        for(auto& i:vec){
+            if(i==en || i==st){
+                continue;
+            }
+
+            if(check(i,en)|| check(i,st)){
+                // int si= -1;
+
+                if(mp1[i]+mp1[st]==5 || mp1[i]+mp1[en]==5){
+                    continue;
+                }
+
+                
+                minn =min(minn,func(mp[i],l,r));
+            }
+
+        }
+
+        if(minn!=INT_MAX){
+            cout<<minn<<endl;
+            continue;
+        }
+        cout<<-1<<endl;
+    }
 }
 
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
-    vector<bool> s= sieve(100);
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 

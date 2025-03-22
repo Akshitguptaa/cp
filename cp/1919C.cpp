@@ -55,50 +55,93 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 // utitily
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-#define vvi vector<vector<int>>
 
-void func1(int i,int x){
-    if(i==0){
-        
+int lis(vector<int> const& a) {
+    int n = a.size();
+    vector<int> dp;
+    for (int i = 0; i < n; i++) {
+        auto it = lower_bound(all(dp), a[i]);
+        if (it == dp.end()) {
+            dp.push_back(a[i]);
+        } else {
+            *it = a[i];
+        }
     }
+    return dp.size();
 }
 
 void solve(){
-    int n,k;
-    cin>>n>>k;
+    int n;
+    cin>>n;
     vi v(n);
     inp(v);
-    
 
-    int maxx=0;
-    // saala k==1
-    if(k==1){
-        // agar max element ko paint kiya toh 
-        // usme humare pass last element ya toh 1st hoga ya n-1 element hoga 
-        // uss case hume uska sum 
-        // last+ baaki ke max ka sum ka max lena hoga
-        //
-
-        maxx= max(maxx,v[0]+*max_element(v.begin()+1,v.end()));
-
-        maxx= max(maxx,v[n-1]+ *max_element(v.begin(),v.end()-1));
-
-        cout<<maxx<<endl;
+    if(n<=2){
+        cout<<0<<endl;
         return ;
-    }    
-    sort(rall(v));
-    int s=0;
-    for(int i=0;i<=k;i++){
-        s+=v[i];
     }
-    cout<<s<<endl;
+    
+    int p1=INT_MAX;
+    int p2= INT_MAX;
+    int c=0;
+    for(auto i:v){
+        if(p1>p2){
+            swap(p1,p2);
+        }
+
+        if(i<=p1){
+            p1= i;
+            continue;
+        }
+
+        if(i<=p2){
+            p2= i;
+            continue;
+     
+        }
+
+        c++;
+        p1= i;
+    }
+    // vi s;
+    // vi t;
+    // s.pb(v[0]);
+
+    // for(int i=1;i<n;i++){
+    //     if(s.back()>=v[i]){
+    //         s.pb(v[i]);
+    //         continue;
+    //     }
+    //     if(t.empty() || t.back()>=v[i]){
+    //         t.pb(v[i]);
+    //         continue;
+    //     }
+
+    //     if(s.size()<=t.size()){
+    //         s.pb(v[i]);
+    //     }else{
+    //         t.pb(v[i]);
+    //     }
+    // }
+
+    // int c=0;
+    // for(int i=1;i<s.size();i++){
+    //     if(s[i-1]<s[i]){
+    //         c++;
+    //     }
+    // }
+    // for(int i=1;i<t.size();i++){
+    //     if(t[i-1]<t[i]){
+    //         c++;
+    //     }
+    // }
+    cout<<c<<endl;
 }
 
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
-    vector<bool> s= sieve(100);
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 

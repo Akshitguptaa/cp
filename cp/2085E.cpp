@@ -8,7 +8,7 @@ using namespace std;
 typedef long long int int64;
 typedef unsigned long long int uint64;
 
-#define int long long
+// #define int long long
 #define endl "\n"
 #define INF LLONG_MAX
 #define MOD 1000000007
@@ -42,7 +42,7 @@ int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
 
 // vector operationss
-using vi = vector<int>;
+using vi = vector<int64>;
 using vb = vector<bool>;
 using v32 = vector<int32_t>;
 template <class T>
@@ -55,50 +55,84 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 // utitily
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-#define vvi vector<vector<int>>
-
-void func1(int i,int x){
-    if(i==0){
-        
-    }
-}
 
 void solve(){
-    int n,k;
-    cin>>n>>k;
+   int n;
+    cin>>n;
+
     vi v(n);
     inp(v);
-    
+    vi v1(n);
+    inp(v1);
 
-    int maxx=0;
-    // saala k==1
-    if(k==1){
-        // agar max element ko paint kiya toh 
-        // usme humare pass last element ya toh 1st hoga ya n-1 element hoga 
-        // uss case hume uska sum 
-        // last+ baaki ke max ka sum ka max lena hoga
-        //
+    int64 s1 = accumulate(all(v), (int64)0);
+    int64 s2 = accumulate(all(v1), (int64)0);
 
-        maxx= max(maxx,v[0]+*max_element(v.begin()+1,v.end()));
-
-        maxx= max(maxx,v[n-1]+ *max_element(v.begin(),v.end()-1));
-
-        cout<<maxx<<endl;
-        return ;
-    }    
-    sort(rall(v));
-    int s=0;
-    for(int i=0;i<=k;i++){
-        s+=v[i];
+    if(s1 < s2){ 
+        cout<<-1<<endl;
+        return;
     }
-    cout<<s<<endl;
+
+    int64 maxx = *max_element(all(v1)); 
+    int64 maxx1 = *max_element(all(v)); 
+
+    if(s1 == s2){
+        sort(all(v));
+        sort(all(v1));
+        for(int i=0; i<n; i++){
+            if(v[i] != v1[i]){
+                cout<<-1<<endl;
+                return;
+            }
+        }
+        // cout<<1<<endl;
+        if(maxx1 < (int64)1e9){
+            cout<<maxx1 + 1<<endl; 
+        } else {
+            cout<<-1<<endl;
+        }
+        return;
+    }
+    // a bada 
+    // valid case
+    s1 -= s2; 
+    vi vec;
+
+    for(int64 i=1; i*i<=s1; i++){
+         // if(i<=maxx){
+        //     continue;
+        // }
+        if(s1 % i == 0){
+            if(i > maxx && i <= maxx1 && i <= (int64)1e9){
+                vec.pb(i);
+            }
+            if(s1/i > maxx && s1/i <= maxx1 && s1/i <= (int64)1e9 && i*i != s1){
+                vec.pb(s1/i);
+            }
+        }
+    }    
+    sort(all(vec));
+    sort(all(v1));
+
+    for(auto i : vec){
+        vi temp = v; 
+        for(auto& j : temp){
+            j %= i;
+        }
+        sort(all(temp));
+        if(temp == v1){
+            cout<<i<<endl;
+            return;
+        }
+    }
+    cout<<-1<<endl;
 }
 
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
-    vector<bool> s= sieve(100);
+    vector<bool> v= sieve(100);
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 

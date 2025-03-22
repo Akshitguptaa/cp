@@ -55,50 +55,48 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 // utitily
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-#define vvi vector<vector<int>>
-
-void func1(int i,int x){
-    if(i==0){
-        
-    }
-}
 
 void solve(){
-    int n,k;
-    cin>>n>>k;
+    int n,m;
+    cin>>n>>m;
     vi v(n);
     inp(v);
-    
+    vi vec(n);
+    int c=0;
+    for(int i=0;i<n;i++){
+        c+= log10(v[i]);
+        c++;
 
-    int maxx=0;
-    // saala k==1
-    if(k==1){
-        // agar max element ko paint kiya toh 
-        // usme humare pass last element ya toh 1st hoga ya n-1 element hoga 
-        // uss case hume uska sum 
-        // last+ baaki ke max ka sum ka max lena hoga
-        //
+        int temp =0;
+        while(v[i]%10==0){
+            temp ++;
+            v[i]/=10;
+        }
 
-        maxx= max(maxx,v[0]+*max_element(v.begin()+1,v.end()));
-
-        maxx= max(maxx,v[n-1]+ *max_element(v.begin(),v.end()-1));
-
-        cout<<maxx<<endl;
-        return ;
-    }    
-    sort(rall(v));
-    int s=0;
-    for(int i=0;i<=k;i++){
-        s+=v[i];
+        if(temp>0){
+            vec.pb(temp);
+        }
     }
-    cout<<s<<endl;
+
+    int n1= vec.size();
+    sort(all(vec));
+
+    
+    for(int i=n1-1;i>=0;i--){
+        c-= vec[i--];
+    }
+    if(c<=m){
+        cout<<"Anna"<<endl;
+        
+    }else{
+        cout<<"Sasha"<<endl;
+    }
 }
 
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
-    vector<bool> s= sieve(100);
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 
