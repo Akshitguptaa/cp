@@ -57,26 +57,47 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int x,y;
-    cin>>x>>y;
-    if(x==y)
-    {
-        cout<<-1<<endl;
-        return;
-    }
-    if(x<y)swap(x,y);
-    int ch=0;
-    // vi v(60,0);
-    for(int i=63;i>=0;i--){
-        if(((1LL<<i)&x))
-        {
-            ch=i;
-            break;
+    int n,m;
+    cin>>n>>m;
+    vector<vi> v(n,vi(m));
+    for(int i=0;i<n;i++){
+        string s;
+        cin>>s;
+
+        for(int j=0;j<m;j++){
+            v[i][j]=s[j]-'0';
         }
     }
-    ch++;
-    int ans=(1LL<<ch)-x;
-    cout<<ans<<endl;
+
+    vector<vi> v1=v;
+    for(int i=0;i<n;i++){
+        for(int j=1;j<m;j++){
+            v1[i][j]+=v1[i][j-1];
+        }
+    }
+    vector<vi> v2=v;
+    for(int j=0;j<m;j++){
+        for(int i=1;i<n;i++){
+            v2[i][j]+= v2[i-1][j];
+        }
+    }
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(v[i][j]==1){
+                    if( (v1[i][j]!=(j+1) && v2[i][j]!=(i+1))){
+                        // cout<<i<<" "<<j<<endl;
+                        // cout<<v1[i][j]<<" "<<v2[i][j]<<" "<<endl;
+                        no();
+                        return;
+                }
+            }
+            // cout<<v2[i][j]<<" ";
+        }
+        // cout<<endl;/
+    }
+
+    yes();
 }
 
 void solve2(){}

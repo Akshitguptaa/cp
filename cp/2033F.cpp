@@ -56,27 +56,30 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+
 void solve(){
-    int x,y;
-    cin>>x>>y;
-    if(x==y)
-    {
-        cout<<-1<<endl;
+    int n,k;
+    cin>>n>>k;
+
+    if(k==1){
+        cout<<n%MOD<<'\n';
         return;
     }
-    if(x<y)swap(x,y);
-    int ch=0;
-    // vi v(60,0);
-    for(int i=63;i>=0;i--){
-        if(((1LL<<i)&x))
-        {
-            ch=i;
-            break;
+    
+    int a=1;
+    int b=1;
+    int j=2;
+    while(1){
+        int c=(a+b)%k;
+        j++;
+
+        if(c==0){
+            cout<<(n%MOD*j%MOD)%MOD<<'\n';
+            return;
         }
+        a=b;
+        b=c;
     }
-    ch++;
-    int ans=(1LL<<ch)-x;
-    cout<<ans<<endl;
 }
 
 void solve2(){}

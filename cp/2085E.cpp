@@ -8,7 +8,7 @@ using namespace std;
 typedef long long int int64;
 typedef unsigned long long int uint64;
 
-// #define int long long
+#define ll long long
 #define endl "\n"
 #define INF LLONG_MAX
 #define MOD 1000000007
@@ -65,29 +65,29 @@ void solve(){
     vi v1(n);
     inp(v1);
 
-    int64 s1 = accumulate(all(v), (int64)0);
-    int64 s2 = accumulate(all(v1), (int64)0);
+    ll s1 = accumulate(all(v),(ll)0);
+    ll s2 = accumulate(all(v1),(ll)0);
 
-    if(s1 < s2){ 
+    if(s1<s2){ 
         cout<<-1<<endl;
         return;
     }
 
-    int64 maxx = *max_element(all(v1)); 
-    int64 maxx1 = *max_element(all(v)); 
+    int maxx=*max_element(all(v1)); 
+    int maxx1=*max_element(all(v)); 
 
     if(s1 == s2){
         sort(all(v));
         sort(all(v1));
         for(int i=0; i<n; i++){
-            if(v[i] != v1[i]){
+            if(v[i]!=v1[i]){
                 cout<<-1<<endl;
                 return;
             }
         }
         // cout<<1<<endl;
-        if(maxx1 < (int64)1e9){
-            cout<<maxx1 + 1<<endl; 
+        if((ll)maxx1<(ll)1e9){
+            cout<<maxx1+1<<endl; 
         } else {
             cout<<-1<<endl;
         }
@@ -95,18 +95,18 @@ void solve(){
     }
     // a bada 
     // valid case
-    s1 -= s2; 
+    s1-=s2; 
     vi vec;
 
-    for(int64 i=1; i*i<=s1; i++){
+    for(ll i=1;i*i<=s1; i++){
          // if(i<=maxx){
         //     continue;
         // }
         if(s1 % i == 0){
-            if(i > maxx && i <= maxx1 && i <= (int64)1e9){
+            if(i > maxx && i <= maxx1 && i <= (ll)1e9){
                 vec.pb(i);
             }
-            if(s1/i > maxx && s1/i <= maxx1 && s1/i <= (int64)1e9 && i*i != s1){
+            if(s1/i > maxx && s1/i <= maxx1 && s1/i <= (ll)1e9 && i*i != s1){
                 vec.pb(s1/i);
             }
         }
@@ -114,13 +114,13 @@ void solve(){
     sort(all(vec));
     sort(all(v1));
 
-    for(auto i : vec){
-        vi temp = v; 
-        for(auto& j : temp){
-            j %= i;
+    for(auto i:vec){
+        vi temp=v; 
+        for(auto& j:temp){
+            j%=i;
         }
         sort(all(temp));
-        if(temp == v1){
+        if(temp==v1){
             cout<<i<<endl;
             return;
         }

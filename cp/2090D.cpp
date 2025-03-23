@@ -39,7 +39,6 @@ int mod_mul(int a, int b, int m) {return (a%m * b%m)%m;}
 int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m); res=mod_mul(res,res,m); if(b%2==1) res=mod_mul(res,a,m);return res;}
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
-vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
 
 // vector operationss
 using vi = vector<int>;
@@ -52,37 +51,76 @@ void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
 void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 
+int maxx=1e6;
+// vector<int> primes;
+vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+
+vector<bool> isprime= sieve(maxx); 
+
 // utitily
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int x,y;
-    cin>>x>>y;
-    if(x==y)
-    {
-        cout<<-1<<endl;
-        return;
-    }
-    if(x<y)swap(x,y);
-    int ch=0;
-    // vi v(60,0);
-    for(int i=63;i>=0;i--){
-        if(((1LL<<i)&x))
-        {
-            ch=i;
-            break;
+    int n;
+    cin>>n;
+
+    int c=max(n/3 ,(int)2);
+
+    if(!isprime[c]){
+        int l=c-1;
+        int r=c+1;
+        while(1){
+            if(l>=2 && isprime[l]){
+                c=l;
+                break;
+            }
+            if(r<=n && isprime[r]){
+                c=r;
+                break;
+            }
+            l--;
+            r++;
         }
     }
-    ch++;
-    int ans=(1LL<<ch)-x;
-    cout<<ans<<endl;
+
+    vector<bool> v(n+1,0);
+
+    cout<<c<<" ";
+    v[c]=1;
+
+    for(int i=1;i<=n;i++){
+        int l=c-i;
+        int r=c+i;
+
+        if(l>=1 && !v[l]){
+            v[l]=1;
+            cout<<l<<" ";
+        }
+
+        if(r<=n&& !v[r]){
+            v[r]=1;
+            cout<<r<<" ";
+        }
+    }
+
+    for(int i=1;i<=n;i++){
+        if(!v[i]){
+            cout<<i<<" ";
+        }
+    }
+
+
+    cout<<endl;
+    // int k=3;
+
 }
 
 void solve2(){}
 
 int32_t main(){
     auto begin = chrono::high_resolution_clock::now();
+    // sieve();
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 

@@ -1,7 +1,7 @@
 //// AKSHIT - template ////
 
 #include <bits/stdc++.h>
-// #include<chrono>
+#include<chrono>
 #include<unordered_set>
 
 using namespace std;
@@ -13,15 +13,6 @@ typedef unsigned long long int uint64;
 #define INF LLONG_MAX
 #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
-#define setbits(x) __builtin_popcountll(x)
-#define trailzero(x) __builtin_ctz(x)
-#define pb push_back
-#define mp make_pair
-#define all(x) x.begin(), x.end()
-#define rall(x) x.rbegin(), x.rend()
-#define rall(x) x.rbegin(), x.rend()
-#define rep(i, a, b) for (int i = a; i < b; i++)
-#define rrep(i, a, b) for (int i = b - 1; i >= a; i--)
 
 // i/o
 static const auto init = []() { ios::sync_with_stdio(0); cin.tie(0); cout.tie(0); return 0;}();
@@ -39,7 +30,6 @@ int mod_mul(int a, int b, int m) {return (a%m * b%m)%m;}
 int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m); res=mod_mul(res,res,m); if(b%2==1) res=mod_mul(res,a,m);return res;}
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
-vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
 
 // vector operationss
 using vi = vector<int>;
@@ -48,7 +38,7 @@ using v32 = vector<int32_t>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
-void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
+void inp(vector<T> &v) { for(int i=0;i<v.size();i++) cin>>v[i];}
 template <class T>
 void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 
@@ -57,26 +47,89 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int x,y;
-    cin>>x>>y;
-    if(x==y)
-    {
-        cout<<-1<<endl;
-        return;
+    int n,m,v;
+    cin>>n>>m>>v;
+    vi v1(n);
+    inp(v1);
+    vi pr(n + 1, 0);
+    for (int i = 0; i < n; i++) {
+        pr[i + 1] = pr[i] + v1[i];
     }
-    if(x<y)swap(x,y);
-    int ch=0;
-    // vi v(60,0);
-    for(int i=63;i>=0;i--){
-        if(((1LL<<i)&x))
-        {
-            ch=i;
-            break;
+
+    vi front(m + 1, INF);
+    vi end(m + 1, -1);
+    front[0] = 0;
+    end[0] = -1;
+
+    int l = 0;
+    int sum = 0;
+    for (int k = 1; k <= m; k++) {
+        if (l >= n) {
+            front[k] = INF;
+            end[k] = n;
+            continue;
+        }
+        int r = l;
+        sum = 0;
+        while (r < n && sum < v) {
+            sum += v1[r];
+            r++;
+        }
+        if (sum >= v) {
+            front[k] = front[k - 1] + sum;
+            end[k] = r - 1;
+            l = r;
+        } else {
+            front[k] = INF;
+            end[k] = n;
         }
     }
-    ch++;
-    int ans=(1LL<<ch)-x;
-    cout<<ans<<endl;
+
+    // Assign from the end
+    vi sum_end(m + 1, INF);
+    vi first_start(m + 1, n);
+    sum_end[0] = 0;
+    first_start[0] = n;
+
+    int r = n - 1;
+    sum = 0;
+    for (int k = 1; k <= m; k++) {
+        if (r < 0) {
+            sum_end[k] = INF;
+            first_start[k] = -1;
+            continue;
+        }
+        int l = r;
+        sum = 0;
+        while (l >= 0 && sum < v) {
+            sum += v1[l];
+            l--;
+        }
+        if (sum >= v) {
+            sum_end[k] = sum_end[k - 1] + sum;
+            first_start[k] = l + 1;
+            r = l;
+        } else {
+            sum_end[k] = INF;
+            first_start[k] = -1;
+        }
+    }
+
+    long long S = pr[n];
+    long long c = -1;
+    for (int k = 0; k <= m; k++) {
+        if (front[k] < INF && sum_end[m - k] < INF) {
+            if (k == 0 || m - k == 0 || end[k] < first_start[m - k]) {
+                long long sum_assigned = front[k] + sum_end[m - k];
+                c = max(c, S - sum_assigned);
+            }
+        }
+    }
+    if(c>=0){
+        cout<<c<<endl;
+    }else{
+        cout<<-1<<endl;
+    }
 }
 
 void solve2(){}

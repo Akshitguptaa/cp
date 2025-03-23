@@ -57,26 +57,26 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int x,y;
-    cin>>x>>y;
-    if(x==y)
-    {
-        cout<<-1<<endl;
-        return;
-    }
-    if(x<y)swap(x,y);
-    int ch=0;
-    // vi v(60,0);
-    for(int i=63;i>=0;i--){
-        if(((1LL<<i)&x))
-        {
-            ch=i;
-            break;
+    int n,k;
+    cin>>n>>k;
+    vi v(n);
+    inp(v);
+
+    priority_queue<int> pq;
+    int c=0;
+    
+    // k min for eating 
+    //  take the max before eating time 
+
+    for(int i=1;i<=n;i++){
+        pq.push(v[i-1]);
+        int time = n-i+1;
+        if(time%(k+1) ==0 ){
+            c+=pq.top();  //
+            pq.pop();
         }
     }
-    ch++;
-    int ans=(1LL<<ch)-x;
-    cout<<ans<<endl;
+    cout<<c<<endl;
 }
 
 void solve2(){}

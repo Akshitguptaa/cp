@@ -57,26 +57,16 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int x,y;
-    cin>>x>>y;
-    if(x==y)
-    {
-        cout<<-1<<endl;
-        return;
+    int x,y,a;
+    cin>>x>>y>>a;
+
+    int s= x+y;
+    int mod= (a)%s;
+    if(mod<x){
+        no();
+        return ;
     }
-    if(x<y)swap(x,y);
-    int ch=0;
-    // vi v(60,0);
-    for(int i=63;i>=0;i--){
-        if(((1LL<<i)&x))
-        {
-            ch=i;
-            break;
-        }
-    }
-    ch++;
-    int ans=(1LL<<ch)-x;
-    cout<<ans<<endl;
+    yes();
 }
 
 void solve2(){}
