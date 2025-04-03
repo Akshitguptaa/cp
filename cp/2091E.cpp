@@ -39,7 +39,26 @@ int mod_mul(int a, int b, int m) {return (a%m * b%m)%m;}
 int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m); res=mod_mul(res,res,m); if(b%2==1) res=mod_mul(res,a,m);return res;}
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
-vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+const int maxx= 1e7+10;
+
+vector<int> primes;
+void sieve(int n) { 
+    vector<bool> prime(n+1,true); 
+    prime[0]=0;
+    prime[1]=0;
+    for (int p = 2; p * p <= n; p++) { 
+        if (prime[p] == true) { 
+            // primes.pb(p);
+            for (int i = p * p; i <= n; i += p) 
+            prime[i] = false; 
+            } 
+        } 
+    for(int i=2;i<=n;i++){
+        if(prime[i]){
+            primes.pb(i);
+        }
+    }
+    } 
 
 // vector operationss
 using vi = vector<int>;
@@ -56,44 +75,24 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+// vector<bool> vec= sieve(maxx);
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
-
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
+    int n;
+    cin>>n;
+    int c=0;
+    for(auto &i:primes){
+        if(i>n){
+            break;
         }
-    } 
-    if(!f){
-        yes();
-        return;
+        c+= n/i;
     }
-
-    sort(all(v1));
-
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
-
-        while(l<=r){
-            int mid= l+(r-l)/2;
-
-            // if()
-        }
-    }
-    yes();
+    cout<<c<<endl;
 }
 
 void solve2(){}
 
 int32_t main(){
+    sieve(maxx);
     auto begin = chrono::high_resolution_clock::now();
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);

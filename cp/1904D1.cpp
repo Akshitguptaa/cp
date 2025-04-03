@@ -57,35 +57,57 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
+    int n;
+    cin>>n;
+     vi v(n);
+     inp(v);
+     vi v1(n);
+     inp(v1);
 
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
-        }
-    } 
-    if(!f){
+    if(v==v1){
         yes();
-        return;
+        return ;
     }
 
-    sort(all(v1));
+    vector<pair<int,int>> vec;
+    for(int i=0;i<n;i++){
+        if(v1[i]<v[i]){
+            no();
+            return;
+        }
+        vec.pb({v[i],v1[i]});
+    }
+    sort(all(vec));
 
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
+    for(int i=0;i<n;i++){
+        if(v1[i]==v[i]){
+            continue;
+        }
 
-        while(l<=r){
-            int mid= l+(r-l)/2;
+        int maxi = v1[i];
 
-            // if()
+        int f=0;
+        int maxx= v[i];
+        for(int j=i;j>=0 && v1[j]>=maxi ;j--){
+            maxx= max(maxx,v[j]);
+            if(maxx== maxi){
+                f=1;
+                break;
+            }
+        }
+        maxx= v[i];
+        maxi = v1[i];
+        for(int j=i;j<n && v1[j]>=maxi;j++){
+            maxx= max(maxx,v[j]);
+            if(maxx==maxi){
+                f=1;
+                break;
+            }
+        }
+        if(!f){
+
+        no();
+        return;
         }
     }
     yes();

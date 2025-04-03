@@ -59,7 +59,7 @@ void no() { cout<<"NO\n"; }
 void solve(){
     int n,x;
     cin>>n>>x;
-    vi v(n);
+    // vi v(n);
     int orr=0;
     if(n==1){
         cout<<x<<endl;
@@ -75,47 +75,26 @@ void solve(){
     // }
 
     int l=0;
+    vi v(n,-1);
     for(int i=0;i<n;i++){
-        if(l>=n){
+        if((l|x)==x){
+            v[i]=l;
+            l++;
+        }else{
             break;
         }
-        if((i&(~x))==0){
-            orr|=i;
-            v[l]=i;
-            l++;
-        }
     }
-
-    if(orr==x){
-        while(l<n){
-            v[l]=0;
-            l++;
+    for(int i=0;i<n;i++){
+        if(v[i]==-1){
+            v[i]=x;
         }
-        display(v);
-        return;
+        orr|=v[i];
     }
-
-    int l1=0;
-    orr=0;
-    for(int i=0;i<x;i++){
-        if(l1>=n-1){
-            break;
-        }
-        if((i&(~x))==0){
-            v[l1]=i;
-            orr|=i;
-            l1++;
-        }
+    if(orr!=x){
+        v.back()=x;
     }
-
-    while(l1<n-1){
-        v[l1]=0;
-        l1++;
-    }
-
-    v.back()=x&(~orr);
+    
     display(v);
-    return;
 }
 
 void solve2(){}

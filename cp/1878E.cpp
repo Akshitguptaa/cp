@@ -1,34 +1,28 @@
 //// AKSHIT - template ////
 
 #include <bits/stdc++.h>
-// #include<chrono>
-#include<unordered_set>
 
 using namespace std;
 typedef long long int int64;
 typedef unsigned long long int uint64;
 
 #define int long long
-#define endl "\n"
-#define INF LLONG_MAX
+#define enl "\n"
+// #define INF LLONG_MAX
 #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
 #define setbits(x) __builtin_popcountll(x)
 #define trailzero(x) __builtin_ctz(x)
 #define pb push_back
 #define mp make_pair
-#define all(x) x.begin(), x.end()
-#define rall(x) x.rbegin(), x.rend()
-#define rall(x) x.rbegin(), x.rend()
+#define all(x) x.begin(), x.en()
+#define rall(x) x.rbegin(), x.ren()
+#define rall(x) x.rbegin(), x.ren()
 #define rep(i, a, b) for (int i = a; i < b; i++)
 #define rrep(i, a, b) for (int i = b - 1; i >= a; i--)
 
 // i/o
 static const auto init = []() { ios::sync_with_stdio(0); cin.tie(0); cout.tie(0); return 0;}();
-
-// string operations
-string to_upper(string a) { for (int i=0;i<(int)a.size();++i) if (a[i]>='a' && a[i]<='z') a[i]-='a'-'A'; return a; }
-string to_lower(string a) { for (int i=0;i<(int)a.size();++i) if (a[i]>='A' && a[i]<='Z') a[i]+='a'-'A'; return a; }
 
 // math
 int gcd(int a,int b) { if (b==0) return a; return gcd(b, a%b); }
@@ -50,45 +44,81 @@ void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout 
 template <class T>
 void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
-void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
+void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << enl; }
 
 // utitily
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+// segment tree
+vector<int> t;
+#define INF ((1LL << 32) - 1)
+
+int combine(int a, int b) {
+    return a & b;
+}
+
+void build(vector<int>& a, int v, int tl, int tr) {
+    if (tl == tr) {
+        t[v] = a[tl];
+    } else {
+        int tm = (tl + tr) / 2;
+        build(a, v * 2, tl, tm);
+        build(a, v * 2 + 1, tm + 1, tr);
+        t[v] = combine(t[v * 2], t[v * 2 + 1]);
+    }
+}
+
+int func(int v,int tl,int tr,int l,int r){
+    if(l > r){
+        return INF;
+    }
+    if(l==tl && r==tr){
+        return t[v];
+    }
+    int tm= (tl+tr)/2;
+
+    return combine(func(v*2, tl, tm, l, min(r,tm)), func(v*2+1, tm+1, tr, max(l,tm+1),r));
+}
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
-
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
-        }
-    } 
-    if(!f){
-        yes();
-        return;
+    int n;
+    cin>>n;
+    vi v(n+1);
+    for(int i=1;i<=n;i++){
+        cin>>v[i];
     }
 
-    sort(all(v1));
+    t.resize(4*n);
+    build(v,1,1,n);
 
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
+    int q;
+    cin>>q;
 
-        while(l<=r){
-            int mid= l+(r-l)/2;
+    while(q--){
+        int l1,k;
+        cin>>l1>>k;
 
-            // if()
+        if(v[l1]<k){
+            cout<<-1<<" ";
+            continue;
         }
+        int l=l1;
+        int r=n;
+
+        int ans=l1;
+        while(l<= r){
+            int mid = l+(r-l)/2;
+            if (func(1,1,n,l1,mid) >= k){
+                ans = mid;
+                l = mid+1;
+            } else {
+                r = mid-1;
+            }
+        }
+        cout<<ans<<" ";
     }
-    yes();
+    cout<<endl;
 }
 
 void solve2(){}
@@ -105,7 +135,7 @@ int32_t main(){
         // solve2();
     }
 
-    auto end = chrono::high_resolution_clock::now();
-    auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);
+    auto en = chrono::high_resolution_clock::now();
+    auto elapsed = chrono::duration_cast<chrono::nanoseconds>(en - begin);
     // cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
 }

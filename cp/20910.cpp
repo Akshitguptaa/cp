@@ -57,38 +57,30 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
+    int n;
+    cin>>n;
+    map<int,int> mp;
+
+    mp[0]=3;
+    mp[1]=1;
+    mp[2]=2;
+    mp[3]=1;
+    mp[5]=1;
+    int c=0;
+    vi v(n);
     inp(v);
-    inp(v1);
-
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
+    for(int i=0;i<n;i++){
+        if(mp[v[i]]>0){
+            mp[v[i]]--;
+            c++;
         }
-    } 
-    if(!f){
-        yes();
-        return;
-    }
-
-    sort(all(v1));
-
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
-
-        while(l<=r){
-            int mid= l+(r-l)/2;
-
-            // if()
+        if(c==8){
+            // ans=i+1;
+            cout<<i+1<<endl;
+            return;
         }
     }
-    yes();
+    cout<<0<<endl;
 }
 
 void solve2(){}

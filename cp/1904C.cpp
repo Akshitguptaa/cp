@@ -57,38 +57,53 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
+    int n,k;
+    cin>>n>>k;
 
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
+    vi v(n);
+    inp(v);
+    sort(all(v));
+    vector<int> temp;
+    
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            temp.pb(abs(v[i]-v[j]));
         }
-    } 
-    if(!f){
-        yes();
+    }
+
+    sort(all(temp));
+
+    if(n==1){
+        cout<<v.front()<<endl;
+        return;
+    }
+    int mini=LONG_LONG_MAX;
+    for(int i=1;i<n;i++){
+        mini =min(abs(v[i]-v[i-1]),mini);
+    }
+    if(k==1){
+        int minn= *min_element(all(v));
+        cout<<min(minn,mini)<<endl;   
         return;
     }
 
-    sort(all(v1));
+    if(k>=3){
+        cout<<0<<endl;
+        return;
+    }
 
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
-
-        while(l<=r){
-            int mid= l+(r-l)/2;
-
-            // if()
+    for(int i=0;i<temp.size();i++){
+        int r= upper_bound(all(v),temp[i])-v.begin();
+        int l= lower_bound(all(v),temp[i])-v.begin();
+        mini= min(abs(v[r]-temp[i]),mini);
+        // cout<<v[r]<<" ";
+        // mini= min(mini,minn);
+        if(r>0){
+            mini= min(abs(v[r-1]-temp[i]),mini);
         }
     }
-    yes();
+    cout<<mini<<endl;
+
 }
 
 void solve2(){}

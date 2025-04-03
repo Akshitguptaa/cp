@@ -57,38 +57,63 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
-
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
-        }
-    } 
-    if(!f){
-        yes();
-        return;
+    int n;
+	cin >> n;
+	vector<int> a(n + 1), b(n + 1), c(n + 1);
+	for(int i = 1; i <= n; i++){
+        cin>>a[i];
+    }
+	for(int i = 1; i <= n; i++){
+        cin>>b[i];
+    }
+	for(int i = 1; i <= n; i++){
+        cin>>c[i];
     }
 
-    sort(all(v1));
+    int sum= accumulate(all(a),(int)2);
+	
+	vector<int> prefa(n + 1), prefb(n + 1), prefc(n + 1);
+	for(int i = 1; i <= n; i++) prefa[i] = prefa[i - 1] + a[i];
+	for(int i = 1; i <= n; i++) prefb[i] = prefb[i - 1] + b[i];
+	for(int i = 1; i <= n; i++) prefc[i] = prefc[i - 1] + c[i];
+	sum/=3;
 
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
+	int l=1,l2=1, r2 = 2, l3 = 1, r3 = 2; 
+	for(int r = 1; r <= n; r++){
+		while(l < r and prefa[r] - prefa[l] >= sum) l++;
+		while(l2 < l - 1 and prefb[l - 1] - prefb[l2] >= sum) l2++;
+		while(r2 < n and prefb[r2] - prefb[r] < sum) r2++;
+		while(l3 < l - 1 and prefc[l - 1] - prefc[l3] >= sum) l3++;
+		while(r3 < n and prefc[r3] - prefc[r] < sum) r3++;
+		
+		if(l > 1 and r < n and prefa[r] - prefa[l - 1] >= sum and prefb[l - 1] >= sum and prefc[n] - prefc[r] >= sum){
+			cout << l << ' ' << r << " 1 " << l - 1 << ' ' << r + 1 << ' ' << n << '\n';
+			return;
+		}
+		if(l > 1 and r < n and prefa[r] - prefa[l - 1] >= sum and prefc[l - 1] >= sum and prefb[n] - prefb[r] >= sum){
+			cout << l << ' ' << r << ' ' << r + 1 << ' ' << n << " 1 " << l - 1 << '\n';
+			return;
+		}
+		if(l2 > 1 and prefa[r] - prefa[l - 1] >= sum and prefb[l - 1] - prefb[l2 - 1] >= sum and prefc[l2 - 1] >= sum){
+			cout << l << ' ' << r << ' ' << l2 << ' ' << l - 1 << ' ' << 1 << ' ' << l2 - 1 << '\n';
+			return;
+		}
+		if(r2 < n and prefa[r] - prefa[l - 1] >= sum and prefb[r2] - prefb[r] >= sum and prefc[n] - prefc[r2] >= sum){
+			cout << l << ' ' << r << ' ' << r + 1 << ' ' << r2 << ' ' << r2 + 1 << ' ' << n << '\n';
+			return;
+		}
+		if(l3 > 1 and prefa[r] - prefa[l - 1] >= sum and prefc[l - 1] - prefc[l3 - 1] >= sum and prefb[l3 - 1] >= sum){
+			cout << l << ' ' << r << ' ' << 1 << ' ' << l3 - 1 << ' ' << l3 << ' ' << l - 1 << '\n';
+			return;
+		}
+		if(r3 < n and prefa[r] - prefa[l - 1] >= sum and prefc[r3] - prefc[r] >= sum and prefb[n] - prefb[r3] >= sum){
+			cout << l << ' ' << r << ' ' << r3 + 1 << ' ' << n << ' ' << r + 1 << ' ' << r3 << '\n';
+			return;
+		}
+	}
+	cout << "-1\n";
+	return;
 
-        while(l<=r){
-            int mid= l+(r-l)/2;
-
-            // if()
-        }
-    }
-    yes();
 }
 
 void solve2(){}

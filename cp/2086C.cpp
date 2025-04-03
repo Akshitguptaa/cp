@@ -40,6 +40,7 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+vector<bool> s= sieve(100);
 
 // vector operationss
 using vi = vector<int>;
@@ -56,39 +57,71 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+// dsu template
+const int mxN=1e5+1;
+
+int parent[mxN];
+int siz[mxN];
+
+void make_set(int v) {
+    parent[v]=v;
+    siz[v]=1;
+}
+
+int find_set(int v) {
+    return(v==parent[v]) ? v : parent[v] = find_set(parent[v]);
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a == b) return;
+    if (siz[a] < siz[b]) swap(a, b);
+    parent[b] = a;
+    siz[a] += siz[b];
+    siz[b] = 0;
+}
+
+int get_size(int v) {
+    return siz[find_set(v)];
+}
+
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
+    int n;
+    cin>>n;
+     vi vec(n+1);
+     vi d(n+1);
+    //  inp(vec);
+    //  inp(d);
+     
+     for(int i=1;i<=n;i++){
+        cin>>vec[i];
+     }
+     for(int i=1;i<=n;i++){
+        cin>>d[i];
+     }
 
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
-        }
-    } 
-    if(!f){
-        yes();
-        return;
+    for(int i=1; i<=n;i++){
+        make_set(i);
     }
 
-    sort(all(v1));
-
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
-
-        while(l<=r){
-            int mid= l+(r-l)/2;
-
-            // if()
-        }
+    for(int i=1;i<=n;i++){
+        union_sets(i,vec[i]);
     }
-    yes();
+
+    vector<bool> st(n+1,0);
+    int res=0;
+    for(int i=1;i<=n;i++){
+        int idx=d[i];
+        int root=find_set(idx);
+        if(!st[root]){
+            res +=get_size(root);
+            st[root]=1;
+        }
+        cout<<res<<" ";
+    }
+    cout<<endl;
 }
 
 void solve2(){}

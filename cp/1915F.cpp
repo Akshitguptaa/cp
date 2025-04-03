@@ -56,39 +56,57 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+const int M = 1e9 + 7;
+const int N = 3e9;
+
+class FenwickTree {
+public:
+    map<int,int> bit;
+
+    void update(int k, int val) {
+        while (k <= N) {
+            bit[k] += val;
+            k += (k & (-k));
+        }
+    }
+
+    int query(int k) {
+        int res = 0;
+        while (k > 0) {
+            res += bit[k];
+            k -= (k & (-k));
+        }
+        return res;
+    }
+};
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
+    FenwickTree fenwick;
+    int n;
+    cin>>n;
 
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
-        }
-    } 
-    if(!f){
-        yes();
-        return;
+    vector<pair<int,int>> vec(n);
+    for(int i=0;i<n;i++){
+        int a,b;
+        cin>>a>>b;
+         vec[i]= {a,b};
     }
 
-    sort(all(v1));
+    sort(all(vec));
+    int ans=0;
+    fenwick.update(vec[0].second +1e9+ 2, 1);
 
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
-
-        while(l<=r){
-            int mid= l+(r-l)/2;
-
-            // if()
-        }
+    // multiset<int> st;
+    for (int i=1;i<n;i++){
+        // auto temp = st.upper_bound(y);
+        // ans += distance(temp, st.end());
+        // st.insert(y);
+        auto [x,y]= vec[i];
+        int v = fenwick.query(y + 1e9 + 2);
+        ans += i - v;
+        fenwick.update(y+ 1e9 + 2, 1);
     }
-    yes();
+    cout<<ans<<endl;
 }
 
 void solve2(){}

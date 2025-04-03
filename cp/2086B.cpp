@@ -40,6 +40,7 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+vector<bool> s= sieve(100);
 
 // vector operationss
 using vi = vector<int>;
@@ -57,38 +58,45 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
+    int n,k,x;
+    cin>>n>>k>>x;
+    vi vec(n);
+     inp(vec);
 
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
+    int s= accumulate(all(vec),(int)0);
+    //  vector<int> vec1(n*k);
+     vi pre(n+1,0);
+     for(int i=0;i<n;i++){
+        pre[i+1]= pre[i]+vec[i];
+     }
+    int c=0;
+
+    for(int i=1;i<=n;i++){
+        int sum= s-pre[i-1];
+        int len =k*n;
+        if(sum>=x){
+            c+=k;
+            continue;
         }
-    } 
-    if(!f){
-        yes();
-        return;
+        if(sum<=0){
+            // c+=len-i;
+            continue;
+        }
+
+        int temp = (x-sum+s-1)/s;
+        // extra wala 
+        if(temp<k){
+            // c+= len-(i+n+temp*n);
+            c+=k-temp;
+
+            // continue;
+        }
+
+
     }
 
-    sort(all(v1));
+    cout<<c<<endl;
 
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
-
-        while(l<=r){
-            int mid= l+(r-l)/2;
-
-            // if()
-        }
-    }
-    yes();
 }
 
 void solve2(){}

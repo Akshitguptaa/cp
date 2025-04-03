@@ -57,38 +57,62 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
+    int n;
+    cin>>n;
+    string s;
+    cin>>s;
+    
+    int c1=0;
+    int c2=0;
+    int c3=0;
 
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
+    for(auto i:s){
+        if(i=='L'){
+            c1++;
+        }else if(i=='I'){
+            c2++;
+        }else{
+            c3++;
         }
-    } 
-    if(!f){
-        yes();
+    }
+
+    if(c1==c2 && c2==c3){
+        cout<<0<<endl;
         return;
     }
 
-    sort(all(v1));
+    if(c1==n || c2==n || c3==n){
+        cout<<-1<<endl;
+        return;
+    }
 
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
+    vi ans ;
+    int j=-1;
+    for(int i=0;i<n-1;i++){
+        if(s[i+1]!=s[i]){
+            int len=(i-j);
+            int si= ans.size();
 
-        while(l<=r){
-            int mid= l+(r-l)/2;
+            for(int k=0;k<len*2;k++){
+                ans.push_back(i+(si)+1);
+            }
 
-            // if()
+            j=i;
         }
     }
-    yes();
+
+    if(j==-1){
+        cout<<-1<<endl;
+    }
+    int len= (n-j-1);
+    for(int i=0;i<len*2;i++){
+        ans.push_back(ans.size()+n-len);
+    }
+    cout<<ans.size()<<endl;
+    // display(ans);
+    for(auto i:ans){
+        cout<<i<<endl;
+    }
 }
 
 void solve2(){}

@@ -48,76 +48,45 @@ vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p 
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-vector<pair<int, int>> generate_pythagorean_triplets(int limit) {
-    vector<pair<int, int>> triplets;
-    
-    for (int m = 2; m * m <= limit; ++m) {
-        for (int n = 1; n < m; ++n) {
-            // Only consider the triplet when m and n are coprime and not both odd
-            if ((m - n) % 2 == 1 && gcd(m, n) == 1) {
-                // Generate a primitive Pythagorean triplet
-                int a = m * m - n * n;
-                int b = 2 * m * n;
-                int c = m * m + n * n;
-                // Add to the list of triplets
-                if (c <= limit) {
-                    triplets.push_back({a, b});
-                }
-            }
-        }
-    }
-    
-    return triplets;
-}
-
-
 void solve(){
     int n;
-    cin >> n;
-    
-    // Special cases where it's impossible to satisfy the conditions
-    if (n == 1 || n == 3) {
-        cout << -1 << endl;
-        return ;
-    }
-
-    // For odd n, we directly return -1 because it's impossible to create pairs
-    if (n % 2 == 1) {
-        cout << -1 << endl;
-        return ;
-    }
-
-    // Generate Pythagorean triplets up to n
-    vector<pair<int, int>> triplets = generate_pythagorean_triplets(n);
-
-    // We will use these triplets to construct the answer
-    vector<int> result(n, 0);
-    int current_filling = 1;
-
-    for (auto& triplet : triplets) {
-        int dist = triplet.first;  // distance to place identical fillings
-        for (int i = 0; i + dist <= n; i++) {
-            // Check if we can fill positions i and i + dist with the same filling
-            if (result[i] == 0 && result[i + dist] == 0) {
-                result[i] = result[i + dist] = current_filling;
-                current_filling++;
-            }
+    cin>>n;
+    if(!(n&1)){
+        for(int i=0;i<n/2;i++){
+            cout<<i+1<<" "<<i+1<<" ";
         }
+        cout<<endl;
+        return;
+    }else if(n<27){
+        cout<<-1<<endl;
+        return;
     }
 
-    // If there are any positions left unfilled, it's impossible to satisfy the conditions
-    for (int i = 0; i < n; i++) {
-        if (result[i] == 0) {
-            cout << -1 << endl;
-            return ;
+    vi ans(n + 1);
+    ans[1]=1;
+    ans[10]=1;
+    ans[26]=1;
+    ans[27]=2;
+    ans[23]=2;
+    int us=0;
+    int now=3;
+    for(int i=1;i<=n;i++){
+        if(ans[i]){
+            cout<<ans[i]<<endl;
+            continue;
         }
+        if(!us){ 
+            ans[i] = now;
+            us = 1;
+        }
+        else{
+            ans[i]=now;
+            now++;
+            us=0;
+        }
+        cout << ans[i] << ' ';
     }
-
-    // Output the resulting filling arrangement
-    for (int i = 0; i < n; i++) {
-        cout << result[i] << " ";
-    }
-    cout << endl;
+    cout <<endl;
 }
 
 void solve2(){}

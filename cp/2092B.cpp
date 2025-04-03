@@ -57,35 +57,49 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
+    int n;
+    cin>>n;
+    string a,b;
+    cin>>a;
+    cin>>b;
 
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
+    // if(a[0]=='1' && b[1]=='1'){
+    //     no();
+    //     return;
+    // }
+    // if(a[n-1]=='1' && b[n-2]=='1'){
+    //     no();
+    //     return;
+    // }
+
+    int c1=0,c2=0,c3=0,c4=0;
+    for(int i=0;i<n;i++){
+        if(b[i]=='0'){
+            if((i&1)){
+                c1++;
+            }else{
+                c2++;
+            }
         }
-    } 
-    if(!f){
-        yes();
-        return;
+
     }
-
-    sort(all(v1));
-
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
-
-        while(l<=r){
-            int mid= l+(r-l)/2;
-
-            // if()
+    for(int i=0;i<n;i++){
+        if(a[i]=='1'){
+            if((i&1)){
+                if(c2>0){
+                    c2--;
+                }else{
+                    no();
+                    return;
+                }
+            }else{
+                if(c1>0){
+                    c1--;
+                }else{
+                    no();
+                    return;
+                }
+            }
         }
     }
     yes();

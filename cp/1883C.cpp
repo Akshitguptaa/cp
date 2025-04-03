@@ -57,38 +57,33 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
+    int n,k;
+    cin>>n>>k;
 
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
+    vi v(n);
+    inp(v);
+    int minn= k;
+    for(int i=0;i<n;i++){
+        minn = min(minn,(k-v[i]%k)%k);
+    }   
+
+    if(k==4){
+        int c=0;
+        for(auto i:v){
+            if(!(i&1)){
+                c++;
+            }
+            if(c>=2){
+                // cout<<0<<endl;
+                break;
+            }
         }
-    } 
-    if(!f){
-        yes();
+        c= 2-c;
+        c= max(c,(int)0);
+        cout<<min(minn,c)<<endl;
         return;
     }
-
-    sort(all(v1));
-
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
-
-        while(l<=r){
-            int mid= l+(r-l)/2;
-
-            // if()
-        }
-    }
-    yes();
+    cout<<minn<<endl;
 }
 
 void solve2(){}

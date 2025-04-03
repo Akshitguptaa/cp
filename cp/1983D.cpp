@@ -56,39 +56,70 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve(){
-    int n,m;
-    cin>>n>>m;
-    vi v(n),v1(m);
-    inp(v);
-    inp(v1);
-
-    int f=0;
-    for(int i=0;i<n-1;i++){
-        if(v[i]>v[i+1]){
-            f=1;
+int bb(vector<int>& k, int j) {
+    int count = 0;
+    while (j > 1) {
+        for (int i = 0; i < j - 1; i++) {
+            if (k[i + 1] < k[i]) {
+                int temp = k[i];
+                k[i] = k[i + 1];
+                k[i + 1] = temp;
+                count++;
+            }
         }
-    } 
-    if(!f){
-        yes();
-        return;
+        j--;
+    }
+    return count;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    
+    vector<int> a(n);
+    unordered_set<int> a2;
+    unordered_set<int> b2;
+    unordered_map<int, int> b3;
+
+    vector<int> b(n);
+    
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        a2.insert(a[i]);
+    }
+    
+    for (int i = 0; i < n; i++) {
+        cin >> b[i];
+        b3[b[i]] = i;
+        b2.insert(b[i]);
     }
 
-    sort(all(v1));
-
-    auto it= *lower_bound(all(v),v[0]);
-    v[0]= v1[it]-v[0];
-    for(int i=1;i<n;i++){
-        int l=0;
-        int r= n;
-
-        while(l<=r){
-            int mid= l+(r-l)/2;
-
-            // if()
+    if (a2 == b2) {
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            int g = a[i];
+            int in = b3[g];
+            if (in < i) {
+                cout << "NO" << endl;
+                return;
+            }
+            if (in > i) {
+                int temp = b[i];
+                b[i] = b[in];
+                b[in] = temp;
+                b3[b[i]] = i;
+                b3[b[in]] = in;
+                count++;
+            }
         }
+        if (count % 2 == 0) {
+            cout << "YES" << endl;
+        } else {
+            cout << "NO" << endl;
+        }
+    } else {
+        cout << "NO" << endl;
     }
-    yes();
 }
 
 void solve2(){}
