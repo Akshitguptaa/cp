@@ -5,5 +5,5 @@ int main(){
     cin>>s;
     int a;
     cin>>a;
-    cout<<" "<<endl;
+    cout<<120<<endl;
 }
