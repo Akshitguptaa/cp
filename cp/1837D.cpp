@@ -1,12 +1,13 @@
 //// AKSHIT - template ////
 
 #include <bits/stdc++.h>
-// #include<chrono>
-#include<unordered_set>
+#include <ext/pb_ds/assoc_container.hpp> // Common file 
+#include <ext/pb_ds/tree_policy.hpp>  
+#include <functional> 
 
+using namespace __gnu_pbds; 
 using namespace std;
 typedef long long int int64;
-typedef unsigned long long int uint64;
 
 #define int long long
 #define endl "\n"
@@ -19,16 +20,12 @@ typedef unsigned long long int uint64;
 #define mp make_pair
 #define all(x) x.begin(), x.end()
 #define rall(x) x.rbegin(), x.rend()
-#define rall(x) x.rbegin(), x.rend()
 #define rep(i, a, b) for (int i = a; i < b; i++)
 #define rrep(i, a, b) for (int i = b - 1; i >= a; i--)
+typedef tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_update> ordered_set;
 
 // i/o
 static const auto init = []() { ios::sync_with_stdio(0); cin.tie(0); cout.tie(0); return 0;}();
-
-// string operations
-string to_upper(string a) { for (int i=0;i<(int)a.size();++i) if (a[i]>='a' && a[i]<='z') a[i]-='a'-'A'; return a; }
-string to_lower(string a) { for (int i=0;i<(int)a.size();++i) if (a[i]>='A' && a[i]<='Z') a[i]+='a'-'A'; return a; }
 
 // math
 int gcd(int a,int b) { if (b==0) return a; return gcd(b, a%b); }
@@ -40,12 +37,12 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
-vector<bool> s =sieve(100);
 
 // vector operationss
 using vi = vector<int>;
 using vb = vector<bool>;
-using v32 = vector<int32_t>;
+using vvi = vector<vector<int>>;
+using vvb = vector<vector<bool>>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -57,71 +54,13 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-bool func(vi & v,int k,int mid){
-    if(mid==0){
-        return 1;
-    }
-
-    int n= v.size();
-    int c=0;
-    int i=0;
-    int c1=0;
-        unordered_set<int> seen;
-    while(i<n){
-        if(v[i]<mid && !seen.count(v[i])){
-            c++;
-            seen.insert(v[i]);
-        }
-        if(c==mid){
-            seen.clear();
-            c1++;
-            if(c1>=k){
-                return 1;
-            }
-            c=0;
-        }
-        i++;
-
-    }
-    return 0;
-
-}
-
 void solve(){
-    int n,k;
-    cin>>n>>k;
     
-    vi v(n);
-    inp(v);
-
-    set<int> st(v.begin(),v.end());
-    int mexx=0;
-    while(st.count(mexx)){
-        mexx++;
-    }
-
-    int l=0;
-    int r=mexx;
-    int ans=0;
-    while(l<=r){
-        int mid= l+(r-l)/2;
-
-        if(func(v,k,mid)){
-            ans=mid;
-            l= mid+1;
-        }else{
-            r=mid-1;
-        }
-
-
-    }
-    cout<<ans<<endl;
 }
 
 void solve2(){}
 
 int32_t main(){
-    auto begin = chrono::high_resolution_clock::now();
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 
@@ -132,7 +71,6 @@ int32_t main(){
         // solve2();
     }
 
-    auto end = chrono::high_resolution_clock::now();
-    auto elapsed = chrono::duration_cast<chrono::nanoseconds>(end - begin);
-    // cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
 }
+
+//END
