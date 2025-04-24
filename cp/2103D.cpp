@@ -37,6 +37,7 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+vector<bool> s= sieve(100);
 
 // vector operationss
 using vi = vector<int>;
@@ -55,65 +56,78 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n;
+    cin>>n;
+     
+     vi v(n);
+     inp(v);
 
-    vector<pair<int,int>> vec(m);
-    for(int i=0;i<m;i++){
-        int l,r;
-        cin>>l>>r;
-        vec[i]= {l-1,r-1};
+    int maxx= *max_element(all(v));
+    vvi vec(maxx+2);
+    int m=-1;
+    for(int i=0;i<n;i++){
+        if(v[i]==-1){
+            // v[i]= maxx+1;
+            m=i;
+        }else{
+        vec[v[i]].push_back(i);
+
+        }
     }
 
-    int q;
-    cin>>q;
+    // for(int i=0;i<n;i++){
 
-    // maxi
-    int r=q+1;
+    // }
 
-    int l=0;
-
-    vi qu(q);
-    for(int i=0;i<q;i++){
-        cin>>qu[i];
-        qu[i]--;
-    }
-
-    while(l<r-1){
-        int midd= l+(r-l)/2;
-
-        vi temp1(n,0);
-        for(int i=0;i<midd;i++){
-            temp1[qu[i]]= 1;
-        }
-        // temp[0]=0;
-        vi temp(n+1,0);
-        for(int i=0;i<n;i++){
-            temp[i+1]= temp[i]+temp1[i];
-        }
-
-        int f=0;
-        for(auto [x,y]:vec){
-            int c= temp[y+1]- temp[x];
-            int temp1= (y-x+1)/2;
-
-            if(c>temp1){
-                f=1;
-                break;
+    vi ans(n);
+    int maxi=n;
+    int l=1;
+    for(int i=1;i<maxx+1;i++){
+            if((i)&1){
+                    for(auto id:vec[i]){
+                        if(id<m){
+                            ans[id]= maxi--;
+                        }
+                        // ans[id]= maxi--;
+                        // maxi--;
+                    }
+                    reverse(all(vec[i]));
+                    for(auto id:vec[i]){
+                        if(id>m){
+                            ans[id]= maxi--;
+                        }
+                        // maxi--;
+                    }
+                    continue;
             }
-        }
-        if(f){
-            r=midd;
-        }else{ 
-            l= midd;
-        }
-    }
-    if(r==q+1){
-        cout<<-1<<endl;
-        return;
+
+            for(auto id:vec[i]){
+                if(id<m){
+                    ans[id]= l++;
+                }
+            }
+            reverse(all(vec[i]));
+            for(auto id:vec[i]){
+                if(id>m){
+                    ans[id]= l++;
+                }
+            }
+        // sort(all(vec[i+1]));
+        // for(auto id:vec[i+1]){
+        //     ans[id]= l++;
+        // }
+
+
     }
 
-    cout<<r<<endl;
+    // // sort(all(vec[maxx+1]));
+    // for(auto i:vec[maxx+1]){
+    //     ans[i]= l++;
+    // }
+    ans[m]=l;
+
+    display(ans);
+    return ;
 }
 
 void solve2(){}

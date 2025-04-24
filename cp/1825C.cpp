@@ -57,63 +57,51 @@ void no() { cout<<"NO\n"; }
 void solve(){
     int n,m;
     cin>>n>>m;
+    
+    vi v(n);
+    inp(v);
+    int ans= min(n,m);
 
-    vector<pair<int,int>> vec(m);
-    for(int i=0;i<m;i++){
-        int l,r;
-        cin>>l>>r;
-        vec[i]= {l-1,r-1};
-    }
-
-    int q;
-    cin>>q;
-
-    // maxi
-    int r=q+1;
-
-    int l=0;
-
-    vi qu(q);
-    for(int i=0;i<q;i++){
-        cin>>qu[i];
-        qu[i]--;
-    }
-
-    while(l<r-1){
-        int midd= l+(r-l)/2;
-
-        vi temp1(n,0);
-        for(int i=0;i<midd;i++){
-            temp1[qu[i]]= 1;
-        }
-        // temp[0]=0;
-        vi temp(n+1,0);
-        for(int i=0;i<n;i++){
-            temp[i+1]= temp[i]+temp1[i];
-        }
-
-        int f=0;
-        for(auto [x,y]:vec){
-            int c= temp[y+1]- temp[x];
-            int temp1= (y-x+1)/2;
-
-            if(c>temp1){
-                f=1;
-                break;
-            }
-        }
-        if(f){
-            r=midd;
-        }else{ 
-            l= midd;
+    vi vec;
+    for(int i=0;i<n;i++){
+        if(v[i]!=-1 && v[i]!=-2){
+            vec.push_back(v[i]);
         }
     }
-    if(r==q+1){
-        cout<<-1<<endl;
-        return;
+
+
+    sort(all(vec));
+    vec.erase(unique(all(vec)),vec.end());
+
+    int sz= vec.size();
+
+    int c=0;
+    int c1=0;
+    for(int i=0;i<n;i++){
+        if(v[i]==-1){
+            c++;
+        }else if(v[i]==-2){
+            c1++;
+        }
+
+
     }
 
-    cout<<r<<endl;
+
+
+    int temp= min(m,c+sz);
+    int temp1= min(m,c1+sz);
+    ans= max(temp,temp1);
+
+    for(int i=0;i<vec.size();i++){
+        int idx= vec[i];
+        temp= min(idx-i-1,c);
+        temp1= min( (m-idx-(sz-(i+1))),c1 );
+        temp= sz+temp+temp1;
+        ans= max(ans,temp);
+
+    }
+    cout<<ans<<endl;
 }
 
 void solve2(){}

@@ -54,66 +54,43 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+// dsu template
+const int mxN=1e5+1;
+ 
+int parent[mxN];
+int siz[mxN];
+ 
+void make_set(int v) {
+    parent[v]=v;
+    siz[v]=1;
+}
+ 
+int find_set(int v) {
+    return(v==parent[v]) ? v : parent[v] = find_set(parent[v]);
+}
+ 
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a == b) return;
+    if (siz[a] < siz[b]) swap(a, b);
+    parent[b] = a;
+    siz[a] += siz[b];
+    siz[b] = 0;
+}
+ 
+int get_size(int v) {
+    return siz[find_set(v)];
+}
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
+   int n;
+   cin>>n;
+    vi v(n);
+    inp(v);
 
-    vector<pair<int,int>> vec(m);
-    for(int i=0;i<m;i++){
-        int l,r;
-        cin>>l>>r;
-        vec[i]= {l-1,r-1};
-    }
-
-    int q;
-    cin>>q;
-
-    // maxi
-    int r=q+1;
-
-    int l=0;
-
-    vi qu(q);
-    for(int i=0;i<q;i++){
-        cin>>qu[i];
-        qu[i]--;
-    }
-
-    while(l<r-1){
-        int midd= l+(r-l)/2;
-
-        vi temp1(n,0);
-        for(int i=0;i<midd;i++){
-            temp1[qu[i]]= 1;
-        }
-        // temp[0]=0;
-        vi temp(n+1,0);
-        for(int i=0;i<n;i++){
-            temp[i+1]= temp[i]+temp1[i];
-        }
-
-        int f=0;
-        for(auto [x,y]:vec){
-            int c= temp[y+1]- temp[x];
-            int temp1= (y-x+1)/2;
-
-            if(c>temp1){
-                f=1;
-                break;
-            }
-        }
-        if(f){
-            r=midd;
-        }else{ 
-            l= midd;
-        }
-    }
-    if(r==q+1){
-        cout<<-1<<endl;
-        return;
-    }
-
-    cout<<r<<endl;
+    
+     
 }
 
 void solve2(){}

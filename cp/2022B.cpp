@@ -55,65 +55,24 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,x;
+    cin>>n>>x; 
 
-    vector<pair<int,int>> vec(m);
-    for(int i=0;i<m;i++){
-        int l,r;
-        cin>>l>>r;
-        vec[i]= {l-1,r-1};
-    }
+    vi a(n);
+    inp(a);
 
-    int q;
-    cin>>q;
+    int sum=accumulate(all(a),(int)0);
+    int maxx= *max_element(all(a));
 
-    // maxi
-    int r=q+1;
-
-    int l=0;
-
-    vi qu(q);
-    for(int i=0;i<q;i++){
-        cin>>qu[i];
-        qu[i]--;
-    }
-
-    while(l<r-1){
-        int midd= l+(r-l)/2;
-
-        vi temp1(n,0);
-        for(int i=0;i<midd;i++){
-            temp1[qu[i]]= 1;
-        }
-        // temp[0]=0;
-        vi temp(n+1,0);
-        for(int i=0;i<n;i++){
-            temp[i+1]= temp[i]+temp1[i];
-        }
-
-        int f=0;
-        for(auto [x,y]:vec){
-            int c= temp[y+1]- temp[x];
-            int temp1= (y-x+1)/2;
-
-            if(c>temp1){
-                f=1;
-                break;
-            }
-        }
-        if(f){
-            r=midd;
-        }else{ 
-            l= midd;
-        }
-    }
-    if(r==q+1){
-        cout<<-1<<endl;
+    if(n==1){
+        cout<<a.front()<<endl;
         return;
     }
 
-    cout<<r<<endl;
+    sort(all(a));
+    int ans = max((sum +x-1)/x,maxx);
+
+    cout<<ans<<endl; 
 }
 
 void solve2(){}

@@ -55,65 +55,38 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    // vi v(4);
+    // inp(v);
+    int a,b,c,d;
+    cin>>a>>b>>c>>d;
 
-    vector<pair<int,int>> vec(m);
-    for(int i=0;i<m;i++){
-        int l,r;
-        cin>>l>>r;
-        vec[i]= {l-1,r-1};
-    }
+    int maxx = b+d+1;
+    // vi pre(maxx+1,0);
+    int ans=0;
 
-    int q;
-    cin>>q;
+    // x+y>z
+    for(int i=a;i<b+1;i++){
+        int l=b+i;
+        int r= i+c;
 
-    // maxi
-    int r=q+1;
+        int l1= c+1;
+        int r1= d+1;
 
-    int l=0;
+        l= max(l1,l);
+        r1= min(r,r1);
 
-    vi qu(q);
-    for(int i=0;i<q;i++){
-        cin>>qu[i];
-        qu[i]--;
-    }
-
-    while(l<r-1){
-        int midd= l+(r-l)/2;
-
-        vi temp1(n,0);
-        for(int i=0;i<midd;i++){
-            temp1[qu[i]]= 1;
-        }
-        // temp[0]=0;
-        vi temp(n+1,0);
-        for(int i=0;i<n;i++){
-            temp[i+1]= temp[i]+temp1[i];
+        if(l>r || l1>r1){
+            continue;
         }
 
-        int f=0;
-        for(auto [x,y]:vec){
-            int c= temp[y+1]- temp[x];
-            int temp1= (y-x+1)/2;
-
-            if(c>temp1){
-                f=1;
-                break;
-            }
+        if(l>=r1){
+            ans+= (r-l+1) * (r1-l1+1);
+            continue;
         }
-        if(f){
-            r=midd;
-        }else{ 
-            l= midd;
-        }
-    }
-    if(r==q+1){
-        cout<<-1<<endl;
-        return;
-    }
-
-    cout<<r<<endl;
+        // z range from l to r-1 + all case in which x+y>d
+        ans+= (l-l1 + r1-l1+1)* (r1-l)/2 + (r-r1+1)* (r1-l1+1);
+    }    
+    cout<<ans<<endl;
 }
 
 void solve2(){}
@@ -122,12 +95,12 @@ int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while(t--){
+    // int t;
+    // cin >> t;
+    // while(t--){
         solve();
         // solve2();
-    }
+    // }
 
 }
 

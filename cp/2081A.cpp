@@ -12,7 +12,7 @@ typedef long long int int64;
 #define int long long
 #define endl "\n"
 #define INF LLONG_MAX
-#define MOD 1000000007
+// #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
 #define setbits(x) __builtin_popcountll(x)
 #define trailzero(x) __builtin_ctz(x)
@@ -54,66 +54,41 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+const int MOD=1e9+7;
+
+int fastpow(int a , int b){
+	int ret = 1;
+	while(b){
+		if(b&1)ret = ret * a % MOD;
+		a = a * a % MOD;
+		b >>= 1;
+	}
+	return ret;
+}
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n;
+    cin>>n;
+    
+    string s;
+    cin>>s;
 
-    vector<pair<int,int>> vec(m);
-    for(int i=0;i<m;i++){
-        int l,r;
-        cin>>l>>r;
-        vec[i]= {l-1,r-1};
+    reverse(all(s));
+    int sum=0;
+    int k=1;
+    for(int i=0;i<n-1;i++){
+        if(s[i]=='1'){
+            sum= (sum+k)%MOD;
+        }
+             k= k*2%MOD;
+
     }
 
-    int q;
-    cin>>q;
-
-    // maxi
-    int r=q+1;
-
-    int l=0;
-
-    vi qu(q);
-    for(int i=0;i<q;i++){
-        cin>>qu[i];
-        qu[i]--;
-    }
-
-    while(l<r-1){
-        int midd= l+(r-l)/2;
-
-        vi temp1(n,0);
-        for(int i=0;i<midd;i++){
-            temp1[qu[i]]= 1;
-        }
-        // temp[0]=0;
-        vi temp(n+1,0);
-        for(int i=0;i<n;i++){
-            temp[i+1]= temp[i]+temp1[i];
-        }
-
-        int f=0;
-        for(auto [x,y]:vec){
-            int c= temp[y+1]- temp[x];
-            int temp1= (y-x+1)/2;
-
-            if(c>temp1){
-                f=1;
-                break;
-            }
-        }
-        if(f){
-            r=midd;
-        }else{ 
-            l= midd;
-        }
-    }
-    if(r==q+1){
-        cout<<-1<<endl;
-        return;
-    }
-
-    cout<<r<<endl;
+    int temp= mod_expo(2,n-1,MOD);
+    temp=mod_expo(temp,MOD-2,MOD) ;
+    
+     int ans = ((n-1) + mod_mul(sum,temp,MOD)) % MOD;
+    cout << ans << endl;
 }
 
 void solve2(){}

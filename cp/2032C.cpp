@@ -54,66 +54,47 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+bool func(vector<int> v,int& n,int mid){
+    if(mid==1){
+        return 0;
+    }
+
+    for(int i=0;i<n-mid+1;i++) {
+        int x =v[i]+v[i+1];
+        if(x>v[i+mid-1]){
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n;
+    cin>>n;
+ 
+    vi v(n);
+    inp(v);
 
-    vector<pair<int,int>> vec(m);
-    for(int i=0;i<m;i++){
-        int l,r;
-        cin>>l>>r;
-        vec[i]= {l-1,r-1};
-    }
+    sort(v.begin(),v.end());
+    int l=1;
+    int r=n;
+    int ans=n;
+ 
+    while(l<=r){
+        int mid=l+(r-l)/2;
 
-    int q;
-    cin>>q;
-
-    // maxi
-    int r=q+1;
-
-    int l=0;
-
-    vi qu(q);
-    for(int i=0;i<q;i++){
-        cin>>qu[i];
-        qu[i]--;
-    }
-
-    while(l<r-1){
-        int midd= l+(r-l)/2;
-
-        vi temp1(n,0);
-        for(int i=0;i<midd;i++){
-            temp1[qu[i]]= 1;
-        }
-        // temp[0]=0;
-        vi temp(n+1,0);
-        for(int i=0;i<n;i++){
-            temp[i+1]= temp[i]+temp1[i];
-        }
-
-        int f=0;
-        for(auto [x,y]:vec){
-            int c= temp[y+1]- temp[x];
-            int temp1= (y-x+1)/2;
-
-            if(c>temp1){
-                f=1;
-                break;
-            }
-        }
-        if(f){
-            r=midd;
-        }else{ 
-            l= midd;
+        if(func(v,n,mid)){
+            r= mid-1;
+        }else{
+            ans=min(ans,n-mid);
+            l=mid+1;
         }
     }
-    if(r==q+1){
-        cout<<-1<<endl;
-        return;
-    }
-
-    cout<<r<<endl;
+ 
+    cout << ans << endl;
+        
+    
 }
 
 void solve2(){}
