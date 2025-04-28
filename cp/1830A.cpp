@@ -54,100 +54,60 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-bool func(string s){
-    int c=0;
-    for(auto i:s){
-        if(i=='('){
-            c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            return 0;
-        }
-    }
-    return c==0;
-}
-
 void solve(){
     int n;
     cin>>n;
-    
-    string s;
-    cin>>s;
+    vector<vector<pair<int,int>>> v(n);
+    for(int i=0;i<n-1;i++){
+        int x,y;
+        cin>>x>>y;
 
-    if((n&1)){
-        cout<<-1<<endl;
-        return;
-    }
+        x--;
+        y--;
 
-    int c=0;
-    // vi ans(n);
-    int f=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
-        }
-    }
-    if(c!=0){
-        cout<<-1<<endl;
-        return ;
-    }
-
-    string temp(rall(s));
-
-    if(func(s)|| func(temp)){
-        cout<<1<<endl;
-        vi ans(n,1);
-        display(ans);
-        return ;
-
+        v[y].pb({x,i});
+        v[x].pb({y,i});
 
     }
 
-    vi ans(n,1);
-    c=0;
-    int c1=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            c1++;
-            c++;
-        }
-    }
+    queue<pair<int,pair<int,int>>> q;
+    q.push({0,{INT_MAX,0}});
 
-    c=0;
-    for(int i=0;i<n;i++){
-        if(s[i]==')'){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
+
+    vb seen(n,0);
+
+    int ans=0;
+    while(!q.empty()){
+        auto [u,temp]= q.front();
+        auto [t,c]= temp;
+
+        q.pop();
+
+        if(!seen[u]){
+
+        seen[u]=1;
+        ans= max(c,ans);
+
+        for(auto [x,y]:v[u]){
+            if(!seen[x]){
+                if(y>t){
+                    q.push({x,{y,c}});
+                }else{
+                    // agar indx chota hai toh counter badhe ga 
+                    q.push({x,{y,c+1}});
+                }
             }
+
+
         }
-    }
-    
-    c=0;
-    for(int i=n;i>=0;i--){
-        if(s[i]=='('){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
-            }
         }
+
+
     }
 
-    cout<<2<<endl;
-    display(ans);
-    return;
-    
+    cout<<ans<<endl;
+
+
 }
 
 void solve2(){}

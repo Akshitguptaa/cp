@@ -37,6 +37,7 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+vector<bool> s= sieve(100);
 
 // vector operationss
 using vi = vector<int>;
@@ -54,100 +55,72 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-bool func(string s){
-    int c=0;
-    for(auto i:s){
-        if(i=='('){
-            c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            return 0;
-        }
-    }
-    return c==0;
-}
-
 void solve(){
-    int n;
-    cin>>n;
-    
-    string s;
-    cin>>s;
+    int n,m;
+    cin>>n>>m;
+    vi v(n);
+    inp(v);
 
-    if((n&1)){
-        cout<<-1<<endl;
-        return;
+    vi v1(m);
+    inp(v1);
+
+    int l=0;
+    int i=0;
+    while(i<n){
+        if(v[i]>=v1[l]){
+            l++;
+        }
+        if(l>=m){
+            cout<<0<<endl;
+            return ;
+        }
+        i++;
     }
 
-    int c=0;
-    // vi ans(n);
-    int f=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
+    vi pre(n+1,0);
+     l=0;
+    vi suf(n+1,0);
+    for(i=0;i<n;i++){
+        pre[i+1] = pre[i];
+        if(l<m && v[i]>=v1[l]){
+            pre[i+1]++;
+            l++;
         }
     }
-    if(c!=0){
-        cout<<-1<<endl;
-        return ;
-    }
+    // for( i=1;i<=n;i++){
+    //     pre[i]+=pre[i-1];
+    // }
 
-    string temp(rall(s));
+    // for( i=n-1;i>=0;i--){
+    //     suf[i]+=suf[i+1];
+    // }
 
-    if(func(s)|| func(temp)){
-        cout<<1<<endl;
-        vi ans(n,1);
-        display(ans);
-        return ;
-
-
-    }
-
-    vi ans(n,1);
-    c=0;
-    int c1=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            c1++;
-            c++;
+    l=m-1;
+    for(i=n-1;i>=0;i--){
+        suf[i] = suf[i+1];
+        if(l>=0 && v[i]>=v1[l]){
+            suf[i]++;
+            l--;
         }
     }
 
-    c=0;
-    for(int i=0;i<n;i++){
-        if(s[i]==')'){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
+    int minn= INT_MAX;
+    for(i=0;i<=n;i++){
+        int temp = pre[i]+suf[i];
+        if(pre[i]<m){
+            if(temp>=m-1){
+                minn= min(minn,v1[pre[i]]);
             }
         }
     }
-    
-    c=0;
-    for(int i=n;i>=0;i--){
-        if(s[i]=='('){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
-            }
-        }
-    }
+    if(minn==INT_MAX){
+        cout<<-1<<endl;
 
-    cout<<2<<endl;
-    display(ans);
-    return;
-    
+        return ;
+    }
+    cout<<minn<<endl;
+
+
 }
 
 void solve2(){}

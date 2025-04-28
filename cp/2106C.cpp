@@ -37,6 +37,7 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+vector<bool> s= sieve(100);
 
 // vector operationss
 using vi = vector<int>;
@@ -54,99 +55,59 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-bool func(string s){
-    int c=0;
-    for(auto i:s){
-        if(i=='('){
-            c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            return 0;
-        }
-    }
-    return c==0;
-}
-
 void solve(){
-    int n;
-    cin>>n;
-    
-    string s;
-    cin>>s;
+    int n,k;
+    cin>>n>>k;
+    vi v(n);
+    vi v1(n);
 
-    if((n&1)){
-        cout<<-1<<endl;
-        return;
-    }
+    inp(v);
+    inp(v1);
+    int x=-1;
 
-    int c=0;
-    // vi ans(n);
-    int f=0;
     for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
+        if(v1[i]!=-1){
+            if(x==-1){
+                x=v[i]+v1[i];
+            }else{
+                if(v[i]+v1[i]!=x){
+                    cout<<0<<endl;
+                    return ;
+                }
+            }
         }
+
+        // if(v[i]==-1){
+
+        // }
     }
-    if(c!=0){
-        cout<<-1<<endl;
+
+    if(x==-1){
+        int maxx= *max_element(all(v));
+        int minn= *min_element(all(v));
+        int temp= minn+k-maxx+1;
+        if(temp<0){
+            cout<<0<<endl;
+            return ;
+        }
+        cout<< temp<<endl;
         return ;
     }
-
-    string temp(rall(s));
-
-    if(func(s)|| func(temp)){
+        for(int i=0;i<n;i++){
+            if(v1[i]==-1){
+                int temp= x-v[i];
+                if(temp<0 || temp>k){
+                    cout<<0<<endl;
+                    return ;
+                }
+            }
+        }
         cout<<1<<endl;
-        vi ans(n,1);
-        display(ans);
-        return ;
+        // only one
 
 
-    }
 
-    vi ans(n,1);
-    c=0;
-    int c1=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            c1++;
-            c++;
-        }
-    }
 
-    c=0;
-    for(int i=0;i<n;i++){
-        if(s[i]==')'){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
-            }
-        }
-    }
-    
-    c=0;
-    for(int i=n;i>=0;i--){
-        if(s[i]=='('){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
-            }
-        }
-    }
-
-    cout<<2<<endl;
-    display(ans);
-    return;
     
 }
 

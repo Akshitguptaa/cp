@@ -54,100 +54,70 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-bool func(string s){
-    int c=0;
-    for(auto i:s){
-        if(i=='('){
-            c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            return 0;
-        }
-    }
-    return c==0;
-}
-
 void solve(){
     int n;
     cin>>n;
-    
-    string s;
-    cin>>s;
+     
+     vi v(n);
+     inp(v);
 
-    if((n&1)){
-        cout<<-1<<endl;
-        return;
-    }
+     map<int,int> mp;
 
-    int c=0;
-    // vi ans(n);
-    int f=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
+     sort(all(v));
+     for(auto i:v){
+        mp[i]++;
+        if(mp[i]>=4){
+            // cout<<"hi";
+            yes();
+            return ;
+
         }
-    }
-    if(c!=0){
-        cout<<-1<<endl;
-        return ;
-    }
+     }
 
-    string temp(rall(s));
-
-    if(func(s)|| func(temp)){
-        cout<<1<<endl;
-        vi ans(n,1);
-        display(ans);
-        return ;
-
-
-    }
-
-    vi ans(n,1);
-    c=0;
-    int c1=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
+     for(int i=0;i<n;i++){
+        if(mp[v[i]]>=2 && mp[v[i]-1]>=2){
+            yes();
+            return ;
         }
-        if(c<0){
-            c1++;
-            c++;
-        }
-    }
+     }
 
-    c=0;
+     
+    // vi vec;
+    //  for(auto [x,y]:mp){
+    //     vec.pb(x);
+    //  }
+
+    //  sort(all(vec));
     for(int i=0;i<n;i++){
-        if(s[i]==')'){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
+        if(mp[v[i]]>=2){
+            int c=1;
+
+            while(1){
+                // if(mp[v[i]+c]==0){
+                //     break;
+                // }
+
+                if(mp[v[i]+c]>=2){
+                    // cout<<"c1";
+                    yes();
+                    return ;
+                }
+                if(mp[v[i]+c]==0){
+                    c++;
+                    break;
+                }
+                
+                c++;
+
             }
-        }
-    }
-    
-    c=0;
-    for(int i=n;i>=0;i--){
-        if(s[i]=='('){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
-            }
+            i+=c-1;
+
         }
     }
 
-    cout<<2<<endl;
-    display(ans);
-    return;
-    
+    no();
+
+
 }
 
 void solve2(){}

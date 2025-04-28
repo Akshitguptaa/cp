@@ -54,99 +54,49 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-bool func(string s){
-    int c=0;
-    for(auto i:s){
-        if(i=='('){
-            c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            return 0;
-        }
-    }
-    return c==0;
-}
-
 void solve(){
-    int n;
-    cin>>n;
+    int n,k;
+    cin>>n>>k;
     
     string s;
     cin>>s;
 
-    if((n&1)){
-        cout<<-1<<endl;
-        return;
-    }
-
     int c=0;
-    // vi ans(n);
-    int f=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
-        }
-    }
-    if(c!=0){
-        cout<<-1<<endl;
-        return ;
-    }
-
-    string temp(rall(s));
-
-    if(func(s)|| func(temp)){
-        cout<<1<<endl;
-        vi ans(n,1);
-        display(ans);
-        return ;
-
-
-    }
-
-    vi ans(n,1);
-    c=0;
+    int x=0;
     int c1=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
+    for(int i=0;i<n-k;i++){
+        if(s[i]==s[i+k]){
+            // if(s[i]=='?'){
+
+            // }
+            continue;
         }else{
-            c--;
-        }
-        if(c<0){
-            c1++;
-            c++;
+            if(s[i]=='?'){
+                s[i]= s[i+k];
+            }else if(s[i+k]=='?'){
+                s[i+k]=s[i];
+            }else{
+                no();
+                return ;
+            }
         }
     }
 
-    c=0;
-    for(int i=0;i<n;i++){
-        if(s[i]==')'){
-            ans[i]=2;
+    for(int i=0;i<k;i++){
+        if(s[i]=='1'){
+            c1++;
+        }else if(s[i]=='0'){
             c++;
-            if(c==c1){
-                break;
-            }
+        }else{
+            x++;
         }
     }
     
-    c=0;
-    for(int i=n;i>=0;i--){
-        if(s[i]=='('){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
-            }
-        }
-    }
 
-    cout<<2<<endl;
-    display(ans);
-    return;
+    
+
+    yes();
+
     
 }
 

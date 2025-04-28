@@ -54,100 +54,41 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-bool func(string s){
-    int c=0;
-    for(auto i:s){
-        if(i=='('){
+const int MAXX= 1e7 + 1;
+vector<int> pref(MAXX);
+
+void func(){
+    auto is_prime = sieve(MAXX-1);
+    int c=1;
+    for(int i=2;i<MAXX;i++){
+        pref[c] = pref[c-1];
+        if(is_prime[i]){
+            pref[c]+=i;
             c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            return 0;
         }
     }
-    return c==0;
 }
+
 
 void solve(){
     int n;
     cin>>n;
-    
-    string s;
-    cin>>s;
 
-    if((n&1)){
-        cout<<-1<<endl;
-        return;
-    }
+    vi v(n);
+    inp(v);
 
-    int c=0;
-    // vi ans(n);
-    int f=0;
+    sort(rall(v));
+    int s=0;
     for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
+        s+=v[i];
+        // cout<<s<<" "<<pref[i + 1]<<" "<<pref[i + 1]<<endl;
+        if(s<pref[i+1]){
+            cout<<n-i<<endl;
+            return ;
         }
-    }
-    if(c!=0){
-        cout<<-1<<endl;
-        return ;
-    }
-
-    string temp(rall(s));
-
-    if(func(s)|| func(temp)){
-        cout<<1<<endl;
-        vi ans(n,1);
-        display(ans);
-        return ;
-
 
     }
-
-    vi ans(n,1);
-    c=0;
-    int c1=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            c1++;
-            c++;
-        }
-    }
-
-    c=0;
-    for(int i=0;i<n;i++){
-        if(s[i]==')'){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
-            }
-        }
-    }
-    
-    c=0;
-    for(int i=n;i>=0;i--){
-        if(s[i]=='('){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
-            }
-        }
-    }
-
-    cout<<2<<endl;
-    display(ans);
-    return;
-    
+    cout<<0<<endl;
 }
 
 void solve2(){}
@@ -155,6 +96,7 @@ void solve2(){}
 int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
+    func();
 
     int t;
     cin >> t;

@@ -37,6 +37,7 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+vector<bool> s= sieve(100);
 
 // vector operationss
 using vi = vector<int>;
@@ -54,100 +55,75 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-bool func(string s){
-    int c=0;
-    for(auto i:s){
-        if(i=='('){
-            c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            return 0;
-        }
-    }
-    return c==0;
-}
-
 void solve(){
-    int n;
-    cin>>n;
-    
-    string s;
-    cin>>s;
+    int n,q;
+    cin>>n>>q;
 
-    if((n&1)){
-        cout<<-1<<endl;
-        return;
-    }
-
-    int c=0;
-    // vi ans(n);
-    int f=0;
+    vi v(n+1);
+    // inp(v);
     for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
-        }
-    }
-    if(c!=0){
-        cout<<-1<<endl;
-        return ;
+        cin>>v[i+1];
     }
 
-    string temp(rall(s));
-
-    if(func(s)|| func(temp)){
-        cout<<1<<endl;
-        vi ans(n,1);
-        display(ans);
-        return ;
-
-
-    }
-
-    vi ans(n,1);
-    c=0;
-    int c1=0;
+    vi temp(n+1);
     for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            c++;
-        }else{
-            c--;
-        }
-        if(c<0){
-            c1++;
-            c++;
-        }
+        temp[v[i+1]]=i+1;
     }
 
-    c=0;
-    for(int i=0;i<n;i++){
-        if(s[i]==')'){
-            ans[i]=2;
-            c++;
-            if(c==c1){
+    int ans;
+    while(q--){
+        int l,r,x;
+        cin>>l>>r>>x;
+
+        if(temp[x]<l || temp[x]>r){
+            cout<<-1<<" ";
+            continue ;
+        }
+        ans=0;
+
+        // int s=l;
+        // int h= r;
+        int c=0;
+        int c1=0;
+        int lc=0;
+        int rc=0;
+        while(l<=r){
+            int mid= l+(r-l)/2;
+
+            if(mid==temp[x]){
                 break;
             }
-        }
-    }
-    
-    c=0;
-    for(int i=n;i>=0;i--){
-        if(s[i]=='('){
-            ans[i]=2;
-            c++;
-            if(c==c1){
-                break;
+            if(mid<temp[x]){
+                lc++;
+                if(v[mid]>x){
+                    c++;
+                }
+                l=mid+1;
+            }else{
+                rc++;
+                if(v[mid]<x){
+                    c1++;
+                }
+                r=mid-1;
             }
+
+            // for(int i=l;i<r;i++){
+
+            // }
+
         }
+            if(lc>x-1 || rc>n-x){
+                cout<<-1<<' ';
+                continue;
+            }
+             ans = max(c1,c);
+
+        cout<<2*ans<<' ';
+
+
     }
 
-    cout<<2<<endl;
-    display(ans);
-    return;
-    
+cout<<endl;
 }
 
 void solve2(){}
