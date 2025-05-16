@@ -1,0 +1,211 @@
+//// AKSHIT - template ////
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file 
+#include <ext/pb_ds/tree_policy.hpp>  
+#include <functional> 
+
+using namespace __gnu_pbds; 
+using namespace std;
+typedef long long int int64;
+
+#define int long long
+#define endl "\n"
+#define INF LLONG_MAX
+#define MOD 1000000007
+#define PI 3.1415926535897932384626433832795
+#define setbits(x) __builtin_popcountll(x)
+#define trailzero(x) __builtin_ctz(x)
+#define pb push_back
+#define mp make_pair
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define rep(i, a, b) for (int i = a; i < b; i++)
+#define rrep(i, a, b) for (int i = b - 1; i >= a; i--)
+typedef tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_update> ordered_set;
+
+// i/o
+static const auto init = []() { ios::sync_with_stdio(0); cin.tie(0); cout.tie(0); return 0;}();
+
+// math
+int gcd(int a,int b) { if (b==0) return a; return gcd(b, a%b); }
+int lcm(int a,int b) { return a/gcd(a,b)*b; }
+int power_mod(int a, int b, int mod) { int res = 1; a %= mod; while(b>0) {if (b & 1) res = res * a % mod;a = a * a % mod; b >>= 1;} return res;}
+bool prime(int a) { if (a==1) return 0; for (int i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
+int mod_mul(int a, int b, int m) {return (a%m * b%m)%m;}
+int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m); res=mod_mul(res,res,m); if(b%2==1) res=mod_mul(res,a,m);return res;}
+int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
+int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
+vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+vector<bool>s= sieve(100);
+
+
+// vector operationss
+using vi = vector<int>;
+using vb = vector<bool>;
+using vvi = vector<vector<int>>;
+using vvb = vector<vector<bool>>;
+template <class T>
+void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
+template <class T>
+void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
+template <class T>
+void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
+
+// utitily
+void yes() { cout<<"YES\n"; }
+void no() { cout<<"NO\n"; }
+
+void solve(){
+    int n,k;
+    cin>>n>>k;
+
+    string s;
+    cin>>s;
+    
+    vi v(n);
+    inp(v);
+
+    int sum=0;
+    int maxx=0;
+    int c=0;
+
+    // int maxi=0
+    for(int i=0;i<n;i++){
+        if(s[i]=='1'){
+            sum= max(sum+v[i],v[i]);
+            maxx= max(maxx,sum);
+        }else{
+            c++;
+            sum=0;
+        }
+    }
+
+    // not pos
+    if(k<maxx){
+        no();
+        return ;
+    }
+
+    if(c==0){
+        // sum agar hua 
+        if(k==maxx){
+            yes();
+            display(v);
+            cout<<endl;
+            return ;
+        }
+        no();
+        return ;
+    }
+
+
+    if(maxx==k){
+        yes();
+        for(int i=0;i<n;i++){
+            if(s[i]=='1'){
+                cout<<v[i]<<" ";
+            }else{
+
+                // baaki sab faltu
+                cout<<INT_MIN<<" ";
+            }
+        }
+        cout<<endl;
+        return;
+    }
+
+    vi pre(n,0);
+    vi suf(n,0);
+    int curr=0;
+    pre[0]=v[0];
+    curr=v[0];
+    for(int i=1;i<n;i++){
+        if(s[i]=='1'){
+            if(s[i-1]=='1'){
+
+                curr= max(curr+v[i],v[i]);
+            }else{
+                curr=v[i];
+            }
+
+
+            pre[i]= curr;
+            continue;
+        }else{
+
+        }
+
+        curr=0;
+    }
+
+
+    curr=0;
+    suf[n-1]= v[n-1];
+    curr=v[n-1];
+    for(int i=n-2;i>=0;i--){
+        if(s[i]=='1'){
+            if(s[i+1]=='1'){
+                curr= max(curr+v[i],v[i]);
+            }else{
+                curr= v[i];
+            }
+
+
+                suf[i]= curr;
+                continue;
+        }
+
+        curr=0;
+    }
+
+    int i=0;
+    for( i=0;i<n;i++){
+        if(s[i]=='0'){
+            break;
+        }
+    } 
+
+    int val=0;
+    if(i>0){
+        val+= max((int)0,pre[i-1]);
+    }
+    if(i<n-1){
+        val+= max((int)0,suf[i+1]);
+    }
+
+
+    val= k - val;
+    yes();
+    for(int j=0;j<n;j++){
+        if(s[j]=='1'){
+            cout<<v[j]<<" ";
+        }else{
+            if(j==i){
+                cout<<val<<" ";
+            }else{
+                cout<<INT_MIN<<" ";
+            }
+        }
+    }
+    cout<<endl;
+    return;
+
+}
+
+void solve2(){}
+
+int32_t main(){
+    // freopen("in",  "r", stdin);
+    // freopen("out", "w", stdout);
+
+    int t;
+    cin >> t;
+    while(t--){
+        solve();
+        // solve2();
+    }
+
+}
+
+//END
