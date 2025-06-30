@@ -55,24 +55,54 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,s;
-    cin>>n>>s;
-    vi v(n);
-    inp(v);
+    int n;
+    cin>>n;
 
-    int x= min(v[0],s);
-    int y= max(v[n-1],s);
+    vi a(n);
+    inp(a);
 
-    if(s==x){
-        cout<<y-s<<endl;
-        return ;
+    vi b(n);
+    inp(b);
+
+    vector<pair<int,int>> vec;
+    for(int i=0;i<n-1;i++){
+        int f=0;
+        for(int j=0;j<n-i-1;j++){
+            if(a[j]>a[j+1]){
+                swap(a[j],a[j+1]);
+                vec.pb({1,j+1});
+                f=1;
+            }
+        }
+        if(!f){
+            break;
+        }
     }
-    if(s==y){
-        cout<<abs(s-x)<<endl;
-        return ;
+    for(int i=0;i<n-1;i++){
+        int f=0;
+        for(int j=0;j<n-i-1;j++){
+            if(b[j]>b[j+1]){
+                swap(b[j],b[j+1]);
+                vec.pb({2,j+1});
+                f=1;
+            }
+        }
+        if(!f){
+            break;
+        }
     }
 
-    cout<<abs(y-x)+ min(abs(y-s),abs(x-s))<<endl;
+    for(int i=0;i<n;i++){
+        if(a[i]>b[i]){
+            vec.pb({3,i+1});
+        }
+    }
+
+    cout<<vec.size()<<endl;
+    for(auto [x,y]:vec){
+        cout<<x<<" "<<y<<endl;
+    }
+    
 }
 
 void solve2(){}

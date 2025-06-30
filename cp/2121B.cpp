@@ -55,24 +55,29 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,s;
-    cin>>n>>s;
-    vi v(n);
-    inp(v);
+    int n;
+    cin>>n;
 
-    int x= min(v[0],s);
-    int y= max(v[n-1],s);
+    string s;
+    cin>>s;
 
-    if(s==x){
-        cout<<y-s<<endl;
-        return ;
+    vector<int> v(26,0);
+    for(auto i:s){
+        v[i-'a']++;
     }
-    if(s==y){
-        cout<<abs(s-x)<<endl;
-        return ;
+    int c=0;
+    int x=0;
+    for(int i=1;i<n-1;i++){
+        if(v[s[i]-'a']>=2){
+            yes();
+            return ;
+            c++;
+        }
+        // if(v[i]){
+        //     x++;
+        // }
     }
-
-    cout<<abs(y-x)+ min(abs(y-s),abs(x-s))<<endl;
+    no();
 }
 
 void solve2(){}
