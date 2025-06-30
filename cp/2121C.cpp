@@ -55,24 +55,46 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,s;
-    cin>>n>>s;
-    vi v(n);
-    inp(v);
+    int n,m;
+    cin>>n>>m;
 
-    int x= min(v[0],s);
-    int y= max(v[n-1],s);
-
-    if(s==x){
-        cout<<y-s<<endl;
-        return ;
-    }
-    if(s==y){
-        cout<<abs(s-x)<<endl;
-        return ;
+    vvi v(n,vi(m));
+    int maxx=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            cin>>v[i][j];
+            maxx= max(v[i][j],maxx);
+        }
     }
 
-    cout<<abs(y-x)+ min(abs(y-s),abs(x-s))<<endl;
+    vi row(n);
+    vi col(m);
+    int maxx1=0;
+    vector<pair<int,int>> vec;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(v[i][j]==maxx){
+                vec.pb({i,j});
+                row[i]++;
+                col[j]++;
+            }
+
+        }
+    }
+    // int maxi = *max_element(all(row));
+    // int maxi1 = *max_element(all(col));
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                int temp = row[i]+col[j]-(v[i][j]==maxx);
+                if(temp==vec.size()){
+                    cout<<maxx-1<<endl;
+                    return ;
+                }
+            }
+        }
+        cout<<maxx<<endl;
+        return ;
 }
 
 void solve2(){}

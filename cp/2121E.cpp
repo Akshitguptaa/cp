@@ -55,24 +55,36 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,s;
-    cin>>n>>s;
-    vi v(n);
-    inp(v);
+    string l,r;
+    cin>>l>>r;
 
-    int x= min(v[0],s);
-    int y= max(v[n-1],s);
+    // int n= min(l.size(),r.size());
+    int c=0;
+    int n= l.size();
+    int f=0;
+    for(int i=0;i<n;i++){
+        int val = (l[i]-r[i]);
+        if(val==9){
+            c++;
+            continue;
+        }
+        if(!f){
+            if(val==0){
+                c+=2;
+                continue;
+            }
+            if(val==1 || val==-1){
+                f=1;
+                c++;
+                continue;
+            }
+        }
 
-    if(s==x){
-        cout<<y-s<<endl;
-        return ;
+        break;
+
     }
-    if(s==y){
-        cout<<abs(s-x)<<endl;
-        return ;
-    }
+    cout<<c<<endl;
 
-    cout<<abs(y-x)+ min(abs(y-s),abs(x-s))<<endl;
 }
 
 void solve2(){}
