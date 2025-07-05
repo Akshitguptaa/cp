@@ -56,30 +56,27 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,k;
-    cin>>n>>k;
+    int a,b,x,y;
+    cin>>a>>b>>x>>y;
     
-    // vi v(n);
-    // inp(v);
-
-    string s;
-    cin>>s;
-
-    vi v(n);
-    for(int i=0;i<n;i++){
-        v[i]= s[i]-'0';
+    if(a>b){
+        if((a&1) && a-b==1){
+            cout<<y<<endl;
+            return ;
+        }else{
+            cout<<-1<<endl;
+            return ;
+        }
     }
-    int sum= accumulate(all(v),(int)0);
-    if(sum<=k){
-        cout<<"Alice"<<endl;
-        return ;
-    }
-    if(n<2*k){
-        cout<<"Alice"<<endl;
-        return ;
-    }
-    cout<<"Bob"<<endl;
+    // if(a<b){
+    //     swap(a,b);
+    //     swap(x,y);
+    // }
+    int odd= (b-a + (a%2))/2;
+    int even = (b-a)-odd;
 
+    int s= odd* x+ even*min(y,x);
+    cout<<s<<endl;
 }
 
 void solve2(){}

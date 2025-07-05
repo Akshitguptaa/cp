@@ -55,30 +55,40 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+
+
 void solve(){
-    int n,k;
-    cin>>n>>k;
+    int n,m;
+    cin>>n>>m;
+
+    vvi dp(n+2,vi(n+2,0));
+    dp[n+1][0]=1;
     
-    // vi v(n);
-    // inp(v);
+    for(int i=n;i>=1;i--){
+        for(int j=0;j<=n;j++){
+            dp[i][j]= (dp[i][j]+dp[i+1][j])%m;
 
-    string s;
-    cin>>s;
+            if(j==n){
+                continue;
+            }
 
-    vi v(n);
-    for(int i=0;i<n;i++){
-        v[i]= s[i]-'0';
+            int temp = n-i+1-j;
+            // cout<<temp<<endl;
+
+            if(temp>0){
+                int val= (dp[i+1][j]* temp) % m;
+                val = (val*i)%m;
+
+                dp[i][j+1]= (dp[i][j+1]+val)%m;
+            }
+
+        }
     }
-    int sum= accumulate(all(v),(int)0);
-    if(sum<=k){
-        cout<<"Alice"<<endl;
-        return ;
-    }
-    if(n<2*k){
-        cout<<"Alice"<<endl;
-        return ;
-    }
-    cout<<"Bob"<<endl;
+
+    // display(dp[1]);
+
+    int res = accumulate(all(dp[1]),(int)0) % m;
+    cout<< res<<endl;
 
 }
 

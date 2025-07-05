@@ -37,7 +37,7 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
-vector<bool> s= sieve(100);
+vector<bool> s=sieve(100);
 
 // vector operationss
 using vi = vector<int>;
@@ -55,30 +55,51 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+int find_msb(int x) {
+    if (x == 0) return 0;
+    return 63 - __builtin_clzll(x);
+}
+
 void solve(){
-    int n,k;
-    cin>>n>>k;
-    
-    // vi v(n);
-    // inp(v);
+    int n,l,r,k;
+    cin>>n>>l>>r>>k;
 
-    string s;
-    cin>>s;
 
-    vi v(n);
-    for(int i=0;i<n;i++){
-        v[i]= s[i]-'0';
+    if(n==2){
+        cout<<-1<<endl;
+        return;
     }
-    int sum= accumulate(all(v),(int)0);
-    if(sum<=k){
-        cout<<"Alice"<<endl;
+
+    if(n==1){
+        cout<<l<<endl;
         return ;
     }
-    if(n<2*k){
-        cout<<"Alice"<<endl;
+
+    if(n&1){
+        if(k>n){
+            cout<<-1<<endl;
+            return ;
+        }
+        cout<<l<<endl;
         return ;
     }
-    cout<<"Bob"<<endl;
+
+    int msb=find_msb(l);
+    int x=(1LL<<(msb+1));
+    if(x<l){
+        x=l+1;
+    }
+    if(x>r){
+        cout<<-1<<endl;
+        return;
+    }
+    if(k <=n-2){
+        cout<<l<<endl;
+        return ;
+    } 
+
+    cout<<x<<endl;
+
 
 }
 

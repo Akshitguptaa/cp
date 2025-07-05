@@ -37,7 +37,6 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
-vector<bool> s= sieve(100);
 
 // vector operationss
 using vi = vector<int>;
@@ -56,30 +55,28 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,k;
-    cin>>n>>k;
-    
-    // vi v(n);
-    // inp(v);
+    int k,a,b,x,y;
+    cin>>k>>a>>b>>x>>y;
 
-    string s;
-    cin>>s;
+    if(x<y){
+        swap(x,y);
+        swap(a,b);
+    }
 
-    vi v(n);
-    for(int i=0;i<n;i++){
-        v[i]= s[i]-'0';
-    }
-    int sum= accumulate(all(v),(int)0);
-    if(sum<=k){
-        cout<<"Alice"<<endl;
-        return ;
-    }
-    if(n<2*k){
-        cout<<"Alice"<<endl;
-        return ;
-    }
-    cout<<"Bob"<<endl;
+    int ans=0;
 
+    if(k>=b){
+        int cnt=(k-b)/y +1;
+        ans+=cnt;
+        k-=cnt*y;
+    }
+    if(k>=a){
+        int cnt=(k-a)/x +1;
+        ans+=cnt;
+        k-=cnt*x;
+    }
+
+    cout<<ans<<endl;
 }
 
 void solve2(){}
