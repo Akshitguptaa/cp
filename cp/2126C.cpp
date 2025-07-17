@@ -37,7 +37,6 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
-vector<bool> s= sieve(100);
 
 // vector operationss
 using vi = vector<int>;
@@ -55,38 +54,34 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-
-
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,k;
+    cin>>n>>k;
 
-    vi dp(n+2);
-    dp[0]=1;
+    vi v(n);
+    inp(v);
+
+    int s= v[k-1];
+
+    set<int> st(all(v));
+    vi vec(all(st));
+    reverse(all(vec));
+    vec.pb(s);
+    reverse(all(vec));
     
-    for(int i=n;i>0;i--){
-        for(int j=n-i;j>=0;j--){
-            if(j==n){
-                continue;
+    int maxx= *max_element(all(v));
+    // 
+    
+    int c= v[k-1];
+
+    for(int i=0;i<vec.size()-1;i++){
+            if(s < vec[i+1]-vec[i]){
+                no();
+                return ;
             }
-
-            int temp = n-i+1-j;
-            // cout<<temp<<endl;
-
-            if(temp>0){
-                int val= (dp[j]* temp) % m;
-                val = (val*i)%m;
-
-                dp[j+1]= (dp[j+1] +val)%m;
-            }
-
-        }
     }
 
-    // display(dp[1]);
-
-    int res = accumulate(all(dp),(int)0) % m;
-    cout<< res<<endl;
+    yes();
 
 }
 

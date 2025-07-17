@@ -37,7 +37,6 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
-vector<bool> s= sieve(100);
 
 // vector operationss
 using vi = vector<int>;
@@ -55,39 +54,115 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+bool func(int midd,int j ,vi &v,vi &vec){
+    vi temp;
 
+    // where it is eql
+    vi idx;
+
+    for(int i=0;i<vec.size();i++){
+        if(v[vec[i]]>=midd){
+            temp.pb(1);
+        }else{
+            temp.pb(-1);
+        }
+
+        if(v[vec[i]]==j){
+            idx.pb(i);
+        }
+    }
+
+
+    int n= temp.size();
+    vi pre(n+1,0);
+
+    for(int i=0;i<n;i++){
+        pre[i+1] = pre[i]+temp[i];
+    }
+
+    vi minn(n+1);
+    minn[0]=pre[0];
+    for(int i=1;i<=n;i++){
+        minn[i] = min(minn[i-1], pre[i]);
+    }
+
+    vi maxx(n+2, INT_MIN);
+    maxx[n] = pre[n];
+    for(int i=n-1;i>=0;i--){
+        maxx[i] = max(maxx[i+1],pre[i]);
+    }
+
+    for(auto i:idx){
+        int l=minn[i];
+        int r=maxx[i+1];
+        if(r-l>=0){
+            return 1;
+        }
+    }
+    return 0;
+
+}
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n;
+    cin>>n;
 
-    vi dp(n+2);
-    dp[0]=1;
-    
-    for(int i=n;i>0;i--){
-        for(int j=n-i;j>=0;j--){
-            if(j==n){
+    vi v(n);
+    inp(v);
+
+    int maxx = *max_element(all(v));
+    int ans=0;
+
+    for(int i=1;i<=maxx;i++){
+        int j=0;
+        while(j<n){
+            if(v[j]<i){
+                j++;
                 continue;
             }
 
-            int temp = n-i+1-j;
-            // cout<<temp<<endl;
+            vi vec;
+            int f=0;
 
-            if(temp>0){
-                int val= (dp[j]* temp) % m;
-                val = (val*i)%m;
+            int k=j;
 
-                dp[j+1]= (dp[j+1] +val)%m;
+            for(k=j;k<n;k++){
+                if(v[k]<i){
+                    break;
+                }
+                    if(v[k]==i){
+                        f=1;
+                    }
+                    vec.pb(k);
             }
+
+            if(!f){
+                j=k;
+                continue;
+            }
+
+            int l=i+1;
+            int r= maxx;
+            int val = i;
+
+            while(l<=r){
+                int midd= l+(r-l)/2;
+
+                if(func(midd,i,v,vec)){
+                    val= midd;
+                    l= midd+1;
+                }else{
+                    r= midd-1;
+                }
+            }
+
+            ans = max(ans,val-i);
+            j=k;
 
         }
     }
 
-    // display(dp[1]);
-
-    int res = accumulate(all(dp),(int)0) % m;
-    cout<< res<<endl;
-
+    cout<<ans<<endl;
 }
 
 void solve2(){}
