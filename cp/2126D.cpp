@@ -37,7 +37,6 @@ int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m);
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
 vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
-vector<bool> s= sieve(100);
 
 // vector operationss
 using vi = vector<int>;
@@ -55,39 +54,56 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-
-
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,k;
+    cin>>n>>k;
 
-    vi dp(n+2);
-    dp[0]=1;
-    
-    for(int i=n;i>0;i--){
-        for(int j=n-i;j>=0;j--){
-            if(j==n){
-                continue;
-            }
+    multiset<pair<pair<int,int>,int>> ms;
+    // vi l(n),r(n),x(n);
+    // for(int i=0;i<n;i++){
+    //     int l,r,x;
+    //     cin>>l>>r>>x;
 
-            int temp = n-i+1-j;
-            // cout<<temp<<endl;
+    // }
 
-            if(temp>0){
-                int val= (dp[j]* temp) % m;
-                val = (val*i)%m;
+    for(int i=0;i<n;i++){
+        int l,r,x;
+        cin>>l>>r>>x;
 
-                dp[j+1]= (dp[j+1] +val)%m;
-            }
-
-        }
+        ms.insert({{l,r},x});
     }
 
-    // display(dp[1]);
+    priority_queue<pair<int,int>> pq;
 
-    int res = accumulate(all(dp),(int)0) % m;
-    cout<< res<<endl;
+    while(1){
+        auto it=ms.begin();
 
+        while(it!=ms.end()){
+            auto [x,y] = *it;
+            auto [l,r] =x;
+            
+            if(l>k){
+                break;
+            }
+                if(r>=k){
+                    pq.push({y,r});
+                }
+
+                it= ms.erase(it);
+
+        }
+
+        if(pq.empty()){
+            break;
+        }
+
+        auto [y,r] = pq.top();
+        pq.pop();
+
+        k= max(k,y);
+    }
+
+    cout<<k<<endl;
 }
 
 void solve2(){}
