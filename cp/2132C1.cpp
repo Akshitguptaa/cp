@@ -43,6 +43,7 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+vb s= sieve(100);
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,23 +55,31 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+vector<int> dp(41,1);
+void pre(){
+    for(int i=1;i<41;i++){
+        dp[i]= dp[i-1]*3;
+    }
+}
+
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
+    int n;
+    cin>>n;
 
-    int maxx=1;
+    int s=n*3;
+    for(int i=0;i<42;i++){
+        if(n==0) break;
 
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
+        if(n%3){
+            if(i){
+                s+= (n%3)*i*dp[i-1];
             }
         }
-    }    
-    cout<<maxx<<endl;
+        n/=3;
+        continue;
+    }
+
+    cout<<s<<endl;
 }
 
 void solve2(){}
@@ -78,10 +87,10 @@ void solve2(){}
 int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
+    pre();
 
     int t;
-    // cin >> t;
-    t=1;
+    cin >> t;
     while(t--){
         solve();
         // solve2();

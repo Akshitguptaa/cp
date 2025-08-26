@@ -54,115 +54,39 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-bool func(int midd,int j ,vi &v,vi &vec){
-    vi temp;
-
-    // where it is eql
-    vi idx;
-
-    for(int i=0;i<vec.size();i++){
-        if(v[vec[i]]>=midd){
-            temp.pb(1);
-        }else{
-            temp.pb(-1);
-        }
-
-        if(v[vec[i]]==j){
-            idx.pb(i);
-        }
+// segment tree
+vector<int> t;
+#define INF ((1LL << 32) - 1)
+ 
+int combine(int a, int b) {
+    return a + b;
+}
+ 
+void build(vector<int>& a, int v, int tl, int tr) {
+    if (tl == tr) {
+        t[v] = a[tl];
+    } else {
+        int tm = (tl + tr) / 2;
+        build(a, v * 2, tl, tm);
+        build(a, v * 2 + 1, tm + 1, tr);
+        t[v] = combine(t[v * 2], t[v * 2 + 1]);
     }
-
-
-    int n= temp.size();
-    vi pre(n+1,0);
-
-    for(int i=0;i<n;i++){
-        pre[i+1] = pre[i]+temp[i];
+}
+ 
+int func(int v,int tl,int tr,int l,int r){
+    if(l > r){
+        return INF;
     }
-
-    vi minn(n+1);
-    minn[0]=pre[0];
-    for(int i=1;i<=n;i++){
-        minn[i] = min(minn[i-1], pre[i]);
+    if(l==tl && r==tr){
+        return t[v];
     }
-
-    vi maxx(n+2, INT_MIN);
-    maxx[n] = pre[n];
-    for(int i=n-1;i>=0;i--){
-        maxx[i] = max(maxx[i+1],pre[i]);
-    }
-
-    for(auto i:idx){
-        int l=minn[i];
-        int r=maxx[i+1];
-        if(r-l>=0){
-            return 1;
-        }
-    }
-    return 0;
-
+    int tm= (tl+tr)/2;
+ 
+    return combine(func(v*2, tl, tm, l, min(r,tm)), func(v*2+1, tm+1, tr, max(l,tm+1),r));
 }
 
 void solve(){
-    int n;
-    cin>>n;
-
-    vi v(n);
-    inp(v);
-
-    int maxx = *max_element(all(v));
-    int ans=0;
-
-    for(int i=1;i<=maxx;i++){
-        int j=0;
-        while(j<n){
-            if(v[j]<i){
-                j++;
-                continue;
-            }
-
-            vi vec;
-            int f=0;
-
-            int k=j;
-
-            for(k=j;k<n;k++){
-                if(v[k]<i){
-                    break;
-                }
-                    if(v[k]==i){
-                        f=1;
-                    }
-                    vec.pb(k);
-            }
-
-            if(!f){
-                j=k;
-                continue;
-            }
-
-            int l=i+1;
-            int r= maxx;
-            int val = i;
-
-            while(l<=r){
-                int midd= l+(r-l)/2;
-
-                if(func(midd,i,v,vec)){
-                    val= midd;
-                    l= midd+1;
-                }else{
-                    r= midd-1;
-                }
-            }
-
-            ans = max(ans,val-i);
-            j=k;
-
-        }
-    }
-
-    cout<<ans<<endl;
+    
 }
 
 void solve2(){}

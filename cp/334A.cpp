@@ -55,22 +55,17 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
+    int n;
+    cin>>n;
+    int sq= n*n;
+    int l=1,r=sq;
 
-    int maxx=1;
-
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
-            }
+    for(int i=0;i<n;i++){
+        for(int j=0;j<(n>>1) ;j++){
+            cout<<l++<<" "<<r--<<" ";
         }
-    }    
-    cout<<maxx<<endl;
+        cout<<endl;
+    }
 }
 
 void solve2(){}

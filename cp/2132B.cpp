@@ -9,7 +9,7 @@ using namespace __gnu_pbds;
 using namespace std;
 typedef long long int int64;
 
-#define int long long
+#define int unsigned long long
 #define endl "\n"
 #define INF LLONG_MAX
 #define MOD 1000000007
@@ -43,6 +43,7 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+vb s= sieve(100);
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -55,22 +56,24 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
+    int n;
+    cin>>n;
 
-    int maxx=1;
-
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
-            }
+    vi vec;
+    for(int i=10;i<n;i*=10){
+        if(!(n%(i+1))){
+            int val = n/(i+1);
+            vec.pb(val);
         }
-    }    
-    cout<<maxx<<endl;
+    }
+
+    sort(all(vec));
+    if(vec.size()){
+        cout<<vec.size()<<endl;
+        display(vec);
+        return ;
+    }
+    cout<<0<<endl;
 }
 
 void solve2(){}
@@ -80,8 +83,7 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    // cin >> t;
-    t=1;
+    cin >> t;
     while(t--){
         solve();
         // solve2();

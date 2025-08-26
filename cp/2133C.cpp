@@ -54,23 +54,55 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+vi dp;
+bool cmp(int a,int b){
+    if(dp[a]!=dp[b]) return dp[a]>dp[b];
+    return a<b;
+}
+
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
-
-    int maxx=1;
-
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
-            }
+    int n;
+    cin>>n;
+    vector<pair<int,int>> v;
+    for(int i=1;i<=n;i++){
+        cout<<"? "<<i<<" "<<n;
+        for(int j=1;j<=n;j++){
+            cout<<" " <<j;
         }
-    }    
-    cout<<maxx<<endl;
+        cout<<endl;
+        int x;
+        cin>>x;
+        v.pb({x,i});
+    }
+
+    sort(rall(v));
+
+    vi ans;
+    ans.pb(v[0].second);
+
+    for(int i=1;i<n;i++){
+        int sz= ans.size();
+        if(ans.size()==v[0].first){
+            break;
+        }
+
+        cout<<"? "<<ans[0]<<" "<< sz+1;
+        for(int node:ans){
+            cout<<" " << node;
+        }
+        cout<<" "<< v[i].second <<endl;
+
+        int ch;
+        cin>> ch;
+
+        if(ch== sz+1){
+            ans.pb(v[i].second);
+        }
+    }
+
+    cout<<"! " <<ans.size()<<" ";
+    display(ans);
+    cout << endl;
 }
 
 void solve2(){}
@@ -80,8 +112,7 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    // cin >> t;
-    t=1;
+    cin >> t;
     while(t--){
         solve();
         // solve2();

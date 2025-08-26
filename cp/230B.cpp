@@ -36,7 +36,7 @@ int mod_mul(int a, int b, int m) {return (a%m * b%m)%m;}
 int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m); res=mod_mul(res,res,m); if(b%2==1) res=mod_mul(res,a,m);return res;}
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
-vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+vector<bool> sieve(int n) { vector<bool> prime(n+1,true);prime[0] = prime[1] = 0; for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
 
 // vector operationss
 using vi = vector<int>;
@@ -54,23 +54,31 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+const int MAX = 1000001;
+vb primes;
+int n;
+
+bool func(int num) {
+    int root = sqrt(num);
+    if(!primes[root]) return 0;
+
+    root*= root;
+    return root== num;
+}
+
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
-
-    int maxx=1;
-
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
-            }
+    cin>>n;
+    vi nums(n);
+    inp(nums);
+    
+    primes=sieve(MAX);
+    for(auto x: nums){
+        if(func(x)){
+            yes();
+        }else{
+            no();
         }
-    }    
-    cout<<maxx<<endl;
+    }
 }
 
 void solve2(){}

@@ -55,22 +55,7 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
-
-    int maxx=1;
-
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
-            }
-        }
-    }    
-    cout<<maxx<<endl;
+    
 }
 
 void solve2(){}
@@ -80,8 +65,7 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    // cin >> t;
-    t=1;
+    cin >> t;
     while(t--){
         solve();
         // solve2();
@@ -90,3 +74,32 @@ int32_t main(){
 }
 
 //END
+
+// dsu template
+const int mxN=1e5+1;
+ 
+int parent[mxN];
+int siz[mxN];
+ 
+void make_set(int v) {
+    parent[v]=v;
+    siz[v]=1;
+}
+ 
+int find_set(int v) {
+    return(v==parent[v]) ? v : parent[v] = find_set(parent[v]);
+}
+ 
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a == b) return;
+    if (siz[a] < siz[b]) swap(a, b);
+    parent[b] = a;
+    siz[a] += siz[b];
+    siz[b] = 0;
+}
+ 
+int get_size(int v) {
+    return siz[find_set(v)];
+}

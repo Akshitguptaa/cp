@@ -54,23 +54,40 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
-
-    int maxx=1;
-
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
-            }
+bool func(int c, int midd, vi &v){
+    int n= v.size();
+    for(int i=0;i<n-midd;i++){
+        int val = n-midd-1-i;
+        val = v[i]<<val;
+        if(val>c){
+            return 0;
         }
-    }    
-    cout<<maxx<<endl;
+    }
+    return 1;
+}
+
+void solve(){
+    int n,c;
+    cin>>n>>c;
+    vi v(n);
+    inp(v);
+
+    sort(all(v));
+    
+    int l=0;
+    int r= n;
+    int ans= -1;
+    while(l<=r){
+        int midd= l+(r-l)/2;
+
+        if(func(c,midd,v)){
+            r= midd-1;
+            ans= midd;
+        }else{
+            l= midd+1;
+        }
+    }
+    cout<<ans<<endl;
 }
 
 void solve2(){}
@@ -80,8 +97,7 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    // cin >> t;
-    t=1;
+    cin >> t;
     while(t--){
         solve();
         // solve2();

@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,23 +56,73 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+// dsu template
+const int mxN=1e5+1;
+ 
+int parent[mxN];
+int siz[mxN];
+ 
+void make_set(int v) {
+    parent[v]=v;
+    siz[v]=1;
+}
+ 
+int find_set(int v) {
+    return(v==parent[v]) ? v : parent[v] = find_set(parent[v]);
+}
+ 
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a == b) return;
+    if (siz[a] < siz[b]) swap(a, b);
+    parent[b] = a;
+    siz[a] += siz[b];
+    // siz[b] = 0;
+}
+ 
+int get_size(int v) {
+    return siz[find_set(v)];
+}
+
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
+    int n;
+    cin>>n;
 
-    int maxx=1;
+    vpii vec(n);
+    unordered_map<int,vi> mp,mp1;
 
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
+    for(int i=0;i<n;i++){
+        int x,y;
+        cin>>x>>y;
+
+        vec[i] = {x,y};
+        mp[x].pb(i);
+        mp1[y].pb(i);
+        make_set(i);
+    }
+
+    for(auto [x,y]: mp){
+        for(int i=0;i<y.size();i++){
+            if(i){
+                union_sets(y[0],y[i]);
             }
         }
-    }    
-    cout<<maxx<<endl;
+    }
+    for(auto [x,y]: mp1){
+        for(int i=0;i<y.size();i++){
+            if(i){
+                union_sets(y[0],y[i]);
+            }
+        }
+    }
+
+    set<int> par;
+    for(int i=0;i<n;i++){
+        par.insert(find_set(i));
+    }
+
+    cout<<par.size()-1 <<endl;
 }
 
 void solve2(){}

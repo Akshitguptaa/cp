@@ -54,23 +54,54 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+map<pair<int,int>,int> dp;
+string s,s1;
+int n;
+int t=0;
+
+int func(int pos,int idx){
+    if(idx==n){
+        return t==pos;
+    }
+
+    if(dp.count({pos,idx})){
+        return dp[{pos,idx}];
+    }
+
+    int ans=0;
+    if(s[idx]=='+'){
+        ans=func(pos+1,idx+1);
+    }else if(s[idx]=='-'){
+        ans=func(pos-1,idx+1);
+    }else{
+        ans=func(pos+1,idx+1)+func(pos-1,idx+1);
+    }
+
+    return dp[{pos,idx}]=ans;
+}
+
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
+    cin>>s1>>s;
+    n= s.size();
 
-    int maxx=1;
-
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
-            }
+    t=0;
+    for(char ch :s1){
+        if(ch == '+'){
+            t++;
         }
-    }    
-    cout<<maxx<<endl;
+        else t--;
+    }
+
+    int c=0;
+    for(auto i:s){
+        if(i=='?'){
+            c++;
+        }
+    }
+
+    int ans = func(0,0);
+    cout<< fixed << setprecision(12) << (double)ans/(1LL<<c)<<endl;
+
 }
 
 void solve2(){}

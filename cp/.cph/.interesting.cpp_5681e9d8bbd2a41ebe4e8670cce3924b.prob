@@ -1,0 +1,1 @@
+{"name":"Local: interesting","url":"/home/sudolife/Documents/cp/cp/interesting.cpp","tests":[{"id":1753094657007,"input":"5\n1 2 3 4 5\n3\n2\n7\n8\n","output":"YES\nYES\nYES"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/sudolife/Documents/cp/cp/interesting.cpp","group":"local","local":true}

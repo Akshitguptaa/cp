@@ -1,0 +1,48 @@
+const int MLOG = 20;
+const int MAXN = (1 << MLOG);
+long long dp[MAXN];
+long long freq[MAXN];
+
+// Forward pass: Adding element to all its supersets
+void forward1() {
+    for (int bit = 0; bit < MLOG; bit++) {
+        for (int i = 0; i < MAXN; i++) {
+            if (i & (1 << bit)) {
+                dp[i] += dp[i ^ (1 << bit)];
+            }
+        }
+    }
+}
+
+// Backward pass: Subtract element from all subsets
+void backward1() {
+    for (int bit = 0; bit < MLOG; bit++) {
+        for (int i = MAXN - 1; i >= 0; i--) {
+            if (i & (1 << bit)) {
+                dp[i] -= dp[i ^ (1 << bit)];
+            }
+        }
+    }
+}
+
+// Forward pass: Add elements to its subsets
+void forward2() {
+    for (int bit = 0; bit < MLOG; bit++) {
+        for (int i = MAXN - 1; i >= 0; i--) {
+            if (i & (1 << bit)) {
+                dp[i ^ (1 << bit)] += dp[i];
+            }
+        }
+    }
+}
+
+// Backward pass: Subtract elements from its subsets
+void backward2() {
+    for (int bit = 0; bit < MLOG; bit++) {
+        for (int i = 0; i < MAXN; i++) {
+            if (i & (1 << bit)) {
+                dp[i ^ (1 << bit)] -= dp[i];
+            }
+        }
+    }
+}

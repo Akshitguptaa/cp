@@ -55,22 +55,42 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
+    int n;
+    cin>>n;
 
-    int maxx=1;
+    vvi adj(n);
+    for(int i=0;i<n-1;i++){
+        int x,y;
+        cin>>x>>y;
 
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
-            }
+        x--;
+        y--;
+
+        adj[x].pb(y);
+        adj[y].pb(x);
+    }
+
+    int maxx=0;
+    for(int i=0;i<n;i++){
+        int c=0;
+        for(auto j:adj[i]){
+            if(adj[j].size()==1)
+                c++;
         }
-    }    
-    cout<<maxx<<endl;
+        maxx= max(c,maxx);
+    }
+    int cnt=0;
+    for(auto i:adj){
+        if(i.size()==1){
+            cnt++;
+        }
+    }
+
+    if(n<=2){
+        cout<<0<<endl;
+        return ;
+    }
+    cout<<cnt-maxx<<endl;
 }
 
 void solve2(){}
@@ -80,8 +100,7 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    // cin >> t;
-    t=1;
+    cin >> t;
     while(t--){
         solve();
         // solve2();

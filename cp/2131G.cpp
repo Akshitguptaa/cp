@@ -14,7 +14,7 @@ typedef long long int int64;
 #define INF LLONG_MAX
 #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
-#define setbits(x) __builtin_popcountll(x)
+#define setbits(x) __builtin_popcntll(x)
 #define trailzero(x) __builtin_ctz(x)
 #define pb push_back
 #define mp make_pair
@@ -54,23 +54,60 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+const int mod= 1e9+7; 
+
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
+    int n,k;
+    cin>>n>>k;
 
-    int maxx=1;
+    vi v(n);
+    inp(v);
+    
+    set<int> st(all(v));
 
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
+    unordered_map<int,int>mp;
+    while(k--){
+        if(st.empty()) break;
+        
+        auto val= *st.begin();
+        
+        st.erase(val);
+        mp[val]++;
+        
+        int a = 0;
+        int cnt = 0;
+        while(a<val && k>0 && val!=1){
+            cnt = (cnt<<1)+1;
+            a++;
+            if(cnt>k){
+                cnt= (cnt>>1);
+                k-= cnt;
+                for(int i = 1;i<a;i++){
+                    mp[i]+= (1 << (a-i-1));
+                }
+                if(k!=0){
+                    mp[a]++;
+                    k--;
+                }
+                cnt = 0;
+                a = 0;
+            }
+            else if(a+1 == val){
+                k-=cnt;
+                for(int i=1;i<=a;i++){
+                    mp[i] += (1<<(a-i));
+                }
+                break;
             }
         }
-    }    
-    cout<<maxx<<endl;
+    }
+    
+    int ans=1;
+    for(auto [x,y]:mp){
+        ans= (ans * mod_expo(x,y,mod))%mod;
+    }
+
+    cout<<ans<<endl;
 }
 
 void solve2(){}
@@ -80,8 +117,7 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    // cin >> t;
-    t=1;
+    cin >> t;
     while(t--){
         solve();
         // solve2();

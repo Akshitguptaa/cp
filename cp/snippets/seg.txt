@@ -1,0 +1,29 @@
+vector<int> t;
+#define INF ((1LL << 32) - 1)
+ 
+int combine(int a, int b) {
+    return a + b;
+}
+ 
+void build(vector<int>& a, int v, int tl, int tr) {
+    if (tl == tr) {
+        t[v] = a[tl];
+    } else {
+        int tm = (tl + tr) / 2;
+        build(a, v * 2, tl, tm);
+        build(a, v * 2 + 1, tm + 1, tr);
+        t[v] = combine(t[v * 2], t[v * 2 + 1]);
+    }
+}
+ 
+int func(int v,int tl,int tr,int l,int r){
+    if(l > r){
+        return INF;
+    }
+    if(l==tl && r==tr){
+        return t[v];
+    }
+    int tm= (tl+tr)/2;
+ 
+    return combine(func(v*2, tl, tm, l, min(r,tm)), func(v*2+1, tm+1, tr, max(l,tm+1),r));
+}

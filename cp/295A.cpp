@@ -54,23 +54,60 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+#define vppii vector<pair<int,pair<int,int>>>
+int n,m,k;
+vppii vec;
+vi v;
+
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
+    cin>>n>>m>>k;
+    
+    v= vi(n+1);
+    for(int i=1;i<=n;i++) cin>>v[i];
+    
+    vec= vppii(m+1);
+    
+    for(int i=0;i<m;i++){
+        int x,y,z;
+        cin>>x>>y>>z;
+        vec[i+1] = {z,{x,y}};
+    }
+    
+    vi dp(m+2,0);
+    
+    for(int i=0;i<k;i++){
+        int a,b;
+        cin>>a>>b;
+        dp[a]++;
+        dp[b+1]--;
 
-    int maxx=1;
+    }
 
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
-            }
+    for(int i=1;i<=m;i++){
+        dp[i] += dp[i-1];
+    }
+
+    vi temp(n+2,0);
+    for(int i=1;i<=m;i++){
+        if(dp[i] == 0){
+            continue;
         }
-    }    
-    cout<<maxx<<endl;
+        
+        auto [x,y]= vec[i];
+        auto [l,r]= y;
+
+        temp[l] += dp[i] * x;
+        temp[r+1] -= dp[i] * x;
+    }
+
+    for(int i=1;i<=n;i++){
+        temp[i] += temp[i-1];
+    }
+
+    for(int i=1;i<=n;i++){
+        cout<<v[i]+temp[i]<<" ";
+    }
+    cout<<endl;
 }
 
 void solve2(){}

@@ -55,22 +55,52 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n,a,b,c;
-    cin>>n>>a>>b>>c;
+    int n;
+    cin>>n;
 
-    int maxx=1;
+    string a,b;
+    cin>>a>>b;
 
-    for(int i=0;i*a<=n;i++){
-        for(int j=0;j*b<=n-i*a;j++){
-            
-            int temp=n- (i*a + j*b);
-            if(temp>=0 && temp%c == 0){
-                int k=temp/c;
-                maxx=max(maxx, i+j+k);
-            }
-        }
-    }    
-    cout<<maxx<<endl;
+    vi pre1(n+1),pre2(n+1);
+
+    for(int i=1;i<=n;i++){
+        pre1[i]= pre1[i-1];
+        pre2[i]= pre2[i-1];
+
+        if(a[i-1]=='1') pre1[i]++;
+        if(b[i-1]=='1') pre2[i]++;
+    }
+    // 
+    // 
+
+    vi p(n),q(n);
+
+    for(int i=0;i<n;i++){
+        p[i]= pre1[i+1]*2 -i-1;
+        q[i]= pre2[i+1]*2 -i-1;
+    }
+
+    sort(all(q));
+    vi pref(n+1,0);
+
+    for(int i=0;i<n;i++){
+        pref[i+1]= pref[i]+q[i];
+    }
+
+    int sum= pref.back();
+
+    int ans = n*(n+1)*n;
+
+    for(auto i:p){
+        int idx= lower_bound(all(q),-i)-q.begin();
+        // sum till this
+        int temp = pref[idx];
+
+        ans-= (i*(n-idx*2)+ sum- temp*2);
+    }
+
+    cout<<(ans>>1)<<endl;
+
 }
 
 void solve2(){}
@@ -80,8 +110,7 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    // cin >> t;
-    t=1;
+    cin >> t;
     while(t--){
         solve();
         // solve2();
