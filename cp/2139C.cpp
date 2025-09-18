@@ -15,7 +15,7 @@ typedef long long int int64;
 #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
 #define setbits(x) __builtin_popcountll(x)
-#define trailzero(x) __builtin_ctz(x)
+#define trailzero(x) __builtin_ctzll(x)
 #define pb push_back
 #define mp make_pair
 #define all(x) x.begin(), x.end()
@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -55,29 +57,30 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n;
-    cin>>n;
+   int k,x;
+   cin>>k>>x;
+   
+// //cakes;
+//     int val= (1<<k);
+//     if(x==val){
+//         cout<<0<<endl;
+//         cout<<endl;
+//         return ;
+//     }
 
-    vi v(n);
-    inp(v);
+    int xero = trailzero(x);
+    int step=  k-xero;
+    cout<<step<<endl;
+    
+    if(step){
+        int p = x>>xero;
 
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
-
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+        for(int i=1;i<=step;i++){
+            int temp = (p>>i)&1;
+            cout<<temp+1<<" ";
         }
     }
-
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
-    }
-
-    cout<<s1<<endl;
+    cout<<endl;
 }
 
 void solve2(){}

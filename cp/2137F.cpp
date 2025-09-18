@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +56,39 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+// segment tree
+vector<int> t;
+#define INF ((1LL << 32) - 1)
+ 
+int combine(int a, int b) {
+    return a + b;
+}
+ 
+void build(vector<int>& a, int v, int tl, int tr) {
+    if (tl == tr) {
+        t[v] = a[tl];
+    } else {
+        int tm = (tl + tr) / 2;
+        build(a, v * 2, tl, tm);
+        build(a, v * 2 + 1, tm + 1, tr);
+        t[v] = combine(t[v * 2], t[v * 2 + 1]);
+    }
+}
+ 
+int func(int v,int tl,int tr,int l,int r){
+    if(l > r){
+        return INF;
+    }
+    if(l==tl && r==tr){
+        return t[v];
+    }
+    int tm= (tl+tr)/2;
+ 
+    return combine(func(v*2, tl, tm, l, min(r,tm)), func(v*2+1, tm+1, tr, max(l,tm+1),r));
+}
+
 void solve(){
-    int n;
-    cin>>n;
-
-    vi v(n);
-    inp(v);
-
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
-
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
-        }
-    }
-
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
-    }
-
-    cout<<s1<<endl;
+    
 }
 
 void solve2(){}

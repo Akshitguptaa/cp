@@ -43,6 +43,9 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
+vb s=sieve(100);
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +57,80 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+
+bool func(const vector<int>& v,const vector<int>& v1,int st) {
+   int i = st;
+    int j = st;
+
+    while(i<v.size() && j<v1.size()){
+        if(v[i]<v1[j]){
+            return 1;
+        }
+        if(v[i]>v1[j]){
+            return 0;
+        }
+        i++;
+        j++;
+    }
+    if(i==v.size() && j < v1.size()){
+        return 1;
+    }
+    return 0;
+}
+
 void solve(){
     int n;
     cin>>n;
 
-    vi v(n);
-    inp(v);
+    // vvi v(n);
 
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
-
+    int maxx=0;
+    vvi v(n);
     for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+        int k;
+        cin>>k;
+        maxx= max(k,maxx);
+
+        while(k--){
+            int x;
+            cin>>x;
+            v[i].pb(x);
         }
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
+    vi ans;
+    int idx=-1;
+
+    for(int i=1;i<=maxx;i++){
+        if(idx!=-1 && v[idx].size()<i){
+            idx=-1;
+        }
+
+        if(idx==-1){
+            int best = -1;
+            for(int j=0;j<n;j++){
+                if(v[j].size()>=i){
+                    if(best==-1){
+                        best=j;
+                    }else{
+                        if(func(v[j], v[best],i-1)){
+                            best=j;
+                        }
+                    }
+                }
+            }
+            if(best==-1){
+                break;
+            }
+            idx= best;
+        }
+
+        ans.pb(v[idx][i-1]);
+
     }
 
-    cout<<s1<<endl;
+    display(ans);
+
 }
 
 void solve2(){}

@@ -1,5 +1,3 @@
-//// AKSHIT - template ////
-
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp> // Common file 
 #include <ext/pb_ds/tree_policy.hpp>  
@@ -43,6 +41,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -61,23 +61,37 @@ void solve(){
     vi v(n);
     inp(v);
 
-    sort(all(v));
+    int c= (n)>>1;
+    int c1= (n+1)>>1;
 
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+    vi odd(c1+2,0);
+    vi even(c+2,0);
 
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
-        }
+
+    for(int i=1;i<=c1;i++){
+        odd[i]= v[2*(i-1)];
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
+    for(int i=1;i<=c;i++){
+        even[i]= v[2*(i-1)+1];
     }
 
-    cout<<s1<<endl;
+    int s= accumulate(all(odd),(int)0);
+    // vi vec= odd;
+    for(int i=2;i<=c1;i++){
+        odd[i]= min(odd[i],even[i-1]);
+    }
+
+    odd[c1+1]=0;
+
+    for(int i=c;i>0;i--){
+        int val = max((int)0,even[i]-odd[i+1]);
+        odd[i]= min(odd[i],val);
+
+    }
+
+    s-= accumulate(all(odd),(int)0);
+    cout<<s<<endl;
 }
 
 void solve2(){}

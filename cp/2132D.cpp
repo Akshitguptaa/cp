@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +56,42 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+bool func(int midd,int n){
+    string s= to_string(midd);
+    int sz= s.size();
+    int base=9;
+    int res=0;
+
+    for(int i=1;i<sz; i++ , base*=10){
+        res+= base*i;
+    }
+
+    res += (midd-pow(10,sz-1)+1)*sz;
+
+    return res<=n;
+}
+
 void solve(){
     int n;
     cin>>n;
 
-    vi v(n);
-    inp(v);
+    int l=1;
+    int r= n;
 
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
-
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+    int ans= 1;
+    while(l<=r){
+        int midd= (l+(r-l)>>1);
+        if(func(midd,n)){
+            ans= midd;
+            l=midd+1;
+        }else{
+            r= midd-1;
         }
+
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
-    }
 
-    cout<<s1<<endl;
+
 }
 
 void solve2(){}

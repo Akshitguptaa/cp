@@ -43,6 +43,9 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
+vb s=sieve(100);
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +57,77 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+// int func(vi &v,int x){
+//     int n= v.size();
+//     int l=0;
+//     int r= n;
+
+//     while(l<=r){
+//         int midd= (l+(r-l)>>1);
+//         if(v[midd]>x){
+//     }
+
+
+//     return l;
+
+// }
+
 void solve(){
-    int n;
-    cin>>n;
+    int n,y;
+    cin>>n>>y;
 
     vi v(n);
     inp(v);
 
-    sort(all(v));
+    int maxx= *max_element(all(v));
 
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+    // map<int,int> mp;
+    // for(auto i:v){
+    //     mp[i]++;
+    // }
 
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+    vi mp(maxx+1,0);
+    for(auto i:v){
+        mp[i]++;
+    }
+
+    vi pre(maxx+1,0);
+    for(int i=0;i<maxx;i++){
+        pre[i+1]= pre[i]+ mp[i+1];
+    }
+
+    // sort(all(v));
+    int ans= LLONG_MIN;
+
+    for(int i=0;i<maxx;i++){
+        int sum=0;
+        int cnt=0;
+        
+        int l=1; //price
+        int en=0;
+        while(1){
+            int val=(l*(i+2)) ;
+            int curr= n;
+            curr=pre[min(maxx,val)]-pre[en];
+
+            // curr-=en;
+            sum+=(l*curr);
+            cnt+= min(mp[l],curr);
+            
+            en= val;
+            if(en==n || val>=maxx){
+                break;
+            }
+            l++;
         }
+
+
+        int temp= sum-y*(n-cnt);
+        ans= max(ans,temp); 
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
-    }
+    cout<<ans<<endl;
 
-    cout<<s1<<endl;
 }
 
 void solve2(){}

@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -61,23 +63,9 @@ void solve(){
     vi v(n);
     inp(v);
 
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
-
     for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
-        }
+        
     }
-
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
-    }
-
-    cout<<s1<<endl;
 }
 
 void solve2(){}

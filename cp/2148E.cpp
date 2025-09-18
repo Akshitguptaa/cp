@@ -43,6 +43,9 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
+vb s=sieve(100);
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -55,29 +58,45 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n;
-    cin>>n;
+    int n,k;
+    cin>>n>>k;
 
     vi v(n);
     inp(v);
 
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+    vi mp(n,0);
+    for(auto i:v){
+        mp[i-1]++;
+    }
 
     for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+        if(mp[i]%k ){
+            cout<<0<<endl;
+            return ;
         }
+        mp[i]= mp[i]/k;
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
+    int ans=0;
+    int l=0;
+    vi temp(n,0);
+    for(int i=0;i<n;i++){
+        int val = v[i];
+        temp[val-1]++;
+
+        while(temp[val-1] > mp[val-1]){
+            temp[v[l]-1]--;
+            l++;
+
+            // mv
+        }
+
+        ans+= (i-l+1);
     }
 
-    cout<<s1<<endl;
+    cout<<ans<<endl;
+
+
 }
 
 void solve2(){}

@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +56,76 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+// dsu template
+const int mxN=200001;
+ 
+int parent[mxN];
+int siz[mxN];
+ 
+void make_set(int v) {
+    parent[v]=v;
+    siz[v]=1;
+}
+ 
+int find_set(int v) {
+    return(v==parent[v]) ? v : parent[v] = find_set(parent[v]);
+}
+ 
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a == b) return;
+    if (siz[a] < siz[b]) swap(a, b);
+    parent[b] = a;
+    siz[a] += siz[b];
+    siz[b] = 0;
+}
+ 
+int get_size(int v) {
+    return siz[find_set(v)];
+}
+
 void solve(){
     int n;
     cin>>n;
 
-    vi v(n);
-    inp(v);
+    for(int i=1;i<=n;i++){
+        make_set(i);
+    }
 
-    sort(all(v));
+    unordered_map<int,int> mp;
+    vector<pair<int,pair<int,int>>> ans;
 
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+    for(int i=1;i<=n;i++){
+        int x;
+        cin>>x;
 
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+        for(int j=0;j<x;j++){
+            int d;
+            cin>>d;
+
+            if(mp.count(d)){
+                if(find_set(i)!= find_set(mp[d])){
+                    ans.push_back({i,{mp[d],d}});
+                    union_sets(i, mp[d]); 
+                }
+
+            }else{
+                mp[d]=i;
+            }
         }
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
+    if(ans.size()!=n-1){
+        cout<<"impossible"<<endl;
         return ;
     }
 
-    cout<<s1<<endl;
+        for(auto [x,y]:ans){
+            auto [a,b]= y;
+            cout<<x<<" "<<a<<" "<<b<<endl;
+        }
+    
 }
 
 void solve2(){}
@@ -87,7 +135,8 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    cin >> t;
+    // cin >> t;
+    t=1;
     while(t--){
         solve();
         // solve2();

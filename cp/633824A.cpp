@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +56,115 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve(){
-    int n;
-    cin>>n;
+// Fenwick Tree
+class FenwickTree {
+public:
+    vector<int> bit;
+    int N;
 
-    vi v(n);
-    inp(v);
+    FenwickTree(int size) {
+        N = size;
+        bit.resize(N + 1, 0);
+    }
 
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
-
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+    void update(int k, int val) {
+        while (k <= N) {
+            bit[k] += val;
+            k += (k & (-k));
         }
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
+    int query(int k) {
+        int res = 0;
+        while (k > 0) {
+            res += bit[k];
+            k -= (k & (-k));
+        }
+        return res;
+    }
+};
+
+void solve(){
+    int n,q;
+    cin>>n>>q;
+
+    FenwickTree fen(q+3);
+
+    vvi vec(q+1);
+    set<int> st;
+    for(int i=1;i<=q;i++){
+        int k;
+        cin>>k;
+        
+        st.insert(i);
+        while(k--){
+            int x;
+            cin>>x;
+            vec[i].pb(x);
+        }
+    }
+    
+    st.insert(q + 1); 
+    
+    vector<int> v(all(st));
+
+    unordered_map<int,unordered_set<int>> mp;
+
+    for(int i=1;i<=n;i++){
+        mp[0].insert(i);
     }
 
-    cout<<s1<<endl;
+    vi score(n+1,0);
+    vi rank(n+1,0);
+
+    int prev=1;
+    for(auto i:v){
+        int week = i-prev;
+
+        if(week>0){
+            fen.update(1,week);
+            fen.update(q+2,-week);
+
+            for(auto [x,y]:mp){
+                if(x){
+                    int val= y.size()* week;
+                    // update for neew 
+                    fen.update(1,val);
+                    fen.update(x+1,-val);
+                }
+            }
+        }
+        if(i<=q){
+            for(int j:vec[i]){
+                int old_s= score[j];
+                int new_s= old_s + 1;
+
+                int old_bonus =fen.query(old_s + 1);
+                int new_bonus =fen.query(new_s + 1);
+
+                rank[j]+=old_bonus;
+                rank[j]-=new_bonus;
+
+                score[j]= new_s;
+                
+                mp[old_s].erase(j);
+                if (mp[old_s].empty()) {
+                    mp.erase(old_s);
+                }
+                mp[new_s].insert(j);
+            }
+        }
+        prev = i;
+    }
+
+    for(int i=1;i<=n;i++){
+        int s= score[i];
+        rank[i]+= fen.query(s+1);
+    }
+
+    for(int i=1;i<=n;i++){
+        cout<<fixed<<setprecision(10)<<(long double)rank[i]/q<<endl;
+    }
 }
 
 void solve2(){}
@@ -87,7 +174,8 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    cin >> t;
+    // cin >> t;
+    t=1;
     while(t--){
         solve();
         // solve2();

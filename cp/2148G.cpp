@@ -22,7 +22,7 @@ typedef long long int int64;
 #define rall(x) x.rbegin(), x.rend()
 #define rep(i, a, b) for (int i = a; i < b; i++)
 #define rrep(i, a, b) for (int i = b - 1; i >= a; i--)
-typedef tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_update> ordered_set;
+typedef tree<pair<int,int>, null_type, less<pair<int,int>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set;
 
 // i/o
 static const auto init = []() { ios::sync_with_stdio(0); cin.tie(0); cout.tie(0); return 0;}();
@@ -43,6 +43,9 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
+vb s=sieve(100);
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,6 +57,17 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+const int MAXN = 200005;
+// vector<int> divs[MAXN];
+// void divi() {
+//     for(int i=1;i<MAXN;i++){
+//         for(int j=i; j<MAXN; j+=i){
+//             divs[j].push_back(i);
+//         }
+//     }
+// }
+
+
 void solve(){
     int n;
     cin>>n;
@@ -61,23 +75,87 @@ void solve(){
     vi v(n);
     inp(v);
 
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
-
+    vvi mp(n+1);
     for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+        mp[v[i]].pb(i+1);
+    }
+    //    ordered_set st; //pair form
+    //    vi mp(n+1,0);
+    
+    //     for(int i=1;i<=n;i++){
+    //         for(auto j:divs[v[i-1]]){
+    //             if(j>1){
+    //                 if(mp[j]>0){
+    //                     st.erase({mp[j],j});
+    //                 }
+    
+    //                 mp[j]++;
+    //                 st.insert({mp[j],j});
+    
+    //             }
+    //         }
+    
+    //         int ans=0;
+    
+    //         int minn = st.order_of_key({i,0});
+    //         if(minn){
+    //             auto it = st.find_by_order(minn-1);
+    //             ans = it->first;
+    //         }
+    
+    //         cout<<ans<<" ";
+    //     }
+    //     cout<<endl;
+    
+    vi dp(n+2,n+1);
+
+
+    for(int i=n;i>=1;i--){
+        vi pos;
+        for(int j=i;j<=n;j+=i){
+            if(!mp[j].empty()){
+                for(auto k:mp[j]){
+                    pos.pb(k);
+                }
+            }
+
+        }
+
+        if(pos.empty()) continue;
+
+
+        sort(all(pos));
+        int sz= pos.size();
+        for(int j=1;j<=sz;j++){
+            int val = max(pos[j-1],j+1);
+            int r= n+1;
+            if(j<sz){
+                r= pos[j];
+            }
+
+            if(val<r){
+                dp[j]= min(dp[j],val);
+            }
         }
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
+    vi ans(n,0);
+
+    for(int i=1;i<=n;i++){
+        if(dp[i]<=n){
+            ans[dp[i]-1]  = max(ans[dp[i]-1],i);
+        }
     }
 
-    cout<<s1<<endl;
+    for(int i=0;i<n-1;i++){
+        ans[i+1]= max(ans[i],ans[i+1]);
+    }
+
+    display(ans);
+
+    
+
+    
 }
 
 void solve2(){}
@@ -85,6 +163,8 @@ void solve2(){}
 int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
+
+    // divi();
 
     int t;
     cin >> t;

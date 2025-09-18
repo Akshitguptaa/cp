@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -55,29 +57,76 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n;
-    cin>>n;
+    int n,k;
+    cin>>n>>k;
 
-    vi v(n);
-    inp(v);
+    vvi adj(n+1);
+    for(int i=0;i<n-1;i++){
+        int x;
+        cin>>x;
 
-    sort(all(v));
+        adj[x].pb(i+2);
+    }
 
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+    int minn=n;
+    vi level;
+    queue<pii> q;
+    q.push({1,0});
+    // min depth and leaf size
+    
+    int curr=0; //lvl
+    while(!q.empty() && curr<=minn){
+        int sz= q.size();
+        level.pb(sz);
 
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+        for(int i=0;i<sz;i++){
+            auto [x,y]= q.front();
+            q.pop();
+
+            if(adj[x].empty()){
+                minn= min(minn,y);
+            }
+
+            for(auto v:adj[x]){
+                q.push({v,y+1});
+            }
+
+        }
+
+        curr++;
+
+        
+    }
+
+    int clr= accumulate(all(level),(int)0);
+
+    vb dp(clr+1,0);
+    dp[0]=1;
+    for(auto i:level){
+        for(int j= clr;j>=i;j--){
+            // dwnward
+            if(dp[j-i]){
+                dp[j]=1;
+            }
         }
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
+
+
+    // int f=0;
+    for(int i=0;i<=clr;i++){
+        if(dp[i]){
+            if(i<=k){
+                if((clr-i)<= (n-k)){
+                    cout<<minn+1<<endl;
+                    // break;
+                    return ;
+                }
+            }
+        }
     }
 
-    cout<<s1<<endl;
+    cout<<minn<<endl;
 }
 
 void solve2(){}

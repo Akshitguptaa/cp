@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +56,45 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve(){
-    int n;
-    cin>>n;
+// Fenwick Tree
+class FenwickTree {
+public:
+    vector<int> bit;
+    int N;
 
-    vi v(n);
-    inp(v);
+    FenwickTree(int size) {
+        N = size;
+        bit.resize(N + 1, 0);
+    }
 
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
-
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+    void update(int k, int val) {
+        while (k <= N) {
+            bit[k] += val;
+            k += (k & (-k));
         }
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
+    int query(int k) {
+        int res = 0;
+        while (k > 0) {
+            res += bit[k];
+            k -= (k & (-k));
+        }
+        return res;
     }
+};
 
-    cout<<s1<<endl;
+
+void solve(){
+    string s;
+    cin>>s;
+
+    int q;
+    cin>>q;
+
+    while(q--){
+
+    }
 }
 
 void solve2(){}

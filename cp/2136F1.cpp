@@ -10,7 +10,7 @@ using namespace std;
 typedef long long int int64;
 
 #define int long long
-#define endl "\n"
+#define endl "\n"<<flush
 #define INF LLONG_MAX
 #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +56,60 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+// int ask(){
+
+// }
+
+const int maxx= 1e5;
+
 void solve(){
-    int n;
-    cin>>n;
+    // s*ai <=w 
 
-    vi v(n);
-    inp(v);
 
-    sort(all(v));
 
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+    cout<<"? "<<maxx<<" ";
+    for(int i=0;i<maxx;i++){
+        cout<<1<<" ";
 
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
-        }
     }
+    cout<<endl;
 
-    if(n&1){
-        cout<<s-s1<<endl;
+    int x;
+    cin>>x;
+
+    if(x==1){
+        cout<<"! "<<1e5<<endl;
         return ;
     }
 
-    cout<<s1<<endl;
+    int l = (maxx+x-1)/x;
+    int r= (maxx+x-2)/(x-1);
+    if(r-l==1){
+        cout<<"! "<<l<<endl;
+        return ;
+    } 
+
+    cout<<"? "<<2*(r-l-1)<<" ";
+    
+    for(int i=l+1;i<r;i++){
+        cout<<l<<" "<<(i-l)<<" ";
+    }
+    
+    cout<<endl;
+    
+    // int x;
+    cin>>x;
+    
+    
+    int ans= (r-1)-x + (r-l-1);
+    cout<<"! "<<ans<<endl;
+
+    // between range of maxx/x and maxx/(x-1)
+    // 2*(r-l-1) pairs evry pair such that sum == i 
+    // overflow wala case handle 
+    // final ans 
+    // galti kha hai iski maa ka 
+
 }
 
 void solve2(){}

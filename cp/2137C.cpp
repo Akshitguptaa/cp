@@ -43,6 +43,9 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
+vb s= sieve(100);
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -55,29 +58,36 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n;
-    cin>>n;
+    int a,b;
+    cin>>a>>b;
 
-    vi v(n);
-    inp(v);
-
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
-
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
-        }
-    }
-
-    if(n&1){
-        cout<<s-s1<<endl;
+    if((a&1)==0 && (b&1)==1){
+        cout<<-1<<endl;
         return ;
     }
 
-    cout<<s1<<endl;
+    int bt= trailzero(b);
+    int temp= b>>bt;
+    int ans=-1;
+
+    for(int i=0;i<=bt;i++){
+        int k1=(1<<i);
+            if(b%k1 ==0){
+                int s = a*k1 + (b/k1);
+                if(((s&1))==0 && s>ans){
+                    ans=s;
+                }
+            }
+
+        int k2=(1<<i)*temp; 
+            if(b% k2 == 0){
+                int s = a*k2 + (b/k2);
+                if (((s&1))==0 && s > ans){
+                    ans=s;
+                }
+            }
+    }
+    cout<<ans<<endl;
 }
 
 void solve2(){}

@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -58,26 +60,43 @@ void solve(){
     int n;
     cin>>n;
 
-    vi v(n);
-    inp(v);
+    int s= (n*(n+1))>>1;
+    
+    if(s&1){
+        no(); return ;
+    }
 
-    sort(all(v));
+    s>>=1;
+    int l=0;
+    vi vec1,vec2;
+    vi vis(n+1,0);
+    int curr=0;
+    int r=n;
 
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+    while(r && r < (s-curr)){
+        vec1.pb(r);
+        vis[r]=1;
+        curr+=r;
+        r--;
+    }
 
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+    if(r>= (s-curr)){
+        int val = s-curr;
+        vis[val]=1;
+        vec1.pb(val);
+    }
+
+    for(auto i=1;i<=n;i++){
+        if(!vis[i]){
+            vec2.pb(i);
         }
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
-    }
-
-    cout<<s1<<endl;
+    yes();
+    cout<<vec1.size()<<endl;
+    display(vec1);
+    cout<<vec2.size()<<endl;
+    display(vec2);
 }
 
 void solve2(){}
@@ -87,7 +106,8 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    cin >> t;
+    t=1;
+    // cin >> t;
     while(t--){
         solve();
         // solve2();

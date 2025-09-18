@@ -10,7 +10,7 @@ using namespace std;
 typedef long long int int64;
 
 #define int long long
-#define endl "\n"
+#define endl "\n"<<flush
 #define INF LLONG_MAX
 #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
@@ -54,11 +54,11 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-vi dp;
-bool cmp(int a,int b){
-    if(dp[a]!=dp[b]) return dp[a]>dp[b];
-    return a<b;
-}
+// vi dp;
+// bool cmp(int a,int b){
+//     if(dp[a]!=dp[b]) return dp[a]>dp[b];
+//     return a<b;
+// }
 
 void solve(){
     int n;
@@ -74,8 +74,8 @@ void solve(){
         cin>>x;
         v.pb({x,i});
     }
-
     sort(rall(v));
+    //pichle se chota always
 
     vi ans;
     ans.pb(v[0].second);

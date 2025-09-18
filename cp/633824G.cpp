@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +56,41 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve(){
-    int n;
-    cin>>n;
+#define ld long double
 
-    vi v(n);
+void solve(){
+    int n,k;
+    cin>>n>>k;
+    
+    vector<ld> v(n);
     inp(v);
 
-    sort(all(v));
+    vector<ld> vec(n);
 
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+    vec[0]= (ld)k/n;
+
+    for(int i=0;i<n-k;i++){
+        vec[i+1]=vec[i]*(double)(n-k-i)/(n-i-1); 
+    }
+
+    vector<ld> ans(n,0.0);
 
     for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+        ld val=0;
+        for(int j=0;j<=n-k;j++){
+            int idx= (i-j+n)%n;
+
+            val+= v[idx]*vec[j];
+            // cout<<di
         }
+        ans[i]=val;
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
+    // display(ans);
+    for(int i=0;i<n;i++){
+        cout<<fixed<<setprecision(10)<<ans[i]<<" ";
     }
-
-    cout<<s1<<endl;
+    cout<<endl;
 }
 
 void solve2(){}
@@ -87,7 +100,8 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    cin >> t;
+    // cin >> t;
+    t=1;
     while(t--){
         solve();
         // solve2();

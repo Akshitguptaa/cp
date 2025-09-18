@@ -43,6 +43,9 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+vb s=sieve(100);
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -57,27 +60,58 @@ void no() { cout<<"NO\n"; }
 void solve(){
     int n;
     cin>>n;
-
     vi v(n);
     inp(v);
 
-    sort(all(v));
+    vi mp(n+1,0);
+    int idx1=-1;
+    int idx2=-1;
+    int idx3=-1;
+    for(int i=0;i<n;i++){
+        if(v[i]==0 && idx1==-1){
+            idx1=i+1;
+        }
+        if(v[i]==0){
+            idx3=i+1;
+        }
 
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+        mp[v[i]]++;
+    }
+
+    int cnt=0;
 
     for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+        if(!mp[i+1] && idx2==-1){
+            idx2=i+1;
+        }
+        if(!mp[i+1]){
+            cnt++;
         }
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
+    int minn=n+1;
+    int maxx=0;
+    for(int i=0;i<n;i++){
+        if(v[i]!=0 && v[i]!=(i+1)){
+            minn= min(minn,i+1);
+            maxx= max(maxx,i+1);
+        }
+    }
+
+    if(mp[0]){
+        if(!(mp[0]==1 && idx1==idx2)){
+            minn = min(idx1,minn);
+            maxx = max(idx3,maxx);
+        }
+    }
+
+    if(maxx==0){
+        cout<<0<<endl;
         return ;
     }
 
-    cout<<s1<<endl;
+    cout<<maxx-minn+1<<endl;
+    
 }
 
 void solve2(){}

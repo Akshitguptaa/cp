@@ -1,5 +1,3 @@
-//// AKSHIT - template ////
-
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp> // Common file 
 #include <ext/pb_ds/tree_policy.hpp>  
@@ -36,13 +34,16 @@ int mod_mul(int a, int b, int m) {return (a%m * b%m)%m;}
 int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m); res=mod_mul(res,res,m); if(b%2==1) res=mod_mul(res,a,m);return res;}
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
-vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+vector<bool> sieve(int n) { vector<bool> prime(n+1,true); prime[0]=0;prime[1]=0; for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
 
 // vector operationss
 using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
+vb s= sieve(100);
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,37 +55,55 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+int maxx= 100000;
+vector<int> primes;
+
+void func(){
+    vb isp = sieve(maxx);
+    for(int i=2;i<=maxx;i++) if(isp[i]) primes.pb(i);
+}
+
 void solve(){
-    int n;
-    cin>>n;
+    int n,k;
+    cin>>n>>k;
 
     vi v(n);
     inp(v);
 
-    sort(all(v));
+    int pr=-1;
 
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+    for(auto i:primes){
+        if(i>k+1){
+            break;
+        }
 
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+        if(k%i ){
+            pr= i;
+            break;
         }
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
+    // k%=pr;
+    int inv = mod_inv(k%pr,pr);
+    // inverse
+
+    for(int i=0;i<n;i++){
+        int x= (v[i]%pr+pr)%pr;
+
+        v[i]+=  mod_mul(pr-x,inv,pr)*k;
     }
 
-    cout<<s1<<endl;
+    display(v);
 }
+
+
 
 void solve2(){}
 
 int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
+    func();
 
     int t;
     cin >> t;

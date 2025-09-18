@@ -43,6 +43,9 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
+vb s=sieve(100);
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -55,29 +58,84 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 void solve(){
-    int n;
-    cin>>n;
+    int n,k;
+    cin>>n>>k;
 
     vi v(n);
-    inp(v);
 
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+    vi cnt(n+1,0);
 
     for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
-        }
+        cin>>v[i];
+        cnt[v[i]]++;
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
+    int s= accumulate(all(v),(int)0);
+
+    if(k==0){
+        cout<<s<<endl;
         return ;
     }
 
-    cout<<s1<<endl;
+    int mexx=n;
+    for(int i=0;i<n;i++){
+        if(cnt[i]==0){
+            mexx=i;
+            break;
+        }
+    } 
+
+    vi vec(n);
+    int s1=0;
+    for(int i=0;i<n;i++){
+        if(cnt[v[i]]==1 && v[i]<mexx){
+            vec[i]= v[i];
+        }else{
+            vec[i]= mexx;
+        }
+        s1+=vec[i];
+    }
+
+    if(k==1){
+        cout<<s1<<endl;
+        return ;
+    }
+
+    vi cnt1(n+1,0);
+
+    for(auto i:vec){
+        cnt1[i]++;
+    }
+
+    
+    int mexi=n;
+    for(int i=0;i<n;i++){
+        if(cnt1[i]==0){
+            mexi=i;
+            break;
+        }
+    }
+
+    if(mexi==n){
+        cout<<s1<<endl;
+        return ;
+    }
+
+
+    if((k&1)){
+        cout<<s1<<endl;
+        return ;
+    }else{
+        int s2=0;
+        for(int i=0;i<n;i++){
+            if(cnt1[vec[i]]==1 && vec[i]<mexi){
+                s2+=vec[i];
+            }else{
+                s2+=mexi;
+            }
+        }
+        cout<<s2<<endl;
+    }
 }
 
 void solve2(){}

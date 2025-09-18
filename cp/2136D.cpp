@@ -10,7 +10,7 @@ using namespace std;
 typedef long long int int64;
 
 #define int long long
-#define endl "\n"
+#define endl "\n"<<flush;
 #define INF LLONG_MAX
 #define MOD 1000000007
 #define PI 3.1415926535897932384626433832795
@@ -43,6 +43,8 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +56,44 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+int ques(char d,int n){
+    cout<<"? "<<d<<" "<<n<<endl;
+    int ans;
+    cin>>ans;
+    return ans;
+}
+
+const int maxx = 1e9;
+const int minn = -(1e9);
+
 void solve(){
     int n;
     cin>>n;
-
-    vi v(n);
-    inp(v);
-
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
-
+    // vi v(n),v1(n);
+    int f=LLONG_MIN;
+    int s=LLONG_MIN;
     for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
-        }
+        int x,y;
+        cin>>x>>y;
+
+        f= max(x+y,f);
+        s= max(x-y,s);
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
-    }
+    ques('R',maxx);
+    ques('R',maxx);
+    ques('U',maxx);
+    int val = ques('U',maxx);
 
-    cout<<s1<<endl;
+    ques('D',maxx);
+    ques('D',maxx);
+    ques('D',maxx);
+    int val1= ques('D',maxx);
+    
+    int calc = (val - maxx*4 + f );
+    int cal2= (val1- maxx*4 +s);
+    cout<< "! ";
+    cout<< ((calc+cal2)/2) << ' ' << ((calc-cal2)/2) <<endl;
 }
 
 void solve2(){}

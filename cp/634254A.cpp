@@ -36,13 +36,15 @@ int mod_mul(int a, int b, int m) {return (a%m * b%m)%m;}
 int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m); res=mod_mul(res,res,m); if(b%2==1) res=mod_mul(res,a,m);return res;}
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
-vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+vector<bool> sieve(int n) { vector<bool> prime(n+1,true); prime[0]=0; prime[1]=0; for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
 
 // vector operationss
 using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +56,24 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
-void solve(){
-    int n;
-    cin>>n;
-
-    vi v(n);
-    inp(v);
-
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
-
-    for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+const int maxx= 1e7;
+vi pre(maxx+1,0);
+void func(){
+    vb s= sieve(maxx);
+    
+    for(int i=1;i<=maxx;i++){
+        pre[i]= pre[i-1];
+        if(s[i]){
+            pre[i]+=i;
         }
     }
+}
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
-    }
+void solve(){
+    int l,r;
+    cin>>l>>r;
 
-    cout<<s1<<endl;
+    cout<<pre[r]-pre[l-1]<<endl;
 }
 
 void solve2(){}
@@ -85,6 +81,7 @@ void solve2(){}
 int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
+    func();
 
     int t;
     cin >> t;

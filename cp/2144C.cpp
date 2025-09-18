@@ -43,6 +43,9 @@ using vi = vector<int>;
 using vb = vector<bool>;
 using vvi = vector<vector<int>>;
 using vvb = vector<vector<bool>>;
+using pii = pair<int,int>;
+using vpii = vector<pii>;
+vb s=sieve(100);
 template <class T>
 void debug(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}"; }
 template <class T>
@@ -54,30 +57,50 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+const int mod= 998244353;
+
 void solve(){
     int n;
     cin>>n;
-
+    
     vi v(n);
+    vi v1(n);
     inp(v);
-
-    sort(all(v));
-
-    int s= accumulate(all(v),(int)0);
-    int s1=0;
+    inp(v1);
 
     for(int i=0;i<n;i++){
-        if(i&1){
-            s1+=v[i];
+        if(v[i]>v1[i]){
+            swap(v[i],v1[i]);
         }
     }
 
-    if(n&1){
-        cout<<s-s1<<endl;
-        return ;
+    int ans=1;
+    int l=0;
+    while(l<n){
+        int r= l;
+        while(r<n-1 && v1[r]>v[r+1]){
+            r++;
+        }
+
+        int cnt=0;
+        for(int i=l;i<=r;i++){
+            if(v[i]==v1[i]){
+                cnt++;
+            }
+        }
+        int val = mod_expo(2,cnt,mod);
+
+        if(cnt!= (r-l+1)){
+            val= mod_mul(2,val,mod);
+        }
+
+        ans = mod_mul(ans,val,mod);
+
+        l= r+1;
+
     }
 
-    cout<<s1<<endl;
+    cout<<ans<<endl;
 }
 
 void solve2(){}
