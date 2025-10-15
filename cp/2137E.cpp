@@ -116,15 +116,40 @@ void solve(){
         }
     }
 
-    if(mexi==n){
-        cout<<s1<<endl;
-        return ;
+    vi vec2(n);
+    int s2=0;
+    for(int i=0;i<n;i++){
+        if(cnt1[vec[i]]==1 && vec[i]<mexi){
+            vec2[i] = vec[i];
+        }else{
+            vec2[i]= mexi;
+        }
+        s2+=vec2[i];
+    }
+    
+    vi cnt2(n+1,0);
+    for(auto i:vec2){
+        cnt2[i]++;
     }
 
+    int mexi2 = n;
+    for(int i=0; i<=n;i++){
+        if(cnt2[i]==0){
+            mexi2=i;
+            break;
+        }
+    }
 
     if((k&1)){
-        cout<<s1<<endl;
-        return ;
+        int s3=0;
+        for(int i=0; i<n;i++){
+            if(cnt2[vec2[i]]==1 && vec2[i]<mexi2){
+                s3+=vec2[i];
+            }else{
+                s3+=mexi2;
+            }
+        }
+        cout<<s3<<endl;
     }else{
         int s2=0;
         for(int i=0;i<n;i++){
