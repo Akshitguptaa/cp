@@ -39,6 +39,7 @@ using vvb = vector<vector<bool>>;
 using pii = pair<int,int>;
 using vpii = vector<pii>;
 using vvb = vector<vb>;
+vb s= sieve(100);
 template <class T>
 void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
@@ -66,55 +67,45 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,m,k;
+    cin>>n>>m>>k;
 
-    vi v(n);
-    inp(v);
+    int ans=1;
+    // int l=1,r=n;
+    // while(l<r){
 
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+    // }
+    
+    for(int i=1;i<=k-1;i++){
+        if(2*i-1 > m){
+            break;
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        int val= min({n-k,m- (2*i-1)});
+        val=  min({val,i});
+        val= 1+ val+i;
+
+        ans= max(ans,val);
+    }
+    
+    for(int i=1;i<=n-k;i++){
+        if(2*i-1 > m){
+            break;
         }
-        f=!f;
+        
+        int val = min({k-1, m-(2*i-1)});
+        val=  min({val,i});
+        val = val+1+i;
+        
+        ans= max(ans,val);
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<ans<<endl;
+    return ;
 }
+
 
 void solve2(){}
 

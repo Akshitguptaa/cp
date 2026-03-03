@@ -39,6 +39,7 @@ using vvb = vector<vector<bool>>;
 using pii = pair<int,int>;
 using vpii = vector<pii>;
 using vvb = vector<vb>;
+vb s= sieve(100);
 template <class T>
 void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
@@ -66,54 +67,62 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
-void solve(){
-    int n,m;
-    cin>>n>>m;
+int n;
+vi par,dist;
+vi tb,child;
+vvi adj;
 
-    vi v(n);
-    inp(v);
+void bfs(){
+    queue<int> q;
+    q.push(1);
+    par[0]++;
 
-    vi v1(m);
-    inp(v1);
+    while(!q.empty()){
+        auto x= q.front(); q.pop();
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+        for(auto i:adj[x]){
+            if(i!= par[x]){
+                par[i]=x;
+                dist[i]= dist[x]+1;
+                tb[dist[i]]++;
+                child[x]++;
+                q.push(i);
             }
-            f=!f;
-            continue;
-        }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
         }
-        f=!f;
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+    return ;
+
+}
+
+void solve(){
+    cin>>n;
+    adj = vvi(n+1);
+    for(int i=0;i<n-1;i++){
+        int x,y;cin>>x>>y;
+        adj[x].pb(y);
+        adj[y].pb(x);
+        
     }
+    
+    par= vi(n+1,0);
+    dist= vi(n+1,0);
+    tb= vi(n+1,0);
+    child= vi(n+1,0);
+    bfs();
+    
+    
+    int maxx=0;
+    for(auto i:tb){
+        maxx= max(maxx,i);
+    }
+    for(auto i:child){
+        maxx= max(maxx,i+1);
+    }
+
+    cout<<maxx<<endl;
+    return ;
 }
 
 void solve2(){}

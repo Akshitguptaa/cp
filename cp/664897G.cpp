@@ -67,53 +67,27 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n;cin>>n;
 
-    vi v(n);
-    inp(v);
+    vi v(n);inp(v);
 
-    vi v1(m);
-    inp(v1);
+    vi pre(n+1);
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
+    for(int i=0;i<n;i++){
+        pre[i+1]= max(pre[i],v[i]);
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+    int cnt=0;
+    int minn=INT_MAX;
+    for(int i=n-1;i>=0;i--){
+        if(pre[i+1]<=minn){
+            cnt++;
         }
-
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
+        minn= min(minn,v[i]);
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<cnt<<endl;
+
 }
 
 void solve2(){}

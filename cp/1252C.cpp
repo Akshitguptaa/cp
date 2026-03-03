@@ -66,54 +66,92 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
+// dsu template
+const int mxN=1e5+1;
+ 
+int parent[mxN];
+int siz[mxN];
+ 
+void make_set(int v) {
+    parent[v]=v;
+    siz[v]=1;
+}
+ 
+int find_set(int v) {
+    return(v==parent[v]) ? v : parent[v] = find_set(parent[v]);
+}
+ 
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a == b) return;
+    if (siz[a] < siz[b]) swap(a, b);
+    parent[b] = a;
+    siz[a] += siz[b];
+    siz[b] = 0;
+}
+ 
+int get_size(int v) {
+    return siz[find_set(v)];
+}
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,q;
+    cin>>n>>q;
 
-    vi v(n);
-    inp(v);
+    vi v(n);inp(v);
+    vi v1(n);inp(v1);
 
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
+    for(int i=0;i<n;i++){
+        make_set(i);
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    // int c=0;
+    for(int i=0;i<n-1;i++){
+        if((v[i]&1)== (v[i+1]&1)){
+            // c++;
+            union_sets(i,i+1);
+        }
+    }
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+    vi temp(n);
+    for(int i=0;i<n;i++){
+        temp[i]= find_set(i);
+    }
+    
+    for(int i=0;i<n;i++){
+        make_set(i);
+    }
+
+    for(int i=0;i<n-1;i++){
+        if((v1[i]&1)== (v1[i+1]&1)){
+            union_sets(i,i+1);
+        }
+    }
+
+    while(q--){
+        int r1,c1,r2,c2;
+        cin>>r1>>c1>>r2>>c2;
+
+        r1--;c1--;r2--;c2--;
+
+        if(temp[r1]==temp[r2]){
+            if(find_set(c1)==find_set(c2)){
+                yes();
+                // return;
+                continue;
             }
-            f=!f;
-            continue;
-        }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+            
         }
-        f=!f;
+        no();
+
+
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+
+
+
 }
 
 void solve2(){}
@@ -123,7 +161,8 @@ int32_t main(){
     // freopen("out", "w", stdout);
     
     int t;
-    cin >> t;
+    // cin >> t;
+    t=1;
     for(int i=1;i<=t;i++){
         //cout<<"Case #"<<i<<": ";
         solve();

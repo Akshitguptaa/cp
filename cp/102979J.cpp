@@ -67,53 +67,56 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-
+    int n;
+    cin>>n;
     vi v(n);
     inp(v);
 
-    vi v1(m);
-    inp(v1);
+    sort(all(v));
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
+    vpii vec(n-1);
+    for(int i=0;i<n-1;i++){
+        vec[i]= {v[i+1]-v[i],i};
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    sort(all(vec));
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
+    set<int> st;
+    int l=0;
+    int maxx=-1;
+    for(int i=0;i<n-6;i++){
+        while(l<vec.size() && vec[l].first<v[i+4]){
+            st.insert(vec[l].second);
+            l++;
+        }
+
+        int val= lower_bound(all(v),v[i]+v[i+1]+v[i+2]+v[i+3] - v[i+4])- v.begin()-1;
+        val = min(n-2,val);
+
+        if(val<i+5){
             continue;
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        auto it= st.upper_bound(val);
+        if(it==st.begin()){
+            continue;
         }
-        f=!f;
-    }
+        it--;
+        int temp = *it;
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+        if(temp>=i+5){
+            int val1= lower_bound(all(v),v[temp]+ v[i+4])- v.begin()-1;
+
+            if(val1>temp){
+                maxx= max(maxx,v[i]+v[i+1]+v[i+2]+v[i+3]+v[i+4]+ v[temp] + v[val1]);
+            }
+
+        }
+
+
+    }   
+
+    cout<<maxx<<endl;
 }
 
 void solve2(){}
@@ -123,7 +126,8 @@ int32_t main(){
     // freopen("out", "w", stdout);
     
     int t;
-    cin >> t;
+    // cin >> t;
+    t=1;
     for(int i=1;i<=t;i++){
         //cout<<"Case #"<<i<<": ";
         solve();

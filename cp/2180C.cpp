@@ -67,53 +67,57 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,k;
+    cin>>n>>k;
 
-    vi v(n);
-    inp(v);
+    if(k&1){
+        for(int i=0;i<k;i++) cout<<n<<" ";
 
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
+        cout<<endl; return ;
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    vb flag(k,0);
+    vi ans(k,0);
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+    for(int i=32;i>=0;i--){
+        int bit = (n>>i)&1;
+        int cnt = 0;
+
+        for(int j=0; j<k; j++){
+            if(flag[j] || bit){
+                cnt++;
             }
-            f=!f;
-            continue;
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        if(cnt % 2 != bit){
+            cnt--;
         }
-        f=!f;
+        
+        for(int j=0; j<k; j++) {
+            if(cnt>0 && flag[j]){
+                ans[j] |= (1 << i);
+                cnt--;
+            }
+        }
+        
+        for(int j=0; j<k; j++){
+            if(cnt > 0 && !flag[j]){
+                ans[j] |= (1LL<<i);
+                cnt--;
+            }
+        }
+
+        for(int j=0;j<k;j++){
+            if (!flag[j]) {
+                int temp = (ans[j]>>i)& 1;
+                if(bit && !temp){
+                    flag[j] = 1;
+                }
+            }
+        }
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    display(ans);
 }
 
 void solve2(){}

@@ -66,54 +66,44 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
+vector<int> pascalRowParity(int n) {
+    vector<int> row(n+1);
+    for (int k = 0; k <= n; k++) {
+        row[k] = ((k & n) == k) ? 1 : 0;
+    }
+    return row;
+}
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int k,q;cin>>k>>q;
+    vi v(k);inp(v);
 
-    vi v(n);
-    inp(v);
+    
+    while(q--){
+        int x,t;
+        cin>>x>>t;
 
-    vi v1(m);
-    inp(v1);
+        int f=0;
+        for(int i=0;i<k;i++){
+            int temp= abs(v[i]-x);
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+            if(temp>t){
+                continue;
             }
-            f=!f;
-            continue;
-        }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+            if((temp+t)&1){
+                continue;
+            }
+            
+            temp= (temp+t)>>1;
+            if((temp&t)==temp){
+                f^=1;
+                continue;
+            }
         }
-        f=!f;
+        cout<<f<<endl;
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
 }
 
 void solve2(){}
@@ -122,8 +112,8 @@ int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
     
-    int t;
-    cin >> t;
+    int t=1;
+    // cin >> t;
     for(int i=1;i<=t;i++){
         //cout<<"Case #"<<i<<": ";
         solve();

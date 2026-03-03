@@ -66,64 +66,75 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
+const int maxx= 1e6+5;
+// vb s= sieve(maxx);
+vi spf(int n){ vi ans(n+1); for(int i=0 ;i<=n ;i++)ans[i]=i; for(int i=2 ;i*i<=n ;i++) if(ans[i]==i) for(int j=i*i ; j<=n ;j+=i) if(ans[j]==j) ans[j]=i ; return ans;}
+vi primes= spf(maxx);
+// void func(){
+//     for(int i=2;i<s.size();i++){
+//         if(s[i]){
+//             primes.pb(i);
+//         }
+//     }
+// }
+
+
+int v1[maxx];
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
-
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
+    int n;cin>>n;
+    vi v(n);inp(v);
+    fill(v1,v1+maxx,0);
 
     int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    vi dp(n+1,0);
+    for(int i=n-1;i>=0;i--){
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+        vi temp;
+        int val= v[i];
+        
+        while(val>1){
+            int p = primes[val];
+            temp.pb(p);
+            while(val%p == 0){
+                val/= p;
             }
-            f=!f;
-            continue;
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        for(auto &j:temp){
+            if(v1[j]>v[i]){
+                dp[i]=1;
+                break;
+            }
         }
-        f=!f;
+
+        if(!dp[i]){
+            for(auto & j:temp){
+                if(v[i]>v1[j]){
+                    v1[j]= v[i];
+                }
+            }
+        }
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+    if(dp[0]){
+        cout<<"Eleven"<<endl;
+        return ;
     }
+
+    cout<<"Vecna"<<endl;
 }
+
 
 void solve2(){}
 
 int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
+    // func();
     
-    int t;
-    cin >> t;
+    int t=1;
+    // cin >> t;
     for(int i=1;i<=t;i++){
         //cout<<"Case #"<<i<<": ";
         solve();

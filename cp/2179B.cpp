@@ -67,53 +67,28 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-
+    int n; cin>>n;
     vi v(n);
     inp(v);
 
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
+    vi pre(n,0);
+    for(int i=1;i<n;i++){
+        pre[i]= pre[i-1]+ abs(v[i]-v[i-1]);
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
-        }
-
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
+    vi suf(n,0);
+    for(int i=n-2;i>=0;i--){
+        suf[i]= suf[i+1]+ abs(v[i]-v[i+1]);
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+    int minn = min(suf[1],pre[n-2]);
+    for(int i=1;i<n-1;i++){
+        int val= pre[i-1]+ suf[i+1]+ abs(v[i-1]-v[i+1]);
+        minn= min(minn,val);
     }
+
+    cout<<minn<<endl;
+
 }
 
 void solve2(){}

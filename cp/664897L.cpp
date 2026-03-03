@@ -65,55 +65,49 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 // ---yo---
+int n,k; 
+vi v(n); 
+
+int func(int midd){
+    for(int i=0;i<n-1;i++){
+        if(v[i]>=midd && v[i+1]>=midd){
+            return 1;
+        }
+    }
+
+    for(int i=0;i<n-2;i++){
+        if(v[i]>=midd && v[i+2]>=midd){
+            if((midd-v[i+1])<= k){
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-
-    vi v(n);
+    cin>>n>>k;
+    v= vi(n);
     inp(v);
 
-    vi v1(m);
-    inp(v1);
+    int maxx= *max_element(all(v));
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
+    int l=1;
+    int r=maxx+k;
+    int ans=1;
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
-        }
-
-        if(x>=y){
-            pq1.push(x);
+    while(l<=r){
+        int midd= (l+r)>>1;
+        if(func(midd)){
+            ans= midd;
+            l= midd+1;
         }else{
-            pq1.push(x);
-            pq2.push(y-x);
+            r= midd-1;
         }
-        f=!f;
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<ans<<endl;
 }
 
 void solve2(){}

@@ -67,53 +67,27 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,k; cin>>n>>k;
 
-    vi v(n);
-    inp(v);
+    int msb= trailzero(n)+1;
+    int ans=0;
 
-    vi v1(m);
-    inp(v1);
+    
+    for(int i=1;i<msb;i++){
+        int l= k-i+1;
+        l= max(l,0LL);
+        
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+        while(l<i){
+            ans+=ncr(i-1,l);
+            l++;
         }
-
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
+    }
+    if(msb>k){
+        ans++;
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<ans<<endl;
 }
 
 void solve2(){}
@@ -121,7 +95,8 @@ void solve2(){}
 int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
-    
+
+    prec(100);
     int t;
     cin >> t;
     for(int i=1;i<=t;i++){

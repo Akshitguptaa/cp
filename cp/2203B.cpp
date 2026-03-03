@@ -39,6 +39,7 @@ using vvb = vector<vector<bool>>;
 using pii = pair<int,int>;
 using vpii = vector<pii>;
 using vvb = vector<vb>;
+vb s= sieve(100);
 template <class T>
 void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
@@ -67,53 +68,52 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
+    string x;cin>>x;
+    int n=x.size();
+    if(n==1){
+        cout<<0<<endl;
+        return ;
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    // priority_queue<int,vi,greater<int>> pq;
+    vi mp(10,0);
+    for(int i=1;i<n;i++){
+        mp[x[i]-'0']++;
+    }
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+    int res=n;
+    if(x.front()<='9'){
+        int sum=x.front()-'0';
+        int val =1+ mp[0];
+
+        for(int i=1;i<=9;i++){
+            
+            int mini = (9-sum)/i;
+            mini =min(mini,mp[i]);
+
+            sum+= mini*i;
+            val+=mini;
         }
+        
+        res-=val;
+    }
+    
+    
+    int sum= 1;
+    int val= mp[0];
+    
+    
+    for(int i=1;i<=9;i++){
+        int mini = (9-sum)/i;
+        mini =min(mini,mp[i]);
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
+        sum+= mini*i;
+        val+=mini;
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    res= min(res,n-val);
+    cout<<res<<endl;
+
 }
 
 void solve2(){}

@@ -29,7 +29,7 @@ int mod_mul(int a, int b, int m) {return (a%m * b%m)%m;}
 int mod_expo(int a, int b, int m){ if(b==0) return 1; int res=mod_expo(a,b/2,m); res=mod_mul(res,res,m); if(b%2==1) res=mod_mul(res,a,m);return res;}
 int mod_inv(int a, int m) {return mod_expo(a,m-2,m);}//fermat's theorem
 int mod_div(int a, int b, int m) {return mod_mul(a,mod_inv(b,m),m);}
-vector<bool> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
+vector<boacidnvi.aiol> sieve(int n) { vector<bool> prime(n+1,true); for (int p = 2; p * p <= n; p++) { if (prime[p] == true) { for (int i = p * p; i <= n; i += p) prime[i] = false; } } return prime;} 
 
 // vector operationss
 using vi = vector<int>;
@@ -65,55 +65,96 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 // ---yo---
+// s=0 a>b
+// b=p-a 
+// b-a=d >=1 
+// d>=p-2a
+
+int n,x,y;
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    cin>>n>>x>>y;
 
-    vi v(n);
-    inp(v);
+    string s; cin>>s;
+    vi v(n); inp(v);
 
-    vi v1(m);
-    inp(v1);
+    int tot= accumulate(all(v),(int)0);
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
+    if((x+y)<tot){
+        no(); return ;
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    int a=0, b=0;
+    int c0=0,c1=0;
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+    for(int i=0;i<n;i++){
+        // int val = (!(v[i]&1))+1;
+        int val= (v[i]>>1)+1;
+
+        if(s[i]=='1'){
+            b+=val;
+            if(!(v[i]&1)){
+                c1++;
             }
-            f=!f;
-            continue;
-        }
-
-        if(x>=y){
-            pq1.push(x);
+            
         }else{
-            pq1.push(x);
-            pq2.push(y-x);
+            a+=val;
+            if(!(v[i]&1)) c0++;
         }
-        f=!f;
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+    if(b>y || a>x){
+        no(); return ;
     }
+
+    int val=tot;
+    if(a){
+        val+= c0+ (x-a)*2;
+    }
+    if(b){
+        val+= c1+(y-b)*2;
+    }
+
+    if(val>=(x+y)){
+        yes(); return ;
+    }
+
+    // if(!c0){
+    //     if(c1+x-y>0){
+    //         no();
+    //         return ;
+    //     }
+    // }
+
+    // if(!c1){
+    //     if(c0-x+y>0){
+    //         no();
+    //         return ;
+    //     }
+    // }
+    // // int val1= max(c0,c1+x-y);
+    // int val2= max(c1,c0-x+y);
+
+    // // if((a&1) != (val1&1)) a++;
+    // // if((b&1) != (val2&1)) b++;
+
+    // // if(a+b > x+y){
+    // //     no();
+    // //     return ;
+    // // }
+
+    // if(func(val2,c1,c0,a,b)){
+    //     yes();
+    //     return ;
+    // }
+    // if(func(val2+1,c1,c0,a,b)){
+    //     yes();
+    //     return ;
+    // }
+
+
+    no();
+
 }
 
 void solve2(){}

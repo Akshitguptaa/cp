@@ -65,55 +65,67 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 // ---yo---
+int n;
+vi v;
+vi dp;
+
+int func(int idx,set<int> &st){
+    if(idx==1){
+        return 0;
+    }
+    
+    if(dp[idx]!=-1){
+        return dp[idx];
+    }
+
+    int ans= INT_MAX;
+    for(int i=1;i*i<=idx;i++){
+        if(idx%i==0){
+            if(i>1 && st.count(i)){
+                int val=func(idx/i,st);
+                ans= min(ans,1+val);
+            }
+            int temp= idx/i;
+            if(temp>1 && st.count(temp)){
+                int val=func(idx/temp,st);
+                ans= min(ans,1+val);
+            }
+        }
+    }
+    return dp[idx]=ans;
+}
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-
-    vi v(n);
+    cin>>n;
+    v= vi(n);
     inp(v);
 
-    vi v1(m);
-    inp(v1);
+    // vi mp(n+1,0);
+    // for(auto i:v){
+    //     mp[i]++;
+    // }
+    set<int> st(all(v));
+    v=vi(all(st));
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
+    dp= vi(n+1,-1);
+    for(int i=1;i<=n;i++){
+        if(st.count(i)){
+            cout<<1<<" ";
             continue;
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        if(i==1){
+            cout<<-1<<" ";
+            continue;
         }
-        f=!f;
+        int val = func(i,st);
+        if(val>=INT_MAX){
+            cout<<-1<<" ";
+        }else{
+            cout<<val<<" ";
+        }
     }
-
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<endl;
 }
 
 void solve2(){}

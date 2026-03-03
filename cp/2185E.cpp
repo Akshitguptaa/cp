@@ -39,6 +39,7 @@ using vvb = vector<vector<bool>>;
 using pii = pair<int,int>;
 using vpii = vector<pii>;
 using vvb = vector<vb>;
+vb s= sieve(100);
 template <class T>
 void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
@@ -67,53 +68,93 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,m,k; cin>>n>>m>>k;
+    vi v(n);inp(v);
+    vi v1(m); inp(v1);
 
-    vi v(n);
-    inp(v);
+    string s;cin>>s;
 
-    vi v1(m);
-    inp(v1);
+    sort(all(v));
+    sort(all(v1));
+    
+    vvi left(k+2), right(k+2);
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+    int idx=0;
+    for(int i=0;i<n;i++){
+        while(idx<m){
+            if(v1[idx]>=v[i]){
+                break;
             }
-            f=!f;
-            continue;
+            idx++;
         }
 
-        if(x>=y){
-            pq1.push(x);
+        if(idx<m){
+            int val= v1[idx]-v[i];
+
+            if(val<=k){
+                right[val].pb(i);
+            }
+        }
+        
+        
+        
+        if(idx!=0){
+            
+            int val= v[i]-v1[idx-1];
+    
+            if(val<=k){
+                left[val].pb(i);
+            }
+        }
+    }
+
+    vb seen(n,0);
+
+    int cnt=n;
+    int l=0,r=0;
+     idx=0;
+
+    for(int i=0;i<k;i++){
+        if(s[i]=='L'){
+            idx--;
         }else{
-            pq1.push(x);
-            pq2.push(y-x);
+            idx++;
         }
-        f=!f;
-    }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+
+        if(-idx>l){
+            l= -idx;
+            if(l<= k){
+                for(auto j:left[l]){
+                    if(!seen[j]){
+                        seen[j]=1;
+                        cnt--;
+                    }
+                }
+            }
+
+
+            // if()
+        }
+
+        if(idx>r){
+            r =idx;
+            if(r<= k){
+                for(auto j:right[r]){
+                    if(!seen[j]){
+                        seen[j]=1;
+                        cnt--;
+                    }
+                }
+            }
+        }
+
+
+        cout<<cnt<<" ";
+        // return ;
     }
+    cout<<endl;
+    
 }
 
 void solve2(){}

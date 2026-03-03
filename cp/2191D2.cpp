@@ -9,7 +9,7 @@ using namespace std;
 // typedef long long int int64;
 #define endl "\n" // for i- r
 #define INF LLONG_MAX
-#define MOD 1000000007
+#define MOD 998244353
 #define PI 3.1415926535897932384626433832795
 #define setbits(x) __builtin_popcountll(x)
 #define trailzero(x) __builtin_ctz(x)
@@ -66,54 +66,61 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
-void solve(){
-    int n,m;
-    cin>>n>>m;
+int n; string s;
+int memo[105][2][3][105][105];
 
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+int func(int idx,int f,int cnt,int bal, int len){
+    if(idx==n){
+        if(bal==0 && cnt==2){
+            return (len-2+MOD)%MOD;
         }
-
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
+        return 0;
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
+    if(memo[idx][f][cnt][bal][len] != -1){
+        return memo[idx][f][cnt][bal][len];
+    }
+
+    int total=0;
+
+    total = (total+func(idx+1,f,cnt,bal,len))%MOD;
+
+    int f1= f;
+    int cn1= cnt;
+    int bal1=bal;
+    bool flag= 1;
+
+    if(s[idx] == '('){
+        bal1++;
+        if(f==1){
+            cn1= min(cnt+1,(int)2);
+        }
     }else{
-        cout<<"Bob"<<endl;
+        bal1--;
+        if(bal1<0){
+            flag = 0;
+        }
+        if(!f){
+            f1=1;
+        }
     }
+
+    if(flag&&bal1 <= n){
+        total = (total+func(idx+1,f1,cn1,bal1,len+1))%MOD;
+    }
+
+    return memo[idx][f][cnt][bal][len]=total;
+}
+
+void solve(){
+    cin>>n;
+    cin>>s;
+    
+    // memo= temp;
+    memset(memo,-1,sizeof(memo));
+    int ans= func(0,0,0,0,0);
+    cout<<ans<<endl;
+
 }
 
 void solve2(){}

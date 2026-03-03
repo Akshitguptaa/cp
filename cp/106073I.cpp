@@ -67,53 +67,53 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n;
+    cin>>n;
 
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
+    vi x(n);
+    vi y(n);
+    for(int i=0;i<n;i++){
+        cin>>x[i]>>y[i];
     }
-    for(auto i:v1){
-        pq2.push(i);
+    // inp(x);inp(y);
+
+    vi dist(n-1);
+    for(int i=0;i<n-1;i++){
+        dist[i]= abs(x[i+1]-x[i])+ abs(y[i+1]-y[i]);
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+    int l=1;
+    int r=dist[0]-1;
+
+    int flag=0;
+    int prev=0;
+    for(int i=0;i<n-1;i++){
+        prev= dist[i]-prev;
+
+        int a=1-prev;
+        int b= LLONG_MAX;
+        if(i+2<n){
+            b= dist[i+1]-1-prev;
         }
 
-        if(x>=y){
-            pq1.push(x);
+        if(flag){
+            l=max(l,a);
+            r= min(r,b);
         }else{
-            pq1.push(x);
-            pq2.push(y-x);
+            l= max(l,(-b));
+            r= min(r,(-a));
         }
-        f=!f;
+        flag=!flag;
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+    if(l>r){
+        cout<<-1<<endl;
+        return;
     }
+
+    cout<<r<<endl;
+
 }
 
 void solve2(){}
@@ -123,7 +123,8 @@ int32_t main(){
     // freopen("out", "w", stdout);
     
     int t;
-    cin >> t;
+    // cin >> t;
+    t=1;
     for(int i=1;i<=t;i++){
         //cout<<"Case #"<<i<<": ";
         solve();

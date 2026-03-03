@@ -67,53 +67,28 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n;
+    cin>>n;
 
-    vi v(n);
-    inp(v);
+    string s;
+    cin>>s;
 
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
+    set<char> st;
+    for(auto i:s){
+        if(i!='-') st.insert(i);
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    if(st.size()<=1){
+        cout<<n<<endl; return ;
+    }
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+    int c=0;
+    for(int i=0;i<n;i++){
+        if(s[i]=='-' || s[(i+n-1)%n]=='-'){
+            c++;
         }
-
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
     }
-
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<c<<endl;
 }
 
 void solve2(){}

@@ -66,54 +66,105 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
+// segment tree
+vector<int> t;
+#define INF ((1LL << 32) - 1)
+ 
+int combine(int a, int b) {
+    return a + b;
+}
+ 
+void build(vector<int>& a, int v, int tl, int tr) {
+    if (tl == tr) {
+        t[v] = a[tl];
+    } else {
+        int tm = (tl + tr) / 2;
+        build(a, v * 2, tl, tm);
+        build(a, v * 2 + 1, tm + 1, tr);
+        t[v] = combine(t[v * 2], t[v * 2 + 1]);
+    }
+}
+ 
+int func(int v,int tl,int tr,int l,int r){
+    if(l > r){
+        return INF;
+    }
+    if(l==tl && r==tr){
+        return t[v];
+    }
+    int tm= (tl+tr)/2;
+ 
+    return combine(func(v*2, tl, tm, l, min(r,tm)), func(v*2+1, tm+1, tr, max(l,tm+1),r));
+}
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,m;cin>>n>>m;
 
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
+    vvi vec(n+1);
+    vpii v1(m);
+    for(int i=0;i<n;i++){
+        int x,y;
+        cin>>x>>y;
+        
+        vec[y].pb(x);
     }
-    for(auto i:v1){
-        pq2.push(i);
+    for(int i=0;i<m;i++){
+        int x,y;cin>>x>>y;
+
+        v1[i]= {x,y};
     }
+    
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    priority_queue<int,vi,greater<int>> pq;
+    int maxx=0;
+    int sum=0;
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+    vi v(n+3,LLONG_MIN);
+
+    for(int i=n+1;i>=1;i--){
+        while(pq.size()>i){
+            sum-= pq.top();
+            pq.pop();
+        }
+
+        for(auto j:vec[i-1]){
+            pq.push(j);
+
+            sum+=j;
+            if(pq.size()>i){
+                sum-=pq.top();
+                pq.pop();
             }
-            f=!f;
+        }
+
+        if(pq.size()==i-1){
+            v[i]= sum;
             continue;
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        if(pq.size()==i){
+            maxx= max(maxx,sum);
+            v[i]= sum-pq.top();            
+
+
         }
-        f=!f;
+
+
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+
+    vi pre(n+3,LLONG_MIN);
+    for(int i=0;i<=n;i++){
+        pre[i+1]= max(pre[i],v[i+1]);
     }
+
+    for(auto [x,y]:v1){
+        int maxi = max(maxx,pre[y+1]+x);
+
+        cout<<maxi<<" ";
+    }
+
+    cout<<endl;
 }
 
 void solve2(){}

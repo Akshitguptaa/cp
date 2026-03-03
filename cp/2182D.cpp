@@ -44,7 +44,7 @@ void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
 void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 
-const int M= MOD;// change 
+const int M= 998244353; 
 vi fact,ifact;
 void prec(int maxx=1e6) {
     fact.assign(maxx+1,1);
@@ -67,53 +67,34 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n;      cin>>n;
+    vi v(n+1);    inp(v);
+    int s=accumulate(all(v),(int)0);
 
-    vi v(n);
-    inp(v);
+    int req= s/n;
+    int ex= s%n;
 
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+    int cnt=0;
+    for(int i=1;i<=n;i++){
+        if(v[i]>req+1){
+            cout<<0<<endl;
+            return ;
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
+        if(v[i]==req+1){
+            cnt++;
+        } // that should be before the pvt
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+    if(ex< cnt){
+        cout<<0<<endl;
+        return ;
     }
+
+    int ans= ncr(ex, cnt);
+    ans= mod_mul(ans,fact[cnt],M);
+    ans= mod_mul(ans,fact[n-cnt],M);
+    cout<<ans<<endl;    
 }
 
 void solve2(){}
@@ -122,6 +103,7 @@ int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
     
+    prec(200005);
     int t;
     cin >> t;
     for(int i=1;i<=t;i++){

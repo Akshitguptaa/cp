@@ -67,53 +67,54 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,l,r,k;
+    cin>>n>>l>>r>>k;
 
-    vi v(n);
-    inp(v);
+    vi v(n); inp(v);
 
-    vi v1(m);
-    inp(v1);
+    vi minn(n,l); vi maxx(n,r);
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
-        }
-
-        if(x>=y){
-            pq1.push(x);
+    for(int i=0;i<n-1;i++){
+        if(v[i]<v[i+1]){
+            minn[i+1]= max(minn[i+1],minn[i]+1);
+            maxx[i+1]= min(maxx[i+1],maxx[i]+k);
+        }else if(v[i]==v[i+1]){
+            minn[i+1]= max(minn[i+1],minn[i]);
+            maxx[i+1]=min(maxx[i+1],maxx[i]);
         }else{
-            pq1.push(x);
-            pq2.push(y-x);
+            minn[i+1]= max(minn[i+1],minn[i]-k);
+            maxx[i+1]= min(maxx[i+1],maxx[i]-1);
+
         }
-        f=!f;
+
+        if(minn[i+1]>maxx[i+1]){
+            cout<<-1<<endl;
+            return ;
+        }
+        
+    }
+    
+    for(int i=n-2;i>=0;i--){
+        if(v[i]<v[i+1]){
+            minn[i]= max(minn[i],minn[i+1]-k);
+            maxx[i]= min(maxx[i],maxx[i+1]-1);
+        }else if(v[i]==v[i+1]){
+            minn[i]= max(minn[i+1],minn[i]);
+            maxx[i]=min(maxx[i+1],maxx[i]);
+        }else{
+            minn[i]= max(minn[i],minn[i+1]+1);
+            maxx[i]= min(maxx[i],maxx[i+1]+k);
+    
+        }
+    
+        if(minn[i]>maxx[i]){
+            cout<<-1<<endl;
+            return ;
+        }
+
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    display(minn);
 }
 
 void solve2(){}
@@ -123,7 +124,8 @@ int32_t main(){
     // freopen("out", "w", stdout);
     
     int t;
-    cin >> t;
+    // cin >> t;
+    t=1;
     for(int i=1;i<=t;i++){
         //cout<<"Case #"<<i<<": ";
         solve();

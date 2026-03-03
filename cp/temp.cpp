@@ -53,54 +53,24 @@ void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 // utitily
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
+/*
 
-#define ld long double
+6 1 4 1 2 1
+all need to be zero by the end 
+        the min must need extras wait if we cant then must output 0 
+            the min can also take some higher than itself 
+            when it the answer not 0?
+            1 0 2 0
+            so pi take from pi or 0 right
+            2 5 4 3 1 
+            0 2 
+            0 2 0
+            1 2 0 
+            0 2 0 2 
 
-static inline bool bad_turn(pair<int,int> a, pair<int,int> b, int x, int y){
-    __int128 x1 = (__int128)b.first  - a.first;
-    __int128 y1 = (__int128)b.second - a.second;
-    __int128 x2 = (__int128)x        - a.first;
-    __int128 y2 = (__int128)y        - a.second;
-    __int128 v  = x1*y2 - y1*x2; 
-    return v <= 0; 
-}
+*/
 void solve(){
-   int n;
-   cin>>n;
-   
-   vector<pair<int,int>> vec(n);
-
-    for(int i=0;i<n;i++){
-        int x,y;
-        cin>>x>>y;
-        vec[i]= {x,y};
-    }
-
-    sort(all(vec));
-    vec.erase(unique(all(vec)),vec.end());
-
-    vector<pair<int,int>> v;
-
-    for(auto [x,y]:vec){
-        while((int)v.size()>=2){
-            int sz= v.size();
-            if(func(v[sz-2],v[sz-1],x,y)){
-                v.pop_back();
-            }else{
-                break;
-            }
-        }
-        v.pb({x,y});
-    }
-
-    ld per = 0.0L;
-    for(int i=1;i<(int)v.size(); i++){
-        ld dx = (ld)v[i].first - v[i-1].first;
-        ld dy = (ld)v[i].second - v[i-1].second;
-        per += sqrtl(dx*dx + dy*dy);
-    }
-
-    cout << (int)llround(per) << endl;
+    
 }
 
 void solve2(){}
@@ -110,8 +80,7 @@ int32_t main(){
     // freopen("out", "w", stdout);
 
     int t;
-    // cin >> t;
-    t=1;
+    cin >> t;
     while(t--){
         solve();
         // solve2();

@@ -39,6 +39,7 @@ using vvb = vector<vector<bool>>;
 using pii = pair<int,int>;
 using vpii = vector<pii>;
 using vvb = vector<vb>;
+vb s=sieve(100);
 template <class T>
 void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
@@ -65,55 +66,34 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 // ---yo---
+vector<string> v;
+int n;
+
+string func(int i,string s){
+    if(i==n){
+        return s;
+    }
+
+    string l= v[i]+s;
+    string r= s+v[i];
+
+    if(l<r){
+        return func(i+1,l);
+    }
+
+    return func(i+1,r);
+
+}
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    cin>>n;
 
-    vi v(n);
+    v= vector<string>(n);
     inp(v);
 
-    vi v1(m);
-    inp(v1);
+    string ans= func(0,"");
+    cout<<ans<<endl;
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
-        }
-
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
-    }
-
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
 }
 
 void solve2(){}

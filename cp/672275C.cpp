@@ -67,53 +67,32 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,k;cin>>n>>k;
 
     vi v(n);
     inp(v);
 
-    vi v1(m);
-    inp(v1);
+    multiset<int> st;
+    int l=0;
+    int ans=0;
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
+    for(int i=0;i<n;i++){
+        st.insert(v[i]);
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+        while(!st.empty() ){
+            int maxx= *st.rbegin(); 
+            int minn= *st.begin();
+            if( maxx-minn<=k) break;
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+            auto it= st.find(v[l]);
+            st.erase(it);
+            l++;
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
+        ans= max(ans,(int)st.size());
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<ans<<endl;
 }
 
 void solve2(){}

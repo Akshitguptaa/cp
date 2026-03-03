@@ -66,53 +66,74 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
-void solve(){
+void first(){
     int n,m;
     cin>>n>>m;
 
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
+    vvi adj(n+1);
+    for(int i=0;i<m;i++){
+        int u,v;
+        cin>>u>>v;
+        adj[u].pb(v);
+        adj[v].pb(u);
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    vi dist(n+1,-1);
+    queue<int> q;
+    dist[1]= 0;
+    q.push(1);
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+    string ans(n,' ');
+    string s ="rgb";
+
+    while(!q.empty()){
+        auto u= q.front();
+        q.pop();
+
+        ans[u-1] = s[dist[u]%3]; 
+
+        for(int v:adj[u]){
+            if(dist[v] ==-1){
+                dist[v] = dist[u]+1;
+                q.push(v);
             }
-            f=!f;
+        }
+    }
+    cout<<ans<<endl;
+}
+
+void solve(){
+    int q;
+    cin>>q;
+    while(q--){
+        int k;cin>>k;
+        string s;cin>>s;
+
+        int r=0, g=0, b=0;
+        for(int i=0; i<k; i++){
+            if(s[i]=='r'){
+                r =i+1;
+            }
+            if(s[i]=='g'){
+                g = i+1;
+            }
+            if(s[i]=='b') b=i+1;
+        }
+
+        if(r&&g){
+            cout<<g<<endl;
             continue;
         }
-
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        if(b&&g){
+            cout<<b<<endl;
+            continue;;
         }
-        f=!f;
-    }
-
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+        
+        if(b&&r){
+            cout<<r<<endl;
+            continue;;
+        }
+         cout<< (r+g+b) << endl;
     }
 }
 
@@ -122,11 +143,19 @@ int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
     
+    string s;
+    cin>>s;
+    
     int t;
     cin >> t;
     for(int i=1;i<=t;i++){
+        if(s=="first"){
+            first();
+        }else{
+            solve();
+        }
         //cout<<"Case #"<<i<<": ";
-        solve();
+        // solve();
         // solve2();
     }
 

@@ -39,6 +39,7 @@ using vvb = vector<vector<bool>>;
 using pii = pair<int,int>;
 using vpii = vector<pii>;
 using vvb = vector<vb>;
+vb s=sieve(100);
 template <class T>
 void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
@@ -67,53 +68,34 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
-
+    int n;
+    cin>>n;
+    
     vi v(n);
     inp(v);
 
-    vi v1(m);
-    inp(v1);
+    vi dp(n+2,0);
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
+    int l=0;
+    int r= LLONG_MAX;
+    int idx=0;
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    for(int i=0;i<n-1;i++){
+        int temp= max(0LL,v[i+1]-v[i]-r);
+        r= v[i+1]-v[i]-l;
+        l=temp;
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+        if(r<=l){
+            idx=i;
+            l=0;
+            r=v[i+1]-v[i];
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
+        dp[i+2]= dp[idx]+ i+1-idx;
+        dp[i+2]= max(dp[i+1],dp[i+2]);
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<dp[n]<<endl;
 }
 
 void solve2(){}

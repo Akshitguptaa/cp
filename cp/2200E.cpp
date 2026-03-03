@@ -66,54 +66,55 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
+vi spf(int n){ vi ans(n+1); for(int i=0 ;i<=n ;i++)ans[i]=i; for(int i=2 ;i*i<=n ;i++) if(ans[i]==i) for(int j=i*i ; j<=n ;j+=i) if(ans[j]==j) ans[j]=i ; return ans;}
+
+int maxx= 1e6+5;
+vi primes= spf(maxx);
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
-
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
+    int n;cin>>n;
+    vi v(n);inp(v);
+    
+    int f=1;
+    for(int i=0;i<n-1;i++){
+        if(v[i]>v[i+1]){
+            f=0;
+            
+        }
     }
-    for(auto i:v1){
-        pq2.push(i);
+    if(f){
+        cout<<"Bob"<<endl;
+        return ;
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
+    for(int i=0;i<n;i++){
+        if(v[i]==1){
             continue;
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        int p= primes[v[i]];
+        int temp= v[i];
+        while(temp%p ==0){
+            temp/=p;
         }
-        f=!f;
+        if(temp>1){
+            cout<<"Alice"<<endl;
+            return ;
+        }
+        v[i]= p;
+    }
+    
+    
+    for(int i=0;i<n-1;i++){
+        if(v[i]>v[i+1]){
+            cout<<"Alice"<<endl;
+            return ;
+            
+        }
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<"Bob"<<endl;
+    
 }
 
 void solve2(){}

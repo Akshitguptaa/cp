@@ -67,53 +67,31 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,k;
+    cin>>n>>k;
 
-    vi v(n);
-    inp(v);
+    string s;
+    cin>>s;
 
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+    for(int i=0;i<n;i++){
+        if(s[i]<='m'){
+            while(k && s[i]<'z'){
+                k--; s[i]++;
             }
-            f=!f;
             continue;
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        while(k && s[i]>'a'){
+            k--; s[i]--;
         }
-        f=!f;
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+    if(k){
+        cout<<-1<<endl;
+        return ;
     }
+
+    cout<<s<<endl;
 }
 
 void solve2(){}
@@ -123,7 +101,8 @@ int32_t main(){
     // freopen("out", "w", stdout);
     
     int t;
-    cin >> t;
+    // cin >> t;
+    t=1;
     for(int i=1;i<=t;i++){
         //cout<<"Case #"<<i<<": ";
         solve();

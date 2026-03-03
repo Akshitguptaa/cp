@@ -39,6 +39,7 @@ using vvb = vector<vector<bool>>;
 using pii = pair<int,int>;
 using vpii = vector<pii>;
 using vvb = vector<vb>;
+vb s= sieve(100);
 template <class T>
 void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
@@ -66,54 +67,93 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
+// Fenwick Tree
+class FenwickTree {
+public:
+    vector<int> bit;
+    int N;
+
+    FenwickTree(int size) {
+        N = size;
+        bit.resize(N + 1, 0);
+    }
+
+    void update(int k, int val) {
+        while (k <= N) {
+            bit[k] ^= val;
+            k += (k & (-k));
+        }
+    }
+
+    int query(int k) {
+        int res = 0;
+        while (k > 0) {
+            res ^= bit[k];
+            k -= (k & (-k));
+        }
+        return res;
+    }
+
+    int query(int l,int r){
+        return query(r)^query(l-1);
+    }
+};
+
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,q;cin>>n>>q;
 
-    vi v(n);
+    int tot= (1LL<<n);
+    FenwickTree seg(tot);
+
+    vi v(tot);
     inp(v);
+    
 
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
+    for(int i=0;i<tot;i++){
+        seg.update(i+1,v[i]);
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    while(q--){
+        int x,val;
+        cin>>x>>val;
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+        int temp= v[x-1]^val;
+        seg.update(x,temp);
+
+        int cnt=0;
+
+        for(int i=0;i<n;i++){
+            int sz= 1LL<<i;
+            int a= ~(sz-1);
+
+            a&= (x-1);
+            int b= a^sz;
+
+            a  = seg.query(a+1,a+sz);
+            b = seg.query(b+1,b+sz);
+
+            if(a==b){
+                if((x-1)&sz){
+                    cnt+= sz;
+                    continue;
+                }
             }
-            f=!f;
-            continue;
+            
+            if(a<b){
+                cnt+= sz;
+                continue;
+            }
+
+
+
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
+        seg.update(x,temp);
+        cout<<cnt<<endl;
+
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
 }
 
 void solve2(){}

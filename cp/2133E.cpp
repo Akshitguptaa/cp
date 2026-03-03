@@ -72,8 +72,24 @@ void solve(){
         deg[x]++;
         deg[y]++;
     }
+    int cnt=0;
+    for(int i=1;i<=n;i++){
+        if(deg[i]>2){
+            cnt++;
+        }
+    }
 
-
+    cout<<n+cnt<<endl;
+    for(int i=1;i<=n;i++){
+        if(deg[i]>2){
+            cout<<2<<" "<<i<<endl;
+        }
+    }
+    
+    for(int i=0;i<n;i++){
+        cout<<1<<" "<<i+1<<endl;
+    }
+    return ;
 
 }
 

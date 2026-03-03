@@ -67,53 +67,66 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n;cin>>n;
+    vi v(n);inp(v);
 
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
+    if(!(n&1)){
+        no();
+        return ;
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
+    int cnt=0;
+    int x=0;
+    for(int i=0;i<n;i++){
+        if((v[i]%3)==0){
+            cnt++;
+        }
+        if((v[i]%5)==0){
+            cnt++;
+        }
+        int temp= trailzero(v[i]);
+        if(!temp){
             continue;
         }
+        // if((v[i]%2)==0){
+        //     cnt++;
+        // }
+        // if((v[i]%8)==0){
+        //     x++;
+        // }
+        // cnt++;
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        if(temp==1){
+            cnt++;
+            continue;
         }
-        f=!f;
+        if(temp&1){
+            x++;
+        }else{
+            cnt++;
+        }
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+    if(x){
+        yes();
+        return ;
     }
+
+    if(cnt&1){
+        // if(x&1){
+        //     no();
+        //     return ;
+        // }
+        yes();
+        return ;
+    }
+
+    // if(x&1){
+    //     yes();
+    //     return ;
+    // }
+    
+    no();
 }
 
 void solve2(){}

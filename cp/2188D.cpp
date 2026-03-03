@@ -65,55 +65,69 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 // ---yo---
+int p,q;
+int x,y;
+// int cnt;
+
+void func(int p1,int q1,int &cnt){
+    int xx= abs(x-p1)+ abs(y-q1);
+
+    if(xx<cnt || cnt==-1){
+        cnt = xx;
+        p=p1;
+        q=q1;
+    }
+}
+
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    cin>>x>>y;
+    
+    p=0;
+    q=0;
+    int cnt=-1;
 
-    vi v(n);
-    inp(v);
+    func(x,y&(~x),cnt);
+    func(x&(~y),y,cnt);
 
-    vi v1(m);
-    inp(v1);
+    for(int i=0;i<32;i++){
+        int bit= (1LL<<i);
+        int k= (1LL<<(i+1))-1;
+        k= ~k;
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
+        if(!(x&bit)){
+            int p1= (x&k)|(bit);
+            int q1= y&(~p1);
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+            func(p1,q1,cnt);
+        }
+        
+        if(!(y&bit)){
+            int p1= (y&k)|(bit);
+            int q1= x&(~p1);
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+            func(q1,p1,cnt);
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        if((x&bit)){
+            int p1= (x&k)|(bit-1);
+            int q1= y&(~p1);
+
+            func(p1,q1,cnt);
         }
-        f=!f;
+        
+        if((y&bit)){
+            int p1= (y&k)|(bit-1);
+            int q1= x&(~p1);
+
+            func(q1,p1,cnt);
+        }
+
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<p<<" "<<q<<endl;
+    return ;
+
 }
 
 void solve2(){}
@@ -130,4 +144,33 @@ int32_t main(){
         // solve2();
     }
 
+}
+
+// dsu template
+const int mxN=1e5+1;
+ 
+int parent[mxN];
+int siz[mxN];
+ 
+void make_set(int v) {
+    parent[v]=v;
+    siz[v]=1;
+}
+ 
+int find_set(int v) {
+    return(v==parent[v]) ? v : parent[v] = find_set(parent[v]);
+}
+ 
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a == b) return;
+    if (siz[a] < siz[b]) swap(a, b);
+    parent[b] = a;
+    siz[a] += siz[b];
+    siz[b] = 0;
+}
+ 
+int get_size(int v) {
+    return siz[find_set(v)];
 }

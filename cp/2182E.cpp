@@ -66,54 +66,51 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
-
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
+    int n,m,k;
+    cin>>n>>m>>k;
+    
+    vb a(m+1,0);
+    multiset<int> st;
+    for(int i=0;i<m;i++){
+        int x;cin>>x;
+        st.insert(x);
+        a[x]=1;
     }
-    for(auto i:v1){
-        pq2.push(i);
+    int ext=k;
+    int arr[n][3];
+    vector<pair<int,int>>v;
+    for(int i=0;i<n;i++){
+        cin>>arr[i][0]>>arr[i][1]>>arr[i][2];
+        v.push_back({arr[i][2]-arr[i][1],i});
+        ext-=arr[i][1];
     }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
+    
+    sort(v.rbegin(),v.rend());
+    vector<int>vv;
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        int ind=v[i].second;
+        int num=arr[ind][0];
+        auto it=st.lower_bound(num);
+        if(it==st.end()){
+            vv.push_back(v[i].first);
         }
-
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+        else{
+            st.erase(it);
+            cnt++;   
         }
-        f=!f;
     }
-
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+    if(vv.size()==0){
+        cout<<cnt<<endl;
+        return;
     }
+    sort(vv.begin(),vv.end());
+    for(int i=0;i<vv.size();i++){
+        if(ext>=vv[i]){ext-=vv[i];cnt++;}
+    }
+    cout<<cnt<<endl;
 }
 
 void solve2(){}

@@ -67,53 +67,68 @@ void no() { cout<<"NO\n"; }
 // ---yo---
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n;
+    cin>>n;
 
     vi v(n);
     inp(v);
 
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
+    vi odd,even;
+    int sz=0;
     for(auto i:v){
-        pq1.push(i);
+        if(i&1){
+            odd.pb(i);
+        }else {
+            even.pb(i); sz++;
+        }
     }
-    for(auto i:v1){
-        pq2.push(i);
+    if(sz==n){
+        for(int i=0;i<n;i++) cout<<0<<" ";
+
+        cout<<endl; return ;
     }
 
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
+    int maxx= *max_element(all(odd));
+    // int minn= *min_element(all(even));
 
-        if(f){
-            if(y>=x){
-                pq2.push(y);
+    if(!sz){
+        for(int i=0;i<n;i++){
+            if(i&1){
+                cout<<0<<" ";
             }else{
-                pq2.push(y);
-                pq1.push(x-y);
+                cout<<maxx<<" ";
             }
-            f=!f;
+        }
+        cout<<endl; return ;
+    }
+    
+    sort(rall(even));
+    vi pre(sz+1);
+    for(int i=0;i<sz;i++){
+        pre[i+1]= pre[i]+even[i];
+    }
+    
+    int s= accumulate(all(even),(int)0);
+
+    // int pre=0,curr=0;
+    for(int i=0;i<n;i++){
+        int val= min(sz,i);
+
+        if(!((i-val+1)&1)){
+            val--;
+        }
+
+        if(val<0 || i+1-val>n-sz){
+            cout<<0<<" ";
             continue;
         }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
+        cout<<pre[val]+maxx<<" ";
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<endl;
+
+
 }
 
 void solve2(){}

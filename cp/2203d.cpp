@@ -39,6 +39,7 @@ using vvb = vector<vector<bool>>;
 using pii = pair<int,int>;
 using vpii = vector<pii>;
 using vvb = vector<vb>;
+vb s= sieve(100);
 template <class T>
 void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
@@ -66,54 +67,93 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
+vi spf(int n){ vi ans(n+1); for(int i=0 ;i<=n ;i++)ans[i]=i; for(int i=2 ;i*i<=n ;i++) if(ans[i]==i) for(int j=i*i ; j<=n ;j+=i) if(ans[j]==j) ans[j]=i ; return ans;}
+
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    int n,m;cin>>n>>m;
 
     vi v(n);
-    inp(v);
-
     vi v1(m);
-    inp(v1);
+    inp(v);inp(v1);
+    int maxx= n+m;
 
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
+    vi prime= spf(maxx);
+
+    set<int> st(all(v));
+    vi vec(maxx+2,0);
+
+    for(auto i:st){
+        for(int j=i;j<=maxx;){
+            vec[j]++;
+            j+=i;
+        }
     }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+    
+    vi temp(maxx+2,0);
+    for(auto i:st){
+        while(i>1){
+            int val= prime[i];
+            int c=0;
+            while(i%val==0){
+                i/=val;
+                c++;
             }
-            f=!f;
-            continue;
+            
+            temp[val] = max(temp[val],c);
         }
-
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+    }
+    
+    int val = 1;
+    for(int i=2;i<=maxx;i++){
+        while(temp[i]){
+            val*=i;
+            temp[i]--;
+            
+            if(val>maxx){
+                break;
+            }
         }
-        f=!f;
+        
+        if(val>maxx){
+            break;
+        }
+    }
+    
+    int cnt=0;
+    for(auto i:v1){
+        if(vec[i]){
+            cnt++;
+        }
     }
 
-    if(pq1.size()){
+    int cnt1=m;
+    if(val<=maxx){
+        for(auto i:v1){
+            if(i%val==0){
+                cnt1--;
+            }
+        }
+    }
+
+    if(cnt>cnt1){
         cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
+        return ;
     }
+
+
+    if(cnt<cnt1){
+        cout<<"Bob"<<endl;
+        return ;
+    }
+    
+    if(m&1){
+        cout<<"Alice"<<endl;
+        return ;
+    }
+    cout<<"Bob"<<endl;
+    return ;
+
+
 }
 
 void solve2(){}

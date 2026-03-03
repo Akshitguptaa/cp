@@ -65,55 +65,96 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 // ---yo---
+int n,xa,ya,xb,yb;
+vpii v;
+vvi memo;
+
+int dfs(int idx,int last){
+    int y;
+    if(idx==0){
+        y=ya; 
+    }else{
+        auto [x,b]= v[idx-1];
+        int minn= b,maxx=b;
+        
+        int k= idx-1;
+        while(k>=0 && v[k].first==x){
+            auto [a,temp]= v[k];
+            minn = min(minn,temp);
+            maxx = max(maxx,temp);
+            k--;
+        }
+        
+        if(!last){
+            y= minn;
+        }else{
+            y= maxx;
+        }
+    }
+    
+    // int dist= y-yb
+    if(idx==n){
+        return abs(y-yb);
+    }
+    
+    if(memo[idx][last] != -1){
+        return memo[idx][last];
+        
+    }
+    
+    auto [x,b]= v[idx];
+    int minn= b,maxx=b;
+    
+    int k= idx;
+    while(k<n && v[k].first==x){
+
+        auto [a,temp]= v[k];
+        minn = min(minn,temp);
+        maxx = max(maxx,temp);
+        k++;
+    }
+    
+   int l= dfs(k,0);
+   l+= abs(y-maxx) + abs(maxx-minn);
+   int r= dfs(k,1);
+   r+= abs(y-minn) + abs(maxx-minn);
+
+    memo[idx][last]= min(l,r);
+    return memo[idx][last];
+}
+
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    cin>>n>>xa>>ya>>xb>>yb;
+    v= vpii(n);
+    memo = vvi(n+1,vi(2,-1));
 
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
+    for(int i=0;i<n;i++){
+        cin>>v[i].first;
     }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
-            }
-            f=!f;
-            continue;
-        }
-
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
-        }
-        f=!f;
+    int minn=LLONG_MAX,maxx=LLONG_MAX;
+    int prev=-1;
+    for(int i=0;i<n;i++){
+        int y;cin>>y;
+        v[i].second= y;
+        // if(v[i].first==prev){
+        //     minn= min(minn,y);
+        //     maxx= max(maxx,y);
+        // }else{
+        //     minn= y;
+        //     maxx=y;
+        // }
+        // prev= v[i].first;
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    sort(all(v));
+
+
+    int ans= dfs(0,0);
+    ans+= (xb-xa);
+
+    cout<<ans<<endl;
+    
 }
 
 void solve2(){}

@@ -44,9 +44,13 @@ void inp(vector<T> &v) { int n=v.size();for(int i=0;i<n;i++) cin>>v[i];}
 template <class T>
 void display(vector<T> &v) {  for (auto x : v) cout << x << " "; cout << endl; }
 
-const int M= MOD;// change 
-vi fact,ifact;
+const int M= 998244353; 
+vi fact,ifact,power(300005,1);
 void prec(int maxx=1e6) {
+    for(int i=1;i<=300000;i++){
+        power[i]= mod_mul(2,power[i-1],M);
+    }
+
     fact.assign(maxx+1,1);
     ifact.assign(maxx+1,1);
     for(int i=1;i<=maxx;i++){
@@ -70,49 +74,79 @@ void solve(){
     int n,m;
     cin>>n>>m;
 
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
+    vi mp(300,0);
+    vb bt(62,0);
+    for(int i=0;i<n;i++){
+        int x; cin>>x;
+        mp[x]++;
+        bt[x]=1;
     }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+    
+    for(int i=0;i<m;i++){
+        int q,x; cin>>q>>x;
+        
+        if(q==1){
+            vector<vvi> vec;
+            bt[x]=1;
+            n++;
+            mp[x]++;
+        }
+        if(q==2){
+            mp[x]--;
+            n--;
+            if(!mp[x]){
+                bt[x]=0;
             }
-            f=!f;
-            continue;
         }
+        // 1 1 0 0 0 0 0 
+        // 1 1 0 0 1 0 1
+        if(q==3){
+            int ans=0;
+            vi mp1= mp;
+            vi pre= mp1;
+            for(int i=1;i<=61;i++){
+                pre[i]+=pre[i-1];
+            }
+            int cnt=0;
+            int temp=1;
+            int f=1;
+            for(int i=61;i>=0;i--){
+                int avail =mp[i+cnt];
+                if(x&(1LL<<i)){
+                    if(avail){
+                        temp = mod_mul(avail,temp,M);
+                        mp1[temp]--;  
+                    }else{
+                        f=0;
+                        break;
+                    }
+                    // cout<<i<<" "<<mp[i]<<" "<<(x&(1LL<<i))<<endl;
+                        // cout<<"h"<<endl;
+                }else{
+                    if(avail){
+                        temp= mod_mul(avail,temp,M);
+                        temp= (temp*power[n-cnt-1])%M;
+                        ans= (ans+temp)%M;
+                    }
 
-        if(x>=y){
-            pq1.push(x);
-        }else{
-            pq1.push(x);
-            pq2.push(y-x);
+
+                    // if(bt[i]){
+                    //     q.push({mp[i],i});
+                    // }
+                }
+            }
+            if(f){
+                int x=0;
+                for(int i=0;i<=60;i++){
+                    x += mp1[i];
+                }
+                
+                ans= (ans+mod_mul(temp,power[x],M))%M;
+            }
+
+            cout<<ans<<endl;
+
         }
-        f=!f;
-    }
-
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
     }
 }
 
@@ -121,9 +155,9 @@ void solve2(){}
 int32_t main(){
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
-    
-    int t;
-    cin >> t;
+    prec();
+    int t=1;
+    // cin >> t;
     for(int i=1;i<=t;i++){
         //cout<<"Case #"<<i<<": ";
         solve();

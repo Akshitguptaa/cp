@@ -66,54 +66,47 @@ void no() { cout<<"NO\n"; }
 
 // ---yo---
 
-void solve(){
-    int n,m;
-    cin>>n>>m;
+bool func(int midd,vi &v,int k){
+    int n= v.size();
+    int l=1;
+    int r= n;
 
-    vi v(n);
-    inp(v);
-
-    vi v1(m);
-    inp(v1);
-
-    priority_queue<int> pq1,pq2;
-    for(auto i:v){
-        pq1.push(i);
-    }
-    for(auto i:v1){
-        pq2.push(i);
-    }
-
-    int f=0;
-    while(!pq1.empty() && !pq2.empty()){
-        int x= pq1.top(); pq1.pop();
-        int y= pq2.top(); pq2.pop();
-
-        if(f){
-            if(y>=x){
-                pq2.push(y);
-            }else{
-                pq2.push(y);
-                pq1.push(x-y);
+    for(int i=0;i<n;i++){
+        if(v[i]<midd){
+            if(midd> k+v[i]){
+                return 0;
             }
-            f=!f;
-            continue;
-        }
 
-        if(x>=y){
-            pq1.push(x);
+            l= max(l,i+1);
+            r= min(r,k+i+1-midd+v[i]);
+        }
+    }
+    return l<=r;
+}
+
+void solve(){
+    int n,k;
+    cin>>n>>k;
+
+    vi v(n); inp(v);
+    int minn= *min_element(all(v));
+
+    int l=minn;
+    int r=minn+k;
+    int ans=minn;
+    while(l<=r){
+        int midd= (l+r)>>1;
+
+        if(func(midd,v,k)){
+            ans= midd;
+            l=midd+1;
         }else{
-            pq1.push(x);
-            pq2.push(y-x);
+            r= midd-1;
         }
-        f=!f;
     }
 
-    if(pq1.size()){
-        cout<<"Alice"<<endl;
-    }else{
-        cout<<"Bob"<<endl;
-    }
+    cout<<ans<<endl;
+    return ;
 }
 
 void solve2(){}
@@ -123,7 +116,8 @@ int32_t main(){
     // freopen("out", "w", stdout);
     
     int t;
-    cin >> t;
+    // cin >> t;
+    t=1;
     for(int i=1;i<=t;i++){
         //cout<<"Case #"<<i<<": ";
         solve();
